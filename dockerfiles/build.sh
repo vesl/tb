@@ -10,7 +10,7 @@ source $BDIR/build.vars
 
 [[ ! -f $BDIR/$1 ]] && usage
 
-IMG=$(echo $1 | awk -F. '{print $1}')
+IMG=$(printf '%s\n' "${1//.Dockerfile/}")
 docker build -t $IMG -f $1 $BDIR 
 docker image tag $IMG $REGISTRY/tb/$IMG
 docker image push $REGISTRY/tb/$IMG
