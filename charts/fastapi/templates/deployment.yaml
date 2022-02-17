@@ -1,0 +1,42 @@
+{{- range $.Values.apps }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .name }}
+  labels:
+    name: {{ .name }}
+spec:
+  replicas: {{ .replicas }}
+  selector:
+    matchLabels:
+      app: {{ .name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .name }}
+    spec:
+      containers:
+        - name: {{ .name }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: APP
+              value: {{ .name }}
+          image: {{ .image }}
+          command: ["uvicorn"]
+          args: ["$(APP).main:app","--host","0.0.0.0","--port","80"{{ if .dev }},"--reload",{{ end }}] 
+          volumeMounts:
+          {{- range .volumes }}
+          - name: {{ .name }}
+            mountPath: {{ .mountPath }}
+          {{- end }}
+      volumes:
+      {{- range .volumes }}
+      - name: {{ .name }}
+        hostPath:
+          path: {{ .hostPath }}
+      {{- end }}
+{{- end }}

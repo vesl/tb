@@ -1,0 +1,11 @@
+apps:
+
+# Scrapper
+ - name: scrapper
+   dev: true
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi
+   replicas: 1
+   volumes:
+     - name: code
+       mountPath: /code
+       hostPath: /var/code/tb/apps/
