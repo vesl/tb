@@ -1,6 +1,7 @@
 import os
 
-class Config:
-    
-    def __init__(self):
-        self.a = 1
+def Config():
+    config = {}
+    for item,value in os.environ.items():
+        if item[:3] == 'TB_': config[item[3:].lower()] = value
+    return config
