@@ -25,14 +25,14 @@ spec:
               containerPort: 80
               protocol: TCP
           env:
-            - name: APP
+            - name: TB_APP
               value: {{ .name }}
           envFrom:
             - configMapRef:
                 name: {{ $.Release.Name }}
           image: {{ .image }}
           command: ["uvicorn"]
-          args: ["$(APP).main:app","--host","0.0.0.0","--port","80"{{ if .dev }},"--reload",{{ end }}] 
+          args: ["$(TB_APP).main:app","--host","0.0.0.0","--port","80"{{ if .dev }},"--reload",{{ end }}] 
           volumeMounts:
           {{- range .volumes }}
           - name: {{ .name }}
