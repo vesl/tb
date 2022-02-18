@@ -5,7 +5,7 @@ apps:
 # Scrapper
  - name: scrapper
    dev: true
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/binance.fastapi
    replicas: 1
    volumes:
      - name: code
