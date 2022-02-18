@@ -1,9 +1,11 @@
+tbmodsPath: /var/code/tb/tbmods
+
 apps:
 
 # Scrapper
  - name: scrapper
    dev: true
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/pandas
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/pandas.fastapi
    replicas: 1
    volumes:
      - name: code
