@@ -30,6 +30,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ $.Release.Name }}
+            {{- range .secrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
           image: {{ .image }}
           command: ["uvicorn"]
           args: ["$(TB_APP).main:app","--host","0.0.0.0","--port","80"{{ if .dev }},"--reload",{{ end }}] 
