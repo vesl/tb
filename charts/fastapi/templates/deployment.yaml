@@ -17,6 +17,12 @@ spec:
         app: {{ .name }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap." $.Release.Name ".yaml") . | sha256sum }}
+        {{- range .secrets }}
+        checksum/config: {{ include (print $.Template.BasePath "/secret." . ".yaml") . | sha256sum }}
+        {{- end }}
+        {{- range .configmaps }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap." . ".yaml") . | sha256sum }}
+        {{- end }}
     spec:
       containers:
         - name: {{ .name }}
@@ -32,6 +38,10 @@ spec:
                 name: {{ $.Release.Name }}
             {{- range .secrets }}
             - secretRef:
+                name: {{ . }}
+            {{- end }}
+            {{- range .configmaps }}
+            - configMapRef:
                 name: {{ . }}
             {{- end }}
           image: {{ .image }}

@@ -13,3 +13,5 @@ apps:
        hostPath: /var/code/tb/apps/
    secrets:
      - binance
+   configmaps:
+     - binance
