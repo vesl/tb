@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: binance
 data:
-  TB_BINANCE_HIST_LIMIT: "1000"
+  TB_BINANCE_HIST_LIMIT: "200"
