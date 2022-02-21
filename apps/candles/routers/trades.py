@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from tbmods.config import Config
-from tbmods.cache import Cache
+from pydantic import BaseModel
 from tbmods.log import Log
+from typing import List
 import pandas as pd
 
 router = APIRouter(
@@ -11,8 +12,20 @@ router = APIRouter(
 
 config = Config()
 log = Log(config['app'])
-cache = Cache(config['app'])
 
-#@router.get('/store')
-#def 
+class Trade(BaseModel):
+    id: str
+    price: float
+    qty: float
+    isBuyerMaker: bool
+    isBestMatch: bool
+    time: int
+
+class Trades(BaseModel):
+    trades: List[Trade]
+
+@router.put('/store')
+def store_trades(trades: Trades):
+    print(trades)
+    return "OK"
     

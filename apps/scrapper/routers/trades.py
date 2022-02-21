@@ -52,7 +52,7 @@ def get_binance_trades():
     log.info('Last trade is at {}'.format(dt_end))
     
     try:
-        r = requests.post(config['candles_trades_store_url'],data={"trades":trades})
+        r = requests.put(config['candles_trades_store_url'],json={"trades":trades})
     except requests.exceptions.ConnectionError as e:
         raise HTTPException(status_code=500,detail="Sent to candles failed. {}".format(e))
     if r.status_code != 200: raise HTTPException(status_code=500,detail="Sent to candles failed")
