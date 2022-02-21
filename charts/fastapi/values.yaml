@@ -18,4 +18,16 @@ apps:
      - binance
    configmaps:
      - binance
+     - scrapper
+
+# Candles
+ - name: candles
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/pandas.fastapi
+   replicas: 1
+   dev: true
+   volumes:
+     - name: code
+       mountPath: /code
+       hostPath: /var/code/tb/apps/
+   configmaps:
      - questdb
