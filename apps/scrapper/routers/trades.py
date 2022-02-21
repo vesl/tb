@@ -48,15 +48,16 @@ def get_binance_trades():
     
     trades = list(filter(lambda trade: trade['time'] <= ts_end, trades))
     log.info('Got {} trades'.format(len(trades)))
-    log.info('Last trade is at {}'.format(datetime(1970, 1, 1) + timedelta(milliseconds=trades[-1]['time'])))
+    dt_end = datetime(1970, 1, 1) + timedelta(milliseconds=trades[-1]['time'])
+    log.info('Last trade is at {}'.format(dt_end))
     
     try:
-        r = requests.post("http://candles",data={"trades":trades})
+        r = requests.post(config['candles_trades_store_url'],data={"trades":trades})
     except requests.exceptions.ConnectionError as e:
         raise HTTPException(status_code=500,detail="Sent to candles failed. {}".format(e))
     if r.status_code != 200: raise HTTPException(status_code=500,detail="Sent to candles failed")
-    cache.data['trades/binance/last_id'] = trades[-1]['time']
+    cache.data['trades/binance/last_id'] = trades[-1]['id']
     cache.write()
-    return {"Scrapped": "from {} to {}".format(dt)}
+    return {"Scrapped": "from {} to {}".format(dt,dt_end)}
     
     
