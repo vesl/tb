@@ -22,7 +22,7 @@ apps:
 
 # Candles
  - name: candles
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/pandas.fastapi
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi
    replicas: 1
    dev: true
    volumes:
