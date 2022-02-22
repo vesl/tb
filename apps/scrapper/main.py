@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import trades
+from scrapper.routers import trades
 
 ## init api
 app = FastAPI(
