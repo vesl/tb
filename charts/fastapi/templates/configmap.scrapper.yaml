@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: scrapper
 data:
-  TB_CANDLES_TRADES_STORE_URL: "http://candles/trades/store"
+  TB_CANDLES_TRADES_STORE_URL: "http://candles/minutes/ingest"

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import trades
+from candles.routers import minutes
 
 ## init api
 app = FastAPI(
@@ -8,4 +8,4 @@ app = FastAPI(
     version="1.0.0"
 )
 ## init routers
-app.include_router(trades.router)
+app.include_router(minutes.router)
