@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: questdb
 data:
-  TB_QUESTDB_HOST: questdb.db.svc.k8s.slav.rocks:9000
+  TB_QUESTDB_HOST: questdb.db.svc.k8s.slav.rocks

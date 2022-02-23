@@ -6,7 +6,6 @@ apps:
  - name: scrapper
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/binance.fastapi
    replicas: 1
-   dev: true
    volumes:
      - name: code
        mountPath: /code
@@ -18,4 +17,4 @@ apps:
      - binance
    configmaps:
      - binance
-     - scrapper
+     - questdb
