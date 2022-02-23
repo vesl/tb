@@ -48,6 +48,8 @@ spec:
           command: ["uvicorn"]
           args: ["$(TB_APP).main:app","--host","0.0.0.0","--port","80"{{ if .dev }},"--reload",{{ end }}] 
           volumeMounts:
+          - name: code
+            mountPath: /code
           {{- range .volumes }}
           - name: {{ .name }}
             mountPath: {{ .mountPath }}
@@ -55,6 +57,9 @@ spec:
           - name: tbmods
             mountPath: /usr/local/lib/python3.9/tbmods
       volumes:
+      - name: code
+        hostPath:
+          path: /var/code/tb/apps/
       {{- range .volumes }}
       - name: {{ .name }}
         hostPath:

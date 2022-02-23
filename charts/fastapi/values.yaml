@@ -7,9 +7,6 @@ apps:
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/binance.fastapi
    replicas: 1
    volumes:
-     - name: code
-       mountPath: /code
-       hostPath: /var/code/tb/apps/
      - name: cache
        mountPath: /var/cache/scrapper
        hostPath: /var/cache/scrapper
@@ -18,3 +15,8 @@ apps:
    configmaps:
      - binance
      - questdb
+
+# Refiner
+ - name: refiner
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi
+   replicas: 1
