@@ -15,8 +15,3 @@ apps:
    configmaps:
      - binance
      - questdb
-
-# Refiner
- - name: refiner
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi
-   replicas: 1
