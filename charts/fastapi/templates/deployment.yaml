@@ -67,5 +67,5 @@ spec:
       {{- end }}
       - name: tbmods
         hostPath:
-          path: {{ $.Values.tbmodsPath }}
+          path: /var/code/tb/tbmods
 {{- end }}
