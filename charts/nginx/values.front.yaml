@@ -1,0 +1,25 @@
+clusterDomain: k8s.slav.rocks
+nameOverride: front
+image:
+  registry: docker.io
+  repository: bitnami/nginx
+  tag: 1.21.6-debian-10-r23
+containerPorts:
+  http: 8080
+  nginxServerBlock: |-
+    server {
+    listen 0.0.0.0:{{ .Values.containerPorts.http }};
+    }
+service:
+  type: ClusterIP
+  port: 80
+  targetPort:
+    http: http
+extraVolumeMounts:
+  - name: app
+    mountPath: /app
+    readOnly: true
+extraVolumes:
+  - name: app
+    hostPath:
+      path: /var/code/tb/apps/front/
