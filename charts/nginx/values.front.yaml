@@ -9,9 +9,13 @@ containerPorts:
 serverBlock: |-
   server {
     listen 0.0.0.0:{{ .Values.containerPorts.http }};
+    location /api/scrapper {
+      rewrite /api/scrapper/(.*) /$1 break;
+      proxy_pass http://scrapper.tb.svc.k8s.slav.rocks;
+    }
     location /api/plotter {
-        rewrite /api/plotter/(.*) /$1 break;
-        proxy_pass http://plotter.tb.svc.k8s.slav.rocks;
+      rewrite /api/plotter/(.*) /$1 break;
+      proxy_pass http://plotter.tb.svc.k8s.slav.rocks;
     }
   }
 service:
