@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from plotter.routers import finance
+from plotter.routers import status,finance
 
 ## init api
 app = FastAPI(
@@ -11,3 +11,4 @@ app = FastAPI(
 
 ## init routers
 app.include_router(finance.router)
+app.include_router(status.router)
