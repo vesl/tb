@@ -6,10 +6,14 @@ image:
   tag: 1.21.6-debian-10-r23
 containerPorts:
   http: 8080
-  nginxServerBlock: |-
-    server {
+serverBlock: |-
+  server {
     listen 0.0.0.0:{{ .Values.containerPorts.http }};
+    location /api/plotter {
+        rewrite /api/plotter/(.*) /$1 break;
+        proxy_pass http://plotter.tb.svc.k8s.slav.rocks;
     }
+  }
 service:
   type: ClusterIP
   port: 80
