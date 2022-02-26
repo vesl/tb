@@ -5,6 +5,10 @@ html, body {
     min-height: 100%;
     height: 100%;
 }
+.min-80 {
+    min-height: 80%;
+    height: 80%;
+}
 .btn-toggle {
   display: inline-flex;
   align-items: center;
@@ -45,4 +49,10 @@ html, body {
 }
 pre {
   padding:1%;
+}
+.content-title {
+  text-transform: capitalize;
+}
+.btn-plot {
+  margin-top: -0.30rem;
 }

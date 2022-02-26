@@ -1,11 +1,15 @@
 function statusContent(status) {
     var status = JSON.stringify(status,undefined, 2)
-    return '<pre class="bg-light text-dark rounded">'+status+'</pre>'
+    $('#content').html('<pre class="bg-light text-dark rounded">'+status+'</pre>')
+}
+
+function statusTitle(title) {
+    $('#content-title').text(title+' status')
 }
 
 function showStatus(app){
+    statusTitle(app)
     return $.get("/api/"+app+"/status/",function(status){
-        setContentTitle(app+" status")
-        setContent(statusContent(status))
+        statusContent(status)
     })
 }

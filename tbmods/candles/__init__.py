@@ -38,6 +38,7 @@ class Candles:
         else:
             df = pd.DataFrame(qdbr['result'],columns=['open','high','low','close','volume','timestamp'])
             df = df.set_index('timestamp').sort_index()
+            df.index = pd.to_datetime(df.index)
             self.candles = df
         # we return qdbr to know if there is error
         return qdbr
