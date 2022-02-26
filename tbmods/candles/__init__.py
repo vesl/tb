@@ -41,6 +41,10 @@ class Candles:
             self.candles = df
         # we return qdbr to know if there is error
         return qdbr
+    
+    def get_last(self):
+        qdbq = "select timestamp from 'candles_minute' order by timestamp desc limit 1"
+        return questdb.query(qdbq)
         
     def ingest(self):
         self.candles.index = self.candles.index.astype(int)
