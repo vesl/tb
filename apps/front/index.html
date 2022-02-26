@@ -5,18 +5,19 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/css/sidebar.css" rel="stylesheet">
+        <link href="/css/front.css" rel="stylesheet">
     </head>
     <body class="bg-secondary">
-        <div class="container-fluid">
-             <div class="row">
-                <div class="col col-md-2 bg-primary p-3" id="left">
+        <div class="container-fluid min-100">
+             <div class="row min-100">
+                <!--left-->
+                <div class="col col-md-2 bg-primary p-3">
                     <!-- title -->
                     <div class="d-flex align-items-center pb-3 mb-3 text-light text-decoration-none border-bottom">
                         <h3>TB Front</h3>
                     </div>
 
-                    <!--left menu -->
+                    <!--menu -->
                     <ul class="list-unstyled ps-0">
 
                         <!--scrapper -->
@@ -24,8 +25,20 @@
                             <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" 
                             data-bs-target="#scrapper" aria-expanded="false">Scrapper</button>
                             <div class="collapse" id="scrapper">
+                                <!--status-->
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li><a href="#" class="link-dark rounded">Status</a></li>
+                                    <li><a href="#" class="link-dark rounded" onclick="showStatus('scrapper')">Status</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!--plotter-->
+                        <li class="mb-1">
+                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" 
+                            data-bs-target="#plotter" aria-expanded="false">Plotter</button>
+                            <div class="collapse" id="plotter">
+                                <!--status-->
+                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                    <li><a href="#" class="link-dark rounded" onclick="showStatus('plotter')">Status</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -33,13 +46,20 @@
                     </ul>
 
                 </div>
-                <div class="col col-md-10 bg-dark text-light" id="right">
-                    .col-md-8
+                <!--right-->
+                <div class="col col-md-10 bg-dark text-light p-3">
+                    <!--title-->
+                    <div id="content-title" class="sd-flex align-items-center pb-3 mb-3 text-light text-decoration-none border-bottom">
+                    </div>
+                    <!--content-->
+                    <div id="content">
+                    </div>
                 </div>
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- $.get("/api/plotter/finance/price") -->
+        <script src="/js/content.js"></script>
+        <script src="/js/status.js"></script>
     </body>
 </html>
