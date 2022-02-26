@@ -1,5 +1,3 @@
-tbmodsPath: /var/code/tb/tbmods
-
 apps:
 
 # Scrapper
@@ -14,4 +12,12 @@ apps:
      - binance
    configmaps:
      - binance
+     - questdb
+
+# Plotter
+ - name: plotter
+   dev: true
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/seaborn.fastapi
+   replicas: 1
+   configmaps:
      - questdb
