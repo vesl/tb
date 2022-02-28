@@ -13,7 +13,9 @@ config = Config()
 log = Log(config['app'])
 indicators = Indicators()
 
-@router.get('/{features}/{from_date}/{to_date}')
-async def get_features(features,from_date,to_date):
-    return "ok"
-    
+@router.get('/{features}/{timescale}/{from_date}/{to_date}')
+async def get_features(features,timescale,from_date,to_date):
+    features = features.split(',')
+    qdbr = indicators.candles_from_questdb(timescale,from_date,to_date)
+    if 'error' in qdbr: return qdbr
+    return indicators.candles[features]
