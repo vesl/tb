@@ -14,16 +14,41 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-@router.get('/ohlc/{timescale}/{from_date}/{to_date}')
-async def graph_price(timescale,from_date,to_date):
+def lightweight_chart(candles):
     """
-    Purpose: get candles olhc from dataset and return it as json for lightweight-chart
+    Format candles for lightweight chart
     """
-    r = requests.get('http://dataset/features/ohlc/{}/{}/{}'.format(timescale,from_date,to_date))
-    if r.status_code != 200: raise HTTPException(status_code=500,detail="Unable to get dataset data")
-    ohlc = r.json()
-    if 'error' in ohlc: raise HTTPException(status_code=500,detail=ohlc['error'])
-    candles = Candles()
-    candles.from_json(ohlc)
     candles.candles['time'] = candles.candles.index.astype(int)/1000000000
     return candles.candles.to_json(orient="records")
+
+def get_features(features,timescale,from_date,to_date):
+    """
+    Pull features json data from dataset
+    """
+    r = requests.get('http://dataset/features/{}/{}/{}/{}'.format(features,timescale,from_date,to_date))
+    if r.status_code != 200: features = {'error':'Unable to get dataset data'}
+    else: features = r.json()
+    return features
+
+@router.get('/ohlc/{timescale}/{from_date}/{to_date}')
+async def graph_ohlc(timescale,from_date,to_date):
+    """
+    Get candles olhc from dataset and return it as json for lightweight-chart
+    """
+    features = get_features('open,high,low,close',timescale,from_date,to_date)
+    if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
+    candles = Candles()
+    candles.from_json(features)
+    return lightweight_chart(candles)
+
+@router.get('/volume/{timescale}/{from_date}/{to_date}')
+async def graph_volume(timescale,from_date,to_date):
+    """
+    Get volume from dataset and return it as json for lightweight-chart
+    """
+    features = get_features('volume',timescale,from_date,to_date)
+    if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
+    candles = Candles()
+    candles.from_json(features)
+    candles.candles = candles.candles.rename({'volume':'value'},axis=1)
+    return lightweight_chart(candles)
