@@ -28,7 +28,13 @@ class Candles:
         df.drop('id_last',axis=1,inplace=True)
         self.candles = df
         return last_id
-        
+
+    def from_json(self,json):
+        df = pd.DataFrame(json)
+        df = df.sort_index()
+        df.index = pd.to_datetime(df.index)
+        self.candles = df
+
     def from_questdb(self,timescale,since,to):
         qdbq = """select first(open),max(high),min(low),last(close),sum(volume),timestamp 
               from candles_minute where timestamp between '{}' and '{}' sample by {}""".format(since,to,timescale)
