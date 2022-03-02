@@ -60,3 +60,13 @@ function plotFinanceVolume(values){
         volumeSeries.setData(JSON.parse(data))
     })
 }
+
+function plotFinanceRSI(values){
+    $.get('/api/plotter/finance/rsi/'+values['timescale']+'/'+values['from']+'/'+values['to'],function(data){
+        charts['rsi'] = LightweightCharts.createChart(document.getElementById('plot'),{
+            height:200,
+        });
+        const rsiSeries = charts['rsi'].addLineSeries({lineWidth:2})
+        rsiSeries.setData(JSON.parse(data))
+    })
+}
