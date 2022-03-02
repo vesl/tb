@@ -30,9 +30,9 @@ class Candles:
         return last_id
 
     def from_json(self,json):
-        df = pd.DataFrame(json)
+        df = pd.DataFrame.from_dict(json)
         df = df.sort_index()
-        df.index = pd.to_datetime(df.index)
+        df.index = pd.to_datetime(df.index,unit='ms')
         self.candles = df
 
     def from_questdb(self,timescale,since,to):

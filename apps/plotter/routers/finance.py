@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from tbmods.indicators import Indicators
 from tbmods.candles import Candles
 from tbmods.config import Config
 from tbmods.cache import Cache
 from tbmods.log import Log
 import requests
+import json
 
 router = APIRouter(
     prefix="/finance",
@@ -27,7 +27,7 @@ def get_features(features,timescale,from_date,to_date):
     """
     r = requests.get('http://dataset/features/{}/{}/{}/{}'.format(features,timescale,from_date,to_date))
     if r.status_code != 200: features = {'error':'Unable to get dataset data'}
-    else: features = r.json()
+    else: features = json.loads(r.json())
     return features
 
 @router.get('/candles/{timescale}/{from_date}/{to_date}')
