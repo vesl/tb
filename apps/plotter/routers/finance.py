@@ -30,8 +30,8 @@ def get_features(features,timescale,from_date,to_date):
     else: features = r.json()
     return features
 
-@router.get('/ohlc/{timescale}/{from_date}/{to_date}')
-async def graph_ohlc(timescale,from_date,to_date):
+@router.get('/candles/{timescale}/{from_date}/{to_date}')
+async def graph_candles(timescale,from_date,to_date):
     """
     Get candles olhc from dataset and return it as json for lightweight-chart
     """
@@ -51,4 +51,16 @@ async def graph_volume(timescale,from_date,to_date):
     candles = Candles()
     candles.from_json(features)
     candles.candles = candles.candles.rename({'volume':'value'},axis=1)
+    return lightweight_chart(candles)
+
+@router.get('/rsi/{timescale}/{from_date}/{to_date}')
+async def graph_rsi(timescale,from_date,to_date):
+    """
+    Get volume from dataset and return it as json
+    """
+    features = get_features('rsi',timescale,from_date,to_date)
+    if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
+    candles = Candles()
+    candles.from_json(features)
+    candles.candles = candles.candles.rename({'rsi':'value'},axis=1)
     return lightweight_chart(candles)
