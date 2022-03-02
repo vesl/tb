@@ -1,4 +1,6 @@
 from tbmods.candles import Candles
+import pandas as pd
+import talib
 
 class Indicators:
     
@@ -12,5 +14,13 @@ class Indicators:
         self.candles = candles.candles
         return qdbr
     
-    
-    
+    def load_indicator(self,feature):
+        switch = {
+            'rsi':self.compute_rsi
+        }
+        return switch[feature]()
+
+    def compute_rsi(self):
+        rsi = talib.RSI(self.candles['close'], timeperiod=14)
+        self.candles = self.candles.join(rsi.rename('rsi'))
+        return ('rsi' in self.candles.columns)
