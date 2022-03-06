@@ -28,7 +28,9 @@ def scrap_trades():
     # init binance client and get 10 packs of 1000 trades to be sure to get at least 2 candles (we drop last one)
     binance_client = Spot(key=config['binance_api_key'], secret=config['binance_api_secret'])
     trades = []
-    while len(trades) < config['binance_trades_pack_size']:
+    prev_nb_trades = -1
+    while (len(trades) < config['binance_trades_pack_size']) and (len(trades) > prev_nb_trades):
+        prev_nb_trades = len(trades)
         trades.extend(binance_client.historical_trades(config['symbol'],limit=config['binance_hist_limit'],fromId=last_id+1))
         if len(trades) < config['binance_hist_limit']: raise HTTPException(status_code=425,detail="First pack size is {}".format(len(trades)))
         last_id = trades[-1]['id']
