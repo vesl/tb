@@ -50,17 +50,26 @@ async def graph_volume(timescale,from_date,to_date):
     if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
     candles = Candles()
     candles.from_json(features)
-    candles.candles = candles.candles.rename({'volume':'value'},axis=1)
     return lightweight_chart(candles)
 
 @router.get('/rsi/{timescale}/{from_date}/{to_date}')
 async def graph_rsi(timescale,from_date,to_date):
     """
-    Get volume from dataset and return it as json
+    Get rsi from dataset and return it as json
     """
     features = get_features('rsi',timescale,from_date,to_date)
     if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
     candles = Candles()
     candles.from_json(features)
-    candles.candles = candles.candles.rename({'rsi':'value'},axis=1)
+    return lightweight_chart(candles)
+
+@router.get('/adx/{timescale}/{from_date}/{to_date}')
+async def graph_adx(timescale,from_date,to_date):
+    """
+    Get adx from dataset and return it as json
+    """
+    features = get_features('adx',timescale,from_date,to_date)
+    if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
+    candles = Candles()
+    candles.from_json(features)
     return lightweight_chart(candles)
