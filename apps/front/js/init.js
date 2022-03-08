@@ -1,5 +1,5 @@
-function initPlotLoading(){
-    $.get('/loading.html',function(html){$('#plot').html(html)})
+function initPlotLoading(node){
+    $.get('/loading.html',function(html){node.html(html)})
 }
 
 function initPlotForm(next){
