@@ -112,77 +112,77 @@ function plotFinanceADX(values){
     })
 }
 function plotFinanceADXR(values){
-    
+
 }
 function plotFinanceAPO(values){
-    
+
 }
 function plotFinanceAroon(values){
-    
+
 }
 function plotFinanceAroonosc(values){
-    
+
 }
 function plotFinanceBOP(values){
-    
+
 }
 function plotFinanceCCI(values){
-    
+
 }
 function plotFinanceCMO(values){
-    
+
 }
 function plotFinanceDX(values){
-    
+
 }
 function plotFinanceMFI(values){
-    
+
 }
 function plotFinanceMinusDI(values){
-    
+
 }
 function plotFinanceMinusDM(values){
-    
+
 }
 function plotFinanceMOM(values){
-    
+
 }
 function plotFinancePlusDI(values){
-    
+
 }
 function plotFinancePlusDM(values){
-    
+
 }
 function plotFinancePPO(values){
-    
+
 }
 function plotFinanceROC(values){
-    
+
 }
 function plotFinanceROCP(values){
-    
+
 }
 function plotFinanceROCR(values){
-    
+
 }
 function plotFinanceROCR100(values){
-    
+
 }
 function plotFinanceStoch(values){
-    
+
 }
 function plotFinanceStochF(values){
-    
+
 }
 function plotFinanceStochRSI(values){
-    
+
 }
 function plotFinanceTrix(values){
-    
+
 }
 function plotFinanceUltosc(values){
-    
+
 }
 function plotFinanceWillr(values){
-    
+
 }
