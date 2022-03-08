@@ -32,7 +32,6 @@ def scrap_trades():
     while (len(trades) < config['binance_trades_pack_size']) and (len(trades) > prev_nb_trades):
         prev_nb_trades = len(trades)
         trades.extend(binance_client.historical_trades(config['symbol'],limit=config['binance_hist_limit'],fromId=last_id+1))
-        if len(trades) < config['binance_hist_limit']: raise HTTPException(status_code=425,detail="First pack size is {}".format(len(trades)))
         last_id = trades[-1]['id']
     log.info("Got {} trades".format(len(trades)))
     
