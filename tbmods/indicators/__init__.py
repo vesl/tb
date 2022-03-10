@@ -25,12 +25,16 @@ class Indicators:
             'adx':self.compute_adx,
             'adxr':self.compute_adxr,
             'apo':self.compute_apo,
+            'aroonup':self.compute_aroon,
             'aroondown':self.compute_aroon,
             'aroonosc':self.compute_aroonosc,
             'bop':self.compute_bop,
             'cci':self.compute_cci,
             'cmo':self.compute_cmo,
             'dx':self.compute_dx,
+            'macd':self.compute_macd,
+            'macdsignal':self.compute_macd,
+            'macdhist':self.compute_macd,
             'mfi':self.compute_mfi,
             'minusdi':self.compute_minusdi,
             'minusdm':self.compute_minusdm,
@@ -41,11 +45,12 @@ class Indicators:
             'roc':self.compute_roc,
             'rocp':self.compute_rocp,
             'rocr':self.compute_rocr,
-            'rocr100':self.compute_rocr100,
             'slowk':self.compute_stoch,
+            'slowd':self.compute_stoch,
             'fastk':self.compute_stochf,
+            'fastd':self.compute_stochf,
             'fastkrsi': self.compute_stochrsi,
-            'trix':self.compute_trix,
+            'fastdrsi': self.compute_stochrsi,
             'ultosc':self.compute_ultosc,
             'willr':self.compute_willr,
         }
@@ -83,12 +88,13 @@ class Indicators:
 
     def compute_aroon(self):
         aroondown, aroonup = talib.AROON(self.candles['high'], self.candles['low'], timeperiod=14)
-        self.candles = self.candles.join(aroondown.rename('aroondown'),aroonup.rename('aroonup'))
+        self.candles = self.candles.join(aroondown.rename('aroondown'))
+        self.candles = self.candles.join(aroonup.rename('aroonup'))
         self.candles.dropna(inplace=True)
         return ('aroondown' in self.candles.columns)
 
     def compute_aroonosc(self):
-        aroondown, aroonup = talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=14)
+        aroonosc = talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=14)
         self.candles = self.candles.join(aroonosc.rename('aroonosc'))
         self.candles.dropna(inplace=True)
         return ('aroonosc' in self.candles.columns)
@@ -177,35 +183,26 @@ class Indicators:
         self.candles.dropna(inplace=True)
         return ('rocr' in self.candles.columns)
 
-    def compute_rocr100(self):
-        rocr100 = talib.ROCR100(self.candles['close'], timeperiod=10)
-        self.candles = self.candles.join(rocr100.rename('rocr100'))
-        self.candles.dropna(inplace=True)
-        return ('rocr100' in self.candles.columns)
-
     def compute_stoch(self):
         slowk, slowd = talib.STOCH(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)
-        self.candles = self.candles.join(slowk.rename('slowk'),slowd.rename('slowd'))
+        self.candles = self.candles.join(slowk.rename('slowk'))
+        self.candles = self.candles.join(slowd.rename('slowd'))
         self.candles.dropna(inplace=True)
         return ('slowk' in self.candles.columns)
 
     def compute_stochf(self):
         fastk,fastd = talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, fastd_period=3, fastd_matype=0)
-        self.candles = self.candles.join(fastk.rename('fastk'),fastd.rename('fastd'))
+        self.candles = self.candles.join(fastk.rename('fastk'))
+        self.candles = self.candles.join(fastd.rename('fastd'))
         self.candles.dropna(inplace=True)
         return ('fastk' in self.candles.columns)
 
     def compute_stochrsi(self):
         fastkrsi, fastdrsi = talib.STOCHRSI(self.candles['close'], timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)
-        self.candles = self.candles.join(fastkrsi.rename('fastkrsi'),fastdrsi.rename('fastdrsi'))
+        self.candles = self.candles.join(fastkrsi.rename('fastkrsi'))
+        self.candles = self.candles.join(fastdrsi.rename('fastdrsi'))
         self.candles.dropna(inplace=True)
         return ('fastkrsi' in self.candles.columns)
-
-    def compute_trix(self):
-        trix = talib.TRIX(self.candles['close'], timeperiod=30)
-        self.candles = self.candles.join(trix.rename('trix'))
-        self.candles.dropna(inplace=True)
-        return ('trix' in self.candles.columns)
 
     def compute_ultosc(self):
         ultosc = talib.ULTOSC(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod1=7, timeperiod2=14, timeperiod3=28)
