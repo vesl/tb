@@ -18,4 +18,5 @@ const indicators = {
     'stoch':function(values){plotFinanceStoch(values)},
     'ultosc':function(values){plotFinanceUltosc(values)},
     'willr':function(values){plotFinanceWillr(values)},
+    'ichimoku':function(values){plotFinanceIchimoku(values)},
 }

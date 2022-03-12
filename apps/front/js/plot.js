@@ -351,3 +351,30 @@ function plotFinanceWillr(values){
         willrSeries.setData(data)
     })
 }
+
+function plotFinanceIchimoku(values){
+    appendIndicatorChart('candles','ichtenkan',values,function(data) {
+        data = JSON.parse(data)
+        renameKey(data,'ichtenkan','value')
+        const ichtenkanSeries = charts['candles'].addLineSeries({color:'#FF7070',lineWidth:1})
+        ichtenkanSeries.setData(data)
+    })
+    appendIndicatorChart('candles','ichkijun',values,function(data) {
+        data = JSON.parse(data)
+        renameKey(data,'ichkijun','value')
+        const ichkijunSeries = charts['candles'].addLineSeries({color:'#7081FF',lineWidth:1})
+        ichkijunSeries.setData(data)
+    })
+    appendIndicatorChart('candles','ichssa',values,function(data) {
+        data = JSON.parse(data)
+        renameKey(data,'ichssa','value')
+        const ichssaSeries = charts['candles'].addLineSeries({color:'#DA70FF',lineWidth:1})
+        ichssaSeries.setData(data)
+    })
+    appendIndicatorChart('candles','ichssb',values,function(data) {
+        data = JSON.parse(data)
+        renameKey(data,'ichssb','value')
+        const ichssbSeries = charts['candles'].addLineSeries({color:'#C2FF70',lineWidth:1})
+        ichssbSeries.setData(data)
+    })
+}

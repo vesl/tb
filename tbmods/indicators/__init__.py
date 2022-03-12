@@ -53,6 +53,11 @@ class Indicators:
             'fastdrsi': self.compute_stochrsi,
             'ultosc':self.compute_ultosc,
             'willr':self.compute_willr,
+            'ichtenkan':self.compute_ichimoku,
+            'ichkijun':self.compute_ichimoku,
+            'ichssa':self.compute_ichimoku,
+            'ichssb':self.compute_ichimoku,
+            'ichlag':self.compute_ichimoku,
         }
         return switch[feature]()
 
@@ -215,3 +220,13 @@ class Indicators:
         self.candles = self.candles.join(willr.rename('willr'))
         self.candles.dropna(inplace=True)
         return ('willr' in self.candles.columns)
+
+    def compute_ichimoku(self):
+        self.candles["ichtenkan"] = (self.candles.high.rolling(9).max()+self.candles.low.rolling(9).min())/2
+        self.candles["ichkijun"] = (self.candles.high.rolling(26).max()+self.candles.low.rolling(26).min())/2
+        self.candles["ichssa"] = ((self.candles.ichtenkan+self.candles.ichkijun)/2).shift(26)
+        self.candles["ichssb"] = ((self.candles.high.rolling(52).max()+self.candles.low.rolling(52).min())/2).shift(26)
+        # Disable lagging span because of nans
+        #self.candles["ichlag"] = self.candles.close.shift(-26)
+        self.candles.dropna(inplace=True)
+        return ('ichtenkan' in self.candles.columns)

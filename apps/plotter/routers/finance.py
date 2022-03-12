@@ -403,3 +403,58 @@ async def graph_ultosc(timescale,from_date,to_date):
     candles = Candles()
     candles.from_json(features)
     return lightweight_chart(candles)
+
+@router.get('/ichtenkan/{timescale}/{from_date}/{to_date}')
+async def graph_tenkan(timescale,from_date,to_date):
+    """
+    Get tenkan from dataset and return it as json
+    """
+    features = get_features('ichtenkan',timescale,from_date,to_date)
+    if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
+    candles = Candles()
+    candles.from_json(features)
+    return lightweight_chart(candles)
+
+@router.get('/ichkijun/{timescale}/{from_date}/{to_date}')
+async def graph_kijun(timescale,from_date,to_date):
+    """
+    Get kijun from dataset and return it as json
+    """
+    features = get_features('ichkijun',timescale,from_date,to_date)
+    if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
+    candles = Candles()
+    candles.from_json(features)
+    return lightweight_chart(candles)
+
+@router.get('/ichssa/{timescale}/{from_date}/{to_date}')
+async def graph_ssa(timescale,from_date,to_date):
+    """
+    Get ssa from dataset and return it as json
+    """
+    features = get_features('ichssa',timescale,from_date,to_date)
+    if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
+    candles = Candles()
+    candles.from_json(features)
+    return lightweight_chart(candles)
+
+@router.get('/ichssb/{timescale}/{from_date}/{to_date}')
+async def graph_ssb(timescale,from_date,to_date):
+    """
+    Get ssb from dataset and return it as json
+    """
+    features = get_features('ichssb',timescale,from_date,to_date)
+    if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
+    candles = Candles()
+    candles.from_json(features)
+    return lightweight_chart(candles)
+
+@router.get('/ichlag/{timescale}/{from_date}/{to_date}')
+async def graph_lagging_span(timescale,from_date,to_date):
+    """
+    Get lagging span from dataset and return it as json
+    """
+    features = get_features('ichlag',timescale,from_date,to_date)
+    if 'error' in features: raise HTTPException(status_code=500,detail=features['error'])
+    candles = Candles()
+    candles.from_json(features)
+    return lightweight_chart(candles)
