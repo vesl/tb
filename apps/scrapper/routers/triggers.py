@@ -6,14 +6,14 @@ from tbmods.cache import Cache
 from tbmods.log import Log
 
 router = APIRouter(
-    prefix="/trades",
-    tags=["trades"],
+    prefix="/triggers",
+    tags=["triggers"],
 )
 
 config = Config()
 log = Log(config['app'])
 
-@router.get('/')
+@router.get('/scrap_trades')
 def scrap_trades():
     """
     Purpose: get binance trades and ingest it in questdb

@@ -36,6 +36,6 @@ config:
   inputs:
     - http:
         urls:
-          - "http://scrapper.tb.svc.k8s.slav.rocks/trades/"
+          - "http://scrapper.tb.svc.k8s.slav.rocks/triggers/scrap_trades"
         timeout: "20s"
         data_format: "json_v2"
