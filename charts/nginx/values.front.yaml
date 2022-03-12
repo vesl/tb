@@ -17,6 +17,10 @@ serverBlock: |-
       rewrite /api/plotter/(.*) /$1 break;
       proxy_pass http://plotter.tb.svc.k8s.slav.rocks;
     }
+    location /api/dataset {
+      rewrite /api/dataset/(.*) /$1 break;
+      proxy_pass http://dataset.tb.svc.k8s.slav.rocks;
+    }
   }
 service:
   type: ClusterIP
