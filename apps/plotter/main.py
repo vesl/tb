@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from plotter.routers import status,finance
+from plotter.routers import status,finance,labels
 
 ## init api
 app = FastAPI(
@@ -9,5 +9,6 @@ app = FastAPI(
 )
 
 ## init routers
+app.include_router(labels.router)
 app.include_router(finance.router)
 app.include_router(status.router)
