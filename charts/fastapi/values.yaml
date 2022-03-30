@@ -29,3 +29,4 @@ apps:
    replicas: 1
    configmaps:
      - questdb
+     - dataset

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dataset
+data:
+  TB_CUSUM_PCT_THRESHOLD: "5"
+  TB_DAILY_VOL_SPAN: "26"
