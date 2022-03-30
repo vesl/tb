@@ -64,5 +64,3 @@ class Candles:
             candle.Index
         ) for candle in self.candles.itertuples()]
         return questdb.ingest(data)
-        
-        
