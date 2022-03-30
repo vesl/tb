@@ -36,4 +36,4 @@ async def get_tbm(timescale,from_date,to_date):
     tbm = TripleBarrier(candles.candles,events)
     tbm.apply_horizontal_barriers(config['tbm_up_thresh'],config['tbm_down_thresh'])
     tbm.apply_vertical_barrier()
-    
+    return tbm.to_json()

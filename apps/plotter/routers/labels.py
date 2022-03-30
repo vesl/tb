@@ -24,9 +24,8 @@ def graph_cusum(timescale,from_date,to_date):
     close.from_json(json.loads(r.json()))
     # get cusum events
     r = requests.get('http://dataset/labels/filters/cusum/{}/{}/{}'.format(timescale,from_date,to_date))
-    if r.status_code != 200: raise HTTPException(status_code=500,detail="Unable to get dataset date")
+    if r.status_code != 200: raise HTTPException(status_code=500,detail="Unable to get dataset data")
     events = Candles()
-    print(r.json())
     events.from_json(json.loads(r.json()))
     # graph
     sns.set(rc = {'figure.figsize':(11,4)})
@@ -35,3 +34,16 @@ def graph_cusum(timescale,from_date,to_date):
     plt.savefig('/tmp/cusum.png')
     plt.close()
     return FileResponse('/tmp/cusum.png',media_type="image/png")
+
+@router.get('/tbm/{timescale}/{from_date}/{to_date}/tbm.png')
+def graph_tbm(timescale,from_date,to_date):
+    # get close prices
+    r = requests.get('http://dataset/features/close/{}/{}/{}'.format(timescale,from_date,to_date))
+    if r.status_code != 200: raise HTTPException(status_code=500,detail="Unable to get dataset data")
+    close = Candles()
+    close.from_json(json.loads(r.json()))
+    # get tbm
+    r = requests.get('http://dataset/labels/tbm/{}/{}/{}'.format(timescale,from_date,to_date))
+    if r.status_code != 200: raise HTTPException(status_code=500,detail="Unable to get dataset data")
+    tbm = Candles()
+    tbm.from_json(json.loads(r.json()))
