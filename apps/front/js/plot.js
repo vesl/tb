@@ -16,6 +16,14 @@ function showPlotsFinance(){
     $('#content-title').html('Finance plots')
 }
 
+function showPlotsLabels(){
+    initPlotForm(function(){
+        initPlotDiv()
+        $('#button-plot').click(function(){plotLabels()})
+    })
+    $('#content-title').html('Labels plots')
+}
+
 function getFormPlotValues(){
     var values = {}
     values['from'] = $('#datepicker-from').val()
@@ -38,7 +46,7 @@ function getFormIndicators(){
 
 function createIndicatorChart(name,values,next){
     const title = $('<span>')
-    const div=$('<div>')
+    const div = $('<div>')
     title.html('<h3>'+name+'</h3>')
     title.attr('id','plot-title-'+name)
     div.attr('id','plot-'+name)
@@ -377,4 +385,23 @@ function plotFinanceIchimoku(values){
         const ichssbSeries = charts['candles'].addLineSeries({color:'#C2FF70',lineWidth:1})
         ichssbSeries.setData(data)
     })
+}
+
+function createPlotImg(name,uri,values){
+    const title = $('<span>')
+    const div = $('<div>')
+    const img = $('<img>')
+    title.html('<h3>'+name+'</h3>')
+    title.attr('id','plot-title-'+name)
+    div.attr('id','plot-'+name)
+    $('#plot').append(title)
+    $('#plot').append(div)
+    img.attr('src','/api/plotter/'+uri+'/'+values['timescale']+'/'+values['from']+'/'+values['to']+'/'+name+'.png')
+    div.html(img)
+}
+
+function plotLabels(){
+    const values = getFormPlotValues()
+    $('#plot').empty()
+    createPlotImg('cusum','labels/filters/cusum',values)
 }

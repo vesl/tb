@@ -5,7 +5,8 @@ const nav = {
     },
     'Plotter': {
         'Status': function(){showStatus('plotter')},
-        'Finance': function(){showPlotsFinance()}
+        'Finance': function(){showPlotsFinance()},
+        'Labels': function(){showPlotsLabels()},
     },
     'Dataset': {
         'Status': function(){showStatus('dataset')},
