@@ -9,6 +9,11 @@ containerPorts:
 serverBlock: |-
   server {
     listen 0.0.0.0:{{ .Values.containerPorts.http }};
+    add_header Last-Modified $date_gmt;
+    add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+    if_modified_since off;
+    expires off;
+    etag off;
     location /api/scrapper {
       rewrite /api/scrapper/(.*) /$1 break;
       proxy_pass http://scrapper.tb.svc.k8s.slav.rocks;
