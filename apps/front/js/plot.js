@@ -404,4 +404,5 @@ function plotLabels(){
     const values = getFormPlotValues()
     $('#plot').empty()
     createPlotImg('cusum','labels/filters/cusum',values)
+    createPlotImg('tbm','labels/tbm',values)
 }
