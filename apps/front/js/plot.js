@@ -405,4 +405,5 @@ function plotLabels(){
     $('#plot').empty()
     createPlotImg('cusum','labels/filters/cusum',values)
     createPlotImg('tbm','labels/tbm',values)
+    createPlotImg('balance','labels/balance',values)
 }

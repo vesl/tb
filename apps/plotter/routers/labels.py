@@ -63,3 +63,17 @@ def graph_tbm(timescale,from_date,to_date):
     fig.savefig('/tmp/tbm.png')
     fig.clf()
     return FileResponse('/tmp/tbm.png',media_type="image/png")
+
+@router.get('/balance/{timescale}/{from_date}/{to_date}/balance.png')
+def graph_balance(timescale,from_date,to_date):
+    # get tbm
+    r = requests.get('http://dataset/labels/tbm/{}/{}/{}'.format(timescale,from_date,to_date))
+    if r.status_code != 200: raise HTTPException(status_code=500,detail="Unable to get dataset data")
+    barriers = Candles()
+    barriers.from_json(json.loads(r.json()))
+    # graph
+    fig, ax = plt.subplots()
+    sns.countplot(x='side',data=barriers.candles)
+    fig.savefig('/tmp/balance.png')
+    fig.clf()
+    return FileResponse('/tmp/balance.png',media_type="image/png")
