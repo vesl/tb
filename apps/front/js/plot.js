@@ -24,6 +24,13 @@ function showPlotsLabels(){
     $('#content-title').html('Labels plots')
 }
 
+function showPlotsCorrelation(){
+    initPlotForm(function(){
+        initPlotDiv()
+        $('#button-plot').click(function(){plotCorrelation()})
+    })
+}
+
 function getFormPlotValues(){
     var values = {}
     values['from'] = $('#datepicker-from').val()
@@ -406,4 +413,8 @@ function plotLabels(){
     createPlotImg('cusum','labels/filters/cusum',values)
     createPlotImg('tbm','labels/tbm',values)
     createPlotImg('balance','labels/balance',values)
+}
+
+function plotCorrelation(){
+    const values = getFormPlotValues()
 }
