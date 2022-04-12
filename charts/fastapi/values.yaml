@@ -24,9 +24,16 @@ apps:
      
 # Dataset
  - name: dataset
-   dev: true
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/talib.fastapi
    replicas: 1
    configmaps:
      - questdb
      - dataset
+
+# Trainer
+ - name: trainer
+   dev: true
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/sklearn.fastapi
+   replicas: 1
+   configmaps:
+     - questdb
