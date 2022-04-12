@@ -18,7 +18,8 @@ async def get_features(features,timescale,from_date,to_date):
     Load ohlc from indicators, then add extra features
     """
     # split features
-    features = features.split(',')
+    if features == 'enabled_features': features = config['enabled_features'].split(',')
+    else: features = features.split(',')
     # init indicators and load basic features (ohlc+volume)
     indicators = Indicators()
     qdbr = indicators.candles_from_questdb(timescale,from_date,to_date)

@@ -21,7 +21,6 @@ class Indicators:
     def load_indicator(self,feature):
         switch = {
             'rsi':self.compute_rsi,
-            'macd':self.compute_macd,
             'adx':self.compute_adx,
             'adxr':self.compute_adxr,
             'apo':self.compute_apo,

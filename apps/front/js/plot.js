@@ -417,4 +417,6 @@ function plotLabels(){
 
 function plotCorrelation(){
     const values = getFormPlotValues()
+    $('#plot').empty()
+    createPlotImg('features_corr','correlation/features',values)
 }
