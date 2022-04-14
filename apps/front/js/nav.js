@@ -9,7 +9,4 @@ const nav = {
         'Labels': function(){showPlotsLabels()},
         'Correlation': function(){showPlotsCorrelation()},
     },
-    'Dataset': {
-        'Status': function(){showStatus('dataset')},
-    }
 }
