@@ -1,5 +1,5 @@
-// Edit nav
-const nav = {
+// Nav map
+const navMap = {
     'Scrapper': {
         'Status': function(){showStatus('scrapper')}
     },
@@ -9,4 +9,17 @@ const nav = {
         'Labels': function(){showPlotsLabels()},
         'Correlation': function(){showPlotsCorrelation()},
     },
+}
+
+// Create Nav
+window.onload = function () {
+
+    for (const app in navMap) {
+        navApp = new NavApp(app)
+        for (const appSubNav in navMap[app]) {
+            subnav = new SubNav(appSubNav,navMap[navApp.app][appSubNav])
+            navApp.div.append(subnav.render())
+        }
+        $('#nav').append(navApp.render())
+    }
 }
