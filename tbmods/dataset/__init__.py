@@ -19,7 +19,7 @@ class Dataset:
         talib_features = [feature for feature in self.sources['talib'] if feature in self.features]
         df_qdb_features = self.load_qdb_features()
         df_talib_features = self.load_talib_features(df_qdb_features,talib_features)
-        if isinstance(df_talib_features,pd.DataFrame): return pd.concat([df_qdb_features,df_talib_features],axis=1)
+        if len(df_talib_features) > 0: return df_qdb_features.join(df_talib_features,how='inner')
         else: return df_qdb_features
         
     def load_qdb_features(self):
@@ -28,7 +28,9 @@ class Dataset:
         return candles.candles
         
     def load_talib_features(self,df_qdb_features,talib_features):
+        df_talib_features = pd.DataFrame()
         indicators = Indicators(df_qdb_features)
-        return pd.DataFrame()
-        #for feature in talib_features:
-            
+        for talib_feature in talib_features:
+            indicators.load(talib_feature)
+            df_talib_features[talib_feature] = indicators.candles[talib_features]
+        return df_talib_features

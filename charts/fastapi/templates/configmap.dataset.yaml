@@ -8,4 +8,18 @@ data:
   TB_TBM_UP_THRESH: "1"
   TB_TBM_DOWN_THRESH: "0.5"
   TB_TBM_MIN_RET: "0.03"
-  TB_ENABLED_FEATURES: "rsi,adx,adxr,apo,aroonup,aroondown,aroonosc,bop,cci,cmo,dx,macd,macdsignal,macdhist,mfi,minusdi,minusdm,mom,plusdi,plusdm,ppo,roc,rocp,rocr,slowk,slowd,fastk,fastd,fastkrsi,fastdrsi,ultosc,willr,ichtenkan,ichkijun,ichssa,ichssb"
+  TB_FEATURES: | 
+    {
+      "sources":{
+          "qdb":[
+            "open",
+            "high",
+            "low",
+            "close",
+            "volume"
+          ],
+          "talib":[
+             "rsi"
+          ]
+      }
+    }
