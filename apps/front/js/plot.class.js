@@ -96,12 +96,17 @@ class PlotLc extends Plot {
             'cmo': plotFinanceCMO,
             'dx': plotFinanceDX,
             'mfi': plotFinanceMFI,
-            'minus': plotFinanceMinus,
+            'minusdi': plotFinanceMinusDI,
+            'minusdm': plotFinanceMinusDM,
             'mom': plotFinanceMOM,
-            'plus': plotFinancePlus,
+            'plusdi': plotFinancePlusDI,
+            'plusdm': plotFinancePlusDM,
             'ppo': plotFinancePPO,
             'roc': plotFinanceROC,
             'stoch': plotFinanceStoch,
+            'stochf': plotFinanceStochF,
+            'stochrsi': plotFinanceStochRSI,
+            'trix': plotFinanceTrix,
             'ultosc': plotFinanceUltosc,
             'willr': plotFinanceWillr,
             'ichimoku': plotFinanceIchimoku,
@@ -140,8 +145,8 @@ class PlotLc extends Plot {
         this.divPlotForm.html(this.ul)
     }
     
-    createLcChart(plotDiv){
-        return LightweightCharts.createChart(document.getElementById(plotDiv.attr('id')),{height:400})
+    createLcChart(plotDiv,height=200){
+        return LightweightCharts.createChart(document.getElementById(plotDiv.attr('id')),{height:height})
     }
     
     extractKeyAsValue(data,key){
