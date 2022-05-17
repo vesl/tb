@@ -19,7 +19,30 @@ data:
             "volume"
           ],
           "talib":[
-             "rsi"
+             "rsi",
+             "macd",
+             "adx",
+             "apo",
+             "aroon",
+             "bop",
+             "cci",
+             "cmo",
+             "dx",
+             "mfi",
+             "minusdi",
+             "minusdm",
+             "mom",
+             "plusdi",
+             "plusdm",
+             "ppo",
+             "roc",
+             "stoch",
+             "stochf",
+             "stochrsi",
+             "trix",
+             "ultosc",
+             "willr",
+             "ichimoku"
           ]
       }
     }

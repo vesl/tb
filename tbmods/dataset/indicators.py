@@ -16,18 +16,13 @@ class Indicators:
         switch = {
             'rsi':self.compute_rsi,
             'adx':self.compute_adx,
-            'adxr':self.compute_adxr,
             'apo':self.compute_apo,
-            'aroonup':self.compute_aroon,
-            'aroondown':self.compute_aroon,
-            'aroonosc':self.compute_aroonosc,
+            'aroon':self.compute_aroon,
             'bop':self.compute_bop,
             'cci':self.compute_cci,
             'cmo':self.compute_cmo,
             'dx':self.compute_dx,
             'macd':self.compute_macd,
-            'macdsignal':self.compute_macd,
-            'macdhist':self.compute_macd,
             'mfi':self.compute_mfi,
             'minusdi':self.compute_minusdi,
             'minusdm':self.compute_minusdm,
@@ -38,19 +33,13 @@ class Indicators:
             'roc':self.compute_roc,
             'rocp':self.compute_rocp,
             'rocr':self.compute_rocr,
-            'slowk':self.compute_stoch,
-            'slowd':self.compute_stoch,
-            'fastk':self.compute_stochf,
-            'fastd':self.compute_stochf,
-            'fastkrsi': self.compute_stochrsi,
-            'fastdrsi': self.compute_stochrsi,
+            'stoch':self.compute_stoch,
+            'stochf':self.compute_stochf,
+            'stochrsi': self.compute_stochrsi,
+            'trix': self.compute_trix,
             'ultosc':self.compute_ultosc,
             'willr':self.compute_willr,
-            'ichtenkan':self.compute_ichimoku,
-            'ichkijun':self.compute_ichimoku,
-            'ichssa':self.compute_ichimoku,
-            'ichssb':self.compute_ichimoku,
-            'ichlag':self.compute_ichimoku,
+            'ichimoku':self.compute_ichimoku,
         }
         return switch[feature]()
 
@@ -68,15 +57,11 @@ class Indicators:
 
     def compute_adx(self):
         adx = talib.ADX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
-        self.candles = self.candles.join(adx.rename('adx'))
-        self.candles.dropna(inplace=True)
-        return ('adx' in self.candles.columns)
-
-    def compute_adxr(self):
         adxr = talib.ADXR(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+        self.candles = self.candles.join(adx.rename('adx'))
         self.candles = self.candles.join(adxr.rename('adxr'))
         self.candles.dropna(inplace=True)
-        return ('adxr' in self.candles.columns)
+        return ('adx' in self.candles.columns)
 
     def compute_apo(self):
         apo = talib.APO(self.candles['close'], fastperiod=12, slowperiod=26, matype=0)
@@ -86,16 +71,10 @@ class Indicators:
 
     def compute_aroon(self):
         aroondown, aroonup = talib.AROON(self.candles['high'], self.candles['low'], timeperiod=14)
-        self.candles = self.candles.join(aroondown.rename('aroondown'))
-        self.candles = self.candles.join(aroonup.rename('aroonup'))
+        aroonosc = talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=14)
+        self.candles = self.candles.join([aroondown.rename('aroondown'),aroonup.rename('aroonup'),aroonosc.rename('aroonosc')])
         self.candles.dropna(inplace=True)
         return ('aroondown' in self.candles.columns)
-
-    def compute_aroonosc(self):
-        aroonosc = talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=14)
-        self.candles = self.candles.join(aroonosc.rename('aroonosc'))
-        self.candles.dropna(inplace=True)
-        return ('aroonosc' in self.candles.columns)
 
     def compute_bop(self):
         bop = talib.BOP(self.candles['open'], self.candles['high'], self.candles['low'], self.candles['close'])
@@ -183,24 +162,27 @@ class Indicators:
 
     def compute_stoch(self):
         slowk, slowd = talib.STOCH(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)
-        self.candles = self.candles.join(slowk.rename('slowk'))
-        self.candles = self.candles.join(slowd.rename('slowd'))
+        self.candles = self.candles.join([slowk.rename('slowk'),slowd.rename('slowd')])
         self.candles.dropna(inplace=True)
         return ('slowk' in self.candles.columns)
 
     def compute_stochf(self):
         fastk,fastd = talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, fastd_period=3, fastd_matype=0)
-        self.candles = self.candles.join(fastk.rename('fastk'))
-        self.candles = self.candles.join(fastd.rename('fastd'))
+        self.candles = self.candles.join([fastk.rename('fastk'),fastd.rename('fastd')])
         self.candles.dropna(inplace=True)
         return ('fastk' in self.candles.columns)
 
     def compute_stochrsi(self):
         fastkrsi, fastdrsi = talib.STOCHRSI(self.candles['close'], timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)
-        self.candles = self.candles.join(fastkrsi.rename('fastkrsi'))
-        self.candles = self.candles.join(fastdrsi.rename('fastdrsi'))
+        self.candles = self.candles.join([fastkrsi.rename('fastkrsi'),fastdrsi.rename('fastdrsi')])
         self.candles.dropna(inplace=True)
         return ('fastkrsi' in self.candles.columns)
+
+    def compute_trix(self):
+        trix = talib.TRIX(self.candles['close'], timeperiod=30)
+        self.candles = self.candles.join(trix.rename('trix'))
+        self.candles.dropna(inplace=True)
+        return ('trix' in self.candles.columns)
 
     def compute_ultosc(self):
         ultosc = talib.ULTOSC(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod1=7, timeperiod2=14, timeperiod3=28)
@@ -215,11 +197,11 @@ class Indicators:
         return ('willr' in self.candles.columns)
 
     def compute_ichimoku(self):
-        self.candles["ichtenkan"] = (self.candles.high.rolling(9).max()+self.candles.low.rolling(9).min())/2
-        self.candles["ichkijun"] = (self.candles.high.rolling(26).max()+self.candles.low.rolling(26).min())/2
-        self.candles["ichssa"] = ((self.candles.ichtenkan+self.candles.ichkijun)/2).shift(26)
-        self.candles["ichssb"] = ((self.candles.high.rolling(52).max()+self.candles.low.rolling(52).min())/2).shift(26)
+        self.candles["tenkan"] = (self.candles.high.rolling(9).max()+self.candles.low.rolling(9).min())/2
+        self.candles["kijun"] = (self.candles.high.rolling(26).max()+self.candles.low.rolling(26).min())/2
+        self.candles["ssa"] = ((self.candles.tenkan+self.candles.kijun)/2).shift(26)
+        self.candles["ssb"] = ((self.candles.high.rolling(52).max()+self.candles.low.rolling(52).min())/2).shift(26)
         # Disable lagging span because of nans
         #self.candles["ichlag"] = self.candles.close.shift(-26)
         self.candles.dropna(inplace=True)
-        return ('ichtenkan' in self.candles.columns)
+        return ('tenkan' in self.candles.columns)

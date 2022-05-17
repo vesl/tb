@@ -28,9 +28,8 @@ class Dataset:
         return candles.candles
         
     def load_talib_features(self,df_qdb_features,talib_features):
-        df_talib_features = pd.DataFrame()
         indicators = Indicators(df_qdb_features)
         for talib_feature in talib_features:
             indicators.load(talib_feature)
-            df_talib_features[talib_feature] = indicators.candles[talib_features]
+        df_talib_features = indicators.candles.drop(df_qdb_features.columns,axis=1)
         return df_talib_features
