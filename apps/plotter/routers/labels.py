@@ -18,7 +18,7 @@ config = Config()
 
 sns.set(rc = {'figure.figsize':(11,4)})
 
-@router.get('/filters/cusum/{timescale}/{from_date}/{to_date}/cusum.png')
+@router.get('/cusum/{timescale}/{from_date}/{to_date}/cusum.png')
 def graph_cusum(timescale,from_date,to_date):
     # get close prices
     r = requests.get('http://dataset/features/close/{}/{}/{}'.format(timescale,from_date,to_date))

@@ -18,7 +18,7 @@ config = Config()
 
 sns.set(rc = {'figure.figsize':(11,4)})
 
-@router.get('/features/{timescale}/{from_date}/{to_date}/features_corr.png')
+@router.get('/features/{timescale}/{from_date}/{to_date}/features.png')
 def graph_balance(timescale,from_date,to_date):
     # get features
     r = requests.get('http://dataset/features/enabled_features/{}/{}/{}'.format(timescale,from_date,to_date))
