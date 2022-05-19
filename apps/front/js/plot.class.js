@@ -45,8 +45,10 @@ class Plot {
         $('#datepicker-to').datepicker({format:'yyyy-mm-dd'})
     }
     
-    showLoading(node){
-        $.get('/loading.html',(html)=>{node.html(html)})
+    showLoading(node,next){
+        $.get('/loading.html',(html)=>{node.html(html)
+            next()
+        })
     }
     
     hideLoading(node){
@@ -56,30 +58,25 @@ class Plot {
     show(){
         $.get('/plot_form.html',(html)=>{
             this.divPlotForm.prepend(html)
-            this.setDatepickersFormat()
             this.content_title.html(this.title)
             this.content
                 .html(this.divPlotForm)
                 .append(this.div)
             this.setClick()
+            this.setDatepickersFormat()
         })
     }
     
-    createSubPlot(name,category,features,dates,next){
+    createSubPlot(name){
         let plotDivId = 'plot-'+name
         if ($('#'+plotDivId)[0]) $('#'+plotDivId).remove()
         const plotDiv = $('<div>').attr('id',plotDivId)
         this.div.append(plotDiv)
-        this.showLoading(plotDiv)
-        $.get('/api/plotter/'+category+'/'+features+'/'+dates['timescale']+'/'+dates['from']+'/'+dates['to'],(data)=>{
-            next(plotDiv,JSON.parse(data))
-            plotDiv.prepend(this.getTitle(name))
-            this.hideLoading(plotDiv)
-        })
+        return plotDiv
     }
 }
 
-//PlotLc class
+// PlotLc class
 class PlotLc extends Plot {
 
     constructor(title,click){
@@ -163,4 +160,56 @@ class PlotLc extends Plot {
             if ($('#checkbox-indicator-'+indicator).is(':checked') === true) this.indicatorsSel.push(indicator)
         }
     }
+    
+    createSubPlotLc(name,category,features,dates,next){
+        const plotDiv = this.createSubPlot(name)
+        this.showLoading(plotDiv,()=>{
+            $.get('/api/plotter/'+category+'/'+features+'/'+dates['timescale']+'/'+dates['from']+'/'+dates['to'],(data)=>{
+                next(plotDiv,JSON.parse(data))
+                plotDiv.prepend(this.getTitle(name))
+                this.hideLoading(plotDiv)
+            })
+        })
+    }
 }
+
+class PlotImg extends Plot {
+    
+    constructor(title,click){
+        super(title,click)
+    }
+    
+    createSubPlotImg(name,category,features,dates,next){
+        let plotDivId = 'plot-'+name
+        if ($('#'+plotDivId)[0]) $('#'+plotDivId).remove()
+        const plotDiv = $('<div>').attr('id',plotDivId)
+        this.div.append(plotDiv)
+        this.showLoading(plotDiv)
+        $.get('/api/plotter/'+category+'/'+features+'/'+dates['timescale']+'/'+dates['from']+'/'+dates['to']+'/'+features+'.png',(data)=>{
+        })
+    }
+}
+/**
+ * 
+ * function createPlotImg(name,uri,values){
+    const title = $('<span>')
+    const div = $('<div>')
+    const img = $('<img>')
+    title.html('<h3>'+name+'</h3>')
+    title.attr('id','plot-title-'+name)
+    div.attr('id','plot-'+name)
+    $('#plot').append(title)
+    $('#plot').append(div)
+    img.attr('src','/api/plotter/'+uri+'/'+values['timescale']+'/'+values['from']+'/'+values['to']+'/'+name+'.png')
+    div.html(img)
+}
+
+function plotCorrelation(){
+    const values = getFormPlotValues()
+    $('#plot').empty()
+    createPlotImg('features_corr','correlation/features',values)
+}
+ *     createPlotImg('cusum','labels/filters/cusum',values)
+    createPlotImg('tbm','labels/tbm',values)
+    createPlotImg('balance','labels/balance',values)
+ **/
