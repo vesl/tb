@@ -6,8 +6,8 @@ const navMap = {
     'Plotter': {
         'Status': function(){showStatus('plotter')},
         'Finance': function(){setupPlotFinance()},
-        'Labels': function(){showPlotsLabels()},
-        'Correlation': function(){showPlotsCorrelation()},
+        'Labels': function(){setupPlotLabels()},
+        'Correlation': function(){setupPlotCorrelation()},
     },
 }
 
