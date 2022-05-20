@@ -142,10 +142,6 @@ class PlotLc extends Plot {
         this.divPlotForm.html(this.ul)
     }
     
-    createLcChart(plotDiv,height=200){
-        return LightweightCharts.createChart(document.getElementById(plotDiv.attr('id')),{height:height})
-    }
-    
     extractKeyAsValue(data,key){
         let ret = []
         for (const i in data) {
@@ -161,6 +157,10 @@ class PlotLc extends Plot {
         }
     }
     
+    createLcChart(plotDiv,height=200){
+        return LightweightCharts.createChart(document.getElementById(plotDiv.attr('id')),{height:height})
+    }
+
     createSubPlotLc(name,category,features,dates,next){
         const plotDiv = this.createSubPlot(name)
         this.showLoading(plotDiv,()=>{
@@ -179,37 +179,14 @@ class PlotImg extends Plot {
         super(title,click)
     }
     
-    createSubPlotImg(name,category,features,dates,next){
-        let plotDivId = 'plot-'+name
-        if ($('#'+plotDivId)[0]) $('#'+plotDivId).remove()
-        const plotDiv = $('<div>').attr('id',plotDivId)
-        this.div.append(plotDiv)
-        this.showLoading(plotDiv)
-        $.get('/api/plotter/'+category+'/'+features+'/'+dates['timescale']+'/'+dates['from']+'/'+dates['to']+'/'+features+'.png',(data)=>{
+    createSubPlotImg(name,category,features,dates){
+        const plotDiv = this.createSubPlot(name)
+        this.showLoading(plotDiv,()=>{
+            let img = new Image()
+            img.onload = ()=>{this.hideLoading(plotDiv)}
+            img.src = '/api/plotter/'+category+'/'+features+'/'+dates['timescale']+'/'+dates['from']+'/'+dates['to']+'/'+features+'.png'
+            plotDiv.prepend(this.getTitle(name))
+            plotDiv.append(img)
         })
     }
 }
-/**
- * 
- * function createPlotImg(name,uri,values){
-    const title = $('<span>')
-    const div = $('<div>')
-    const img = $('<img>')
-    title.html('<h3>'+name+'</h3>')
-    title.attr('id','plot-title-'+name)
-    div.attr('id','plot-'+name)
-    $('#plot').append(title)
-    $('#plot').append(div)
-    img.attr('src','/api/plotter/'+uri+'/'+values['timescale']+'/'+values['from']+'/'+values['to']+'/'+name+'.png')
-    div.html(img)
-}
-
-function plotCorrelation(){
-    const values = getFormPlotValues()
-    $('#plot').empty()
-    createPlotImg('features_corr','correlation/features',values)
-}
- *     createPlotImg('cusum','labels/filters/cusum',values)
-    createPlotImg('tbm','labels/tbm',values)
-    createPlotImg('balance','labels/balance',values)
- **/

@@ -261,13 +261,18 @@ function setupPlotLabels(){
 
 function plotLabels(plot){
     dates = plot.getDates()
-    plot.createSubPlot('labels','tbm',features,dates,function(){
-        
-    })
+    plot.createSubPlotImg('cusum','labels','cusum',dates)
+    plot.createSubPlotImg('tbm','labels','tbm',dates)
+    plot.createSubPlotImg('balance','labels','balance',dates)
 }
 
 // Correlation plots
 function setupPlotCorrelation(){
     plot = new PlotImg('Correlation plots',plotCorrelation)
     plot.show()
+}
+
+function plotCorrelation(plot){
+    dates = plot.getDates()
+    plot.createSubPlotImg('features','correlation','features',dates)
 }
