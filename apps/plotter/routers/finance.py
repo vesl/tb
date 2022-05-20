@@ -1,8 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from tbmods.dataset import Dataset
-from tbmods.candles import Candles
 from tbmods.config import Config
-from tbmods.cache import Cache
 from tbmods.log import Log
 import pandas as pd
 import requests
