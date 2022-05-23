@@ -5,24 +5,27 @@ config = Config()
 
 class TripleBarrier:
     
-    def __init__(self,candles,events):
-        # we need close for later , but not events
-        self.close = candles.close
-        events = events.event
+    def __init__(self,close,events):
+        self.close = close
         self.daily_vol = self.get_daily_vol(self.close)
         # sync indexes on daily_vol and events which has less rows
         index = events.index.intersection(self.daily_vol.index)
         # init barriers
-        self.barriers = pd.DataFrame({"close":self.close.loc[index],"events":events.loc[index]},index=events.index)
-        self.barriers.dropna(inplace=True)
+        self.barriers = pd.DataFrame({
+            "close":self.close.loc[index].values,
+            "events":events.event.loc[index].values},
+            index=index)
+        self.apply_horizontal_barriers(config['tbm_up_thresh'],config['tbm_down_thresh'])
+        self.apply_vertical_barrier()
+        self.get_first_touch()
+        self.get_sides()
 
     def get_daily_vol(self,close):
-        df0=close.index.searchsorted(close.index-pd.Timedelta(days=1))
-        df0=df0[df0>0]
-        df0=pd.Series(close.index[(df0-1)], index=close.index[close.shape[0]-df0.shape[0]:])
-        df0=close.loc[df0.index]/close.loc[df0.values].values-1 # daily returns 
-        df0=df0.ewm(span=config['daily_vol_span']).std()
-        return df0
+        days = close.index[:-1]
+        next_days = close.index.shift(1,freq='D')[:-1]
+        daily_rets = close.loc[days]/close.loc[next_days].values-1
+        daily_vol=daily_rets.ewm(span=config['daily_vol_span']).std().dropna()
+        return daily_vol
         
     def apply_horizontal_barriers(self,up_thresh,down_thresh):
         top = []
