@@ -22,7 +22,7 @@ class TripleBarrier:
 
     def get_daily_vol(self,close):
         days = close.index[:-1]
-        next_days = close.index.shift(1,freq='D')[:-1]
+        next_days = close.index[1:]
         daily_rets = close.loc[days]/close.loc[next_days].values-1
         daily_vol=daily_rets.ewm(span=config['daily_vol_span']).std().dropna()
         return daily_vol

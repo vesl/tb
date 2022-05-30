@@ -274,5 +274,5 @@ function setupPlotCorrelation(){
 
 function plotCorrelation(plot){
     dates = plot.getDates()
-    plot.createSubPlotImg('features','correlation','features',dates)
+    plot.createSubPlotImg('chi2','correlation','chi2',dates)
 }
