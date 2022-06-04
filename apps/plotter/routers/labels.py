@@ -5,6 +5,7 @@ from tbmods.triple_barrier import TripleBarrier
 from tbmods.dataset import Dataset
 from tbmods.filters import Filters
 from tbmods.config import Config
+from tbmods.log import Log
 import seaborn as sns
 import pandas as pd
 import requests
@@ -16,6 +17,7 @@ router = APIRouter(
 )
 
 config = Config()
+log = Log(config['app'])
 
 sns.set(rc = {'figure.figsize':(11,4)})
 
@@ -23,6 +25,7 @@ sns.set(rc = {'figure.figsize':(11,4)})
 def graph_cusum(timescale,from_date,to_date):
     close = Dataset(timescale,from_date,to_date,'close').load()['close']
     cusum = Filters(close).cusum_events(config['cusum_pct_threshold'])
+    log.info('Cusum number {}'.format(len(cusum)))
     # graph
     fig, ax = plt.subplots()
     sns.lineplot(x=close.index,y=close.values,color='green',label='price',alpha=0.3,ax=ax)
@@ -36,6 +39,7 @@ def graph_tbm(timescale,from_date,to_date):
     close = Dataset(timescale,from_date,to_date,'close').load()['close']
     cusum = Filters(close).cusum_events(config['cusum_pct_threshold'])
     barriers = TripleBarrier(close,cusum).barriers
+    log.info('Sample number {}'.format(len(barriers)))
     # graph
     fig, ax = plt.subplots()
     sns.lineplot(x=close.index,y=close.values,color='green',label='price',alpha=0.3,ax=ax)
@@ -53,6 +57,7 @@ def graph_balance(timescale,from_date,to_date):
     close = Dataset(timescale,from_date,to_date,'close').load()['close']
     cusum = Filters(close).cusum_events(config['cusum_pct_threshold'])
     barriers = TripleBarrier(close,cusum).barriers
+    log.info('Mean ret {}'.format(barriers.ret.mean()))
     # graph
     fig, ax = plt.subplots()
     sns.countplot(x='side',data=barriers)
