@@ -8,7 +8,7 @@ class Filters:
         self.close = close
 
     def cusum_events(self,threshold):
-        threshold = threshold/100
+        threshold = float(threshold)/100
         cusum_events = pd.DataFrame(columns=['event'])
         close_diff = self.close.pct_change().dropna()
         for date in close_diff.index:
