@@ -17,7 +17,7 @@ apps:
 # Plotter
  - name: plotter
    dev: true
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/seaborn.fastapi
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/seaborn.sklearn
    replicas: 1
    configmaps:
      - questdb
@@ -26,7 +26,7 @@ apps:
 # Trainer
  - name: trainer
    dev: true
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/sklearn.fastapi
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/sklearn.talib
    replicas: 1
    configmaps:
      - questdb
