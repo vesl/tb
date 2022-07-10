@@ -2,7 +2,7 @@ apps:
 
 # Scrapper
  - name: scrapper
-  image: registry.devops.svc.k8s.slav.rocks:5000/tb/binance.fastapi:latest
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/binance.fastapi:latest
    replicas: 1
    volumes:
      - name: cache
