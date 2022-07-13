@@ -7,7 +7,7 @@ apps:
    volumes:
      - name: cache
        mountPath: /var/cache/scrapper
-       hostPath: /var/cache/scrapper
+       hostPath: /var/cache/tb/scrapper
    secrets:
      - binance
    configmaps:
