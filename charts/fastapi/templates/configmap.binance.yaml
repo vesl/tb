@@ -4,4 +4,5 @@ metadata:
   name: binance
 data:
   TB_BINANCE_HIST_LIMIT: "1000"
-  TB_BINANCE_TRADES_PACK_SIZE: "100000"
+  TB_BINANCE_TRADES_PACK_SIZE: "100" # => pour le feed de 0
+  #TB_BINANCE_TRADES_PACK_SIZE: "100000" # => pour la prod
