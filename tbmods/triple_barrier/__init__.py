@@ -8,13 +8,11 @@ class TripleBarrier:
     def __init__(self,close,events):
         self.close = close
         self.vol = self.get_vol(self.close)
-        # sync indexes on vol and events which has less rows
-        index = events.index.intersection(self.vol.index)
         # init barriers
         self.barriers = pd.DataFrame({
-            "close":self.close.loc[index].values,
-            "events":events.event.loc[index].values},
-            index=index)
+            "close":self.close.loc[events.index].values,
+            "events":events.event.loc[events.index].values},
+            index=events.index)
         self.apply_horizontal_barriers(config['tbm_up_thresh'],config['tbm_down_thresh'])
         self.apply_vertical_barrier()
         self.get_first_touch()
@@ -49,10 +47,10 @@ class TripleBarrier:
         first_touchs = []
         for date,row in self.barriers.iterrows():
             price_range = self.close.loc[date:row.vertical]
-            touchs = pd.DatetimeIndex([row.vertical])
-            if price_range.max() >= row.top: touchs.append(price_range.index)
-            if price_range.min() <= row.bot: touchs.append(price_range.index)
-            first_touchs.append(min(touchs))
+            touchs = [row.vertical]
+            if price_range.max() >= row.top: touchs.append(price_range.idxmax())
+            elif price_range.min() <= row.bot: touchs.append(price_range.idxmin())
+            first_touchs.append(min(pd.DatetimeIndex(touchs)))
         self.barriers['first_touch'] = first_touchs
     
     def get_sides(self):
@@ -60,7 +58,7 @@ class TripleBarrier:
         self.barriers['close_touch'] = self.close.loc[self.barriers.first_touch].values
         self.barriers['ret'] = (self.barriers.close_touch - self.barriers.close)/self.barriers.close
         for date,row in self.barriers.iterrows():
-            if (row.ret < float(config['tbm_min_ret'])) and (row.ret > -float(config['tbm_min_ret'])): sides.append(0)
-            elif (row.ret > 0): sides.append(1)
-            elif (row.ret < 0): sides.append(-1)
+            if row['close_touch'] >= row.top: sides.append(1)
+            if row['close_touch'] <= row.bot: sides.append(-1)
+            if row['close_touch'] < row.top and row['close_touch'] > row.bot: sides.append(0)
         self.barriers['side'] = sides
