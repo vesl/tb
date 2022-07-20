@@ -77,14 +77,26 @@ function plotFinanceAPO(plot,dates){
     })
 }
 
-function plotFinanceAroon(plot,dates){
-    plot.createSubPlotLc('aroon','finance','aroon',dates,function(plotDiv,data){
-        const chartAROON = plot.createLcChart(plotDiv)
-        const aroonUpSeries = chartAROON.addLineSeries({color:"#FE00DB"})
-        const aroonDownSeries = chartAROON.addLineSeries({color:"#9E00FE"})
-        const aroonOscSeries = chartAROON.addLineSeries({color:"#F2A9FC"})
+function plotFinanceAroonUp(plot,dates){
+    plot.createSubPlotLc('aroonup','finance','aroonup',dates,function(plotDiv,data){
+        const chartAROONUP = plot.createLcChart(plotDiv)
+        const aroonUpSeries = chartAROONUP.addLineSeries({color:"#FE00DB"})
         aroonUpSeries.setData(plot.extractKeyAsValue(data,'aroonup'))
+    })
+}
+
+function plotFinanceAroonDown(plot,dates){
+    plot.createSubPlotLc('aroondown','finance','aroondown',dates,function(plotDiv,data){
+        const chartAROONDOWN = plot.createLcChart(plotDiv)
+        const aroonDownSeries = chartAROONDOWN.addLineSeries({color:"#FEDB00"})
         aroonDownSeries.setData(plot.extractKeyAsValue(data,'aroondown'))
+    })
+}
+
+function plotFinanceAroonOsc(plot,dates){
+    plot.createSubPlotLc('aroonosc','finance','aroonosc',dates,function(plotDiv,data){
+        const chartAROONOSC = plot.createLcChart(plotDiv)
+        const aroonOscSeries = chartAROONOSC.addLineSeries({color:"#0FE0DB"})
         aroonOscSeries.setData(plot.extractKeyAsValue(data,'aroonosc'))
     })
 }
@@ -139,8 +151,8 @@ function plotFinanceMinusDI(plot,dates){
 
 function plotFinanceMinusDM(plot,dates){
     plot.createSubPlotLc('minusdm','finance','minusdm',dates,function(plotDiv,data){
-        const chartMINUS = plot.createLcChart(plotDiv)
-        const minusdmSeries = chartMINUS.addLineSeries({color:"#83CCFF"})
+        const chartMINUSDM = plot.createLcChart(plotDiv)
+        const minusdmSeries = chartMINUSDM.addLineSeries({color:"#83CCFF"})
         minusdmSeries.setData(plot.extractKeyAsValue(data,'minusdm'))
     })
 }

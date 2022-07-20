@@ -17,7 +17,9 @@ class Indicators:
             'rsi':self.compute_rsi,
             'adx':self.compute_adx,
             'apo':self.compute_apo,
-            'aroon':self.compute_aroon,
+            'aroonup':self.compute_aroonup,
+            'aroondown':self.compute_aroondown,
+            'aroonosc':self.compute_aroonosc,
             'bop':self.compute_bop,
             'cci':self.compute_cci,
             'cmo':self.compute_cmo,
@@ -69,12 +71,23 @@ class Indicators:
         self.candles.dropna(inplace=True)
         return ('apo' in self.candles.columns)
 
-    def compute_aroon(self):
+    def compute_aroonup(self):
         aroondown, aroonup = talib.AROON(self.candles['high'], self.candles['low'], timeperiod=14)
-        aroonosc = talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=14)
-        self.candles = self.candles.join([aroondown.rename('aroondown'),aroonup.rename('aroonup'),aroonosc.rename('aroonosc')])
+        self.candles = self.candles.join(aroonup.rename('aroonup'))
+        self.candles.dropna(inplace=True)
+        return ('aroonup' in self.candles.columns)
+
+    def compute_aroondown(self):
+        aroondown, aroonup = talib.AROON(self.candles['high'], self.candles['low'], timeperiod=14)
+        self.candles = self.candles.join(aroondown.rename('aroondown'))
         self.candles.dropna(inplace=True)
         return ('aroondown' in self.candles.columns)
+
+    def compute_aroonosc(self):
+        aroonosc = talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=14)
+        self.candles = self.candles.join(aroonosc.rename('aroonosc'))
+        self.candles.dropna(inplace=True)
+        return ('aroonosc' in self.candles.columns)
 
     def compute_bop(self):
         bop = talib.BOP(self.candles['open'], self.candles['high'], self.candles['low'], self.candles['close'])
