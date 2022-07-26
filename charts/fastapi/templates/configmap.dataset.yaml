@@ -38,13 +38,19 @@ data:
              "plusdm",
              "ppo",
              "roc",
-             "stoch",
-             "stochf",
-             "stochrsi",
+             "slowk",
+             "slowd",
+             "fastk",
+             "fastd",
+             "fastkrsi",
+             "fastdrsi",
              "trix",
              "ultosc",
              "willr",
-             "ichimoku"
+             "ssa",
+             "ssb",
+             "tenkan",
+             "kijun"
           ]
       }
     }

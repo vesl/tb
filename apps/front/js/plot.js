@@ -197,32 +197,50 @@ function plotFinanceROC(plot,dates){
     })      
 }
 
-function plotFinanceStoch(plot,dates){
-    plot.createSubPlotLc('stoch','finance','stoch',dates,function(plotDiv,data){
-        const chartSTOCH = plot.createLcChart(plotDiv)
-        const slowkSeries = chartSTOCH.addLineSeries({color:"#FFEC00"})
-        const slowdSeries = chartSTOCH.addLineSeries({color:"#FF9E00"})
+function plotFinanceSlowK(plot,dates){
+    plot.createSubPlotLc('slowk','finance','slowk',dates,function(plotDiv,data){
+        const chartSLOWK = plot.createLcChart(plotDiv)
+        const slowkSeries = chartSLOWK.addLineSeries({color:"#FFEC00"})
         slowkSeries.setData(plot.extractKeyAsValue(data,'slowk'))
+    })
+}
+
+function plotFinanceSlowD(plot,dates){
+    plot.createSubPlotLc('slowd','finance','slowd',dates,function(plotDiv,data){
+        const chartSLOWD = plot.createLcChart(plotDiv)
+        const slowdSeries = chartSLOWD.addLineSeries({color:"#FF9E00"})
         slowdSeries.setData(plot.extractKeyAsValue(data,'slowd'))
     })
 }
 
-function plotFinanceStochF(plot,dates){
-    plot.createSubPlotLc('stochf','finance','stochf',dates,function(plotDiv,data){
-        const chartSTOCHF = plot.createLcChart(plotDiv)
-        const fastkSeries = chartSTOCHF.addLineSeries({color:"#00CDFF"})
-        const fastdSeries = chartSTOCHF.addLineSeries({color:"#002B8E"})
+function plotFinanceFastK(plot,dates){
+    plot.createSubPlotLc('fastk','finance','fastk',dates,function(plotDiv,data){
+        const chartFastK = plot.createLcChart(plotDiv)
+        const fastkSeries = chartFastK.addLineSeries({color:"#00CDFF"})
         fastkSeries.setData(plot.extractKeyAsValue(data,'fastk'))
+    })
+}
+
+function plotFinanceFastD(plot,dates){
+    plot.createSubPlotLc('fastd','finance','fastd',dates,function(plotDiv,data){
+        const chartFastD = plot.createLcChart(plotDiv)
+        const fastdSeries = chartFastD.addLineSeries({color:"#002B8E"})
         fastdSeries.setData(plot.extractKeyAsValue(data,'fastd'))
     })
 }
 
-function plotFinanceStochRSI(plot,dates){
-    plot.createSubPlotLc('stochrsi','finance','stochrsi',dates,function(plotDiv,data){
-        const chartSTOCHF = plot.createLcChart(plotDiv)
-        const fastkSeries = chartSTOCHF.addLineSeries({color:"#00FF0C"})
-        const fastdSeries = chartSTOCHF.addLineSeries({color:"#008E06"})
+function plotFinanceFastKRSI(plot,dates){
+    plot.createSubPlotLc('fastkrsi','finance','fastkrsi',dates,function(plotDiv,data){
+        const chartFastKRSI = plot.createLcChart(plotDiv)
+        const fastkSeries = chartFastKRSI.addLineSeries({color:"#00FF0C"})
         fastkSeries.setData(plot.extractKeyAsValue(data,'fastkrsi'))
+    })
+}
+
+function plotFinanceFastDRSI(plot,dates){
+    plot.createSubPlotLc('fastdrsi','finance','fastdrsi',dates,function(plotDiv,data){
+        const chartFastDRSI = plot.createLcChart(plotDiv)
+        const fastdSeries = chartFastDRSI.addLineSeries({color:"#008E06"})
         fastdSeries.setData(plot.extractKeyAsValue(data,'fastdrsi'))
     })
 }
@@ -252,7 +270,7 @@ function plotFinanceWillr(plot,dates){
 }
 
 function plotFinanceIchimoku(plot,dates){
-    plot.createSubPlotLc('ichimoku','finance','ichimoku',dates,function(plotDiv,data){
+    plot.createSubPlotLc('ichimoku','finance','tenkan,kijun,ssa,ssb',dates,function(plotDiv,data){
         const chartICHIMOKU = plot.createLcChart(plotDiv)
         const tenkanSeries = chartICHIMOKU.addLineSeries({color:"#FF0000"})
         const kijunSeries = chartICHIMOKU.addLineSeries({color:"#0C00FF"})

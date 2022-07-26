@@ -35,13 +35,19 @@ class Indicators:
             'roc':self.compute_roc,
             'rocp':self.compute_rocp,
             'rocr':self.compute_rocr,
-            'stoch':self.compute_stoch,
-            'stochf':self.compute_stochf,
-            'stochrsi': self.compute_stochrsi,
+            'slowk':self.compute_slowk,
+            'slowd':self.compute_slowd,
+            'fastk':self.compute_fastk,
+            'fastd':self.compute_fastd,
+            'fastkrsi': self.compute_fastkrsi,
+            'fastdrsi': self.compute_fastdrsi,
             'trix': self.compute_trix,
             'ultosc':self.compute_ultosc,
             'willr':self.compute_willr,
-            'ichimoku':self.compute_ichimoku,
+            'tenkan':self.compute_tenkan,
+            'kijun':self.compute_kijun,
+            'ssa':self.compute_ssa,
+            'ssb':self.compute_ssb
         }
         return switch[feature]()
 
@@ -173,23 +179,41 @@ class Indicators:
         self.candles.dropna(inplace=True)
         return ('rocr' in self.candles.columns)
 
-    def compute_stoch(self):
+    def compute_slowk(self):
         slowk, slowd = talib.STOCH(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)
-        self.candles = self.candles.join([slowk.rename('slowk'),slowd.rename('slowd')])
+        self.candles = self.candles.join(slowk.rename('slowk'))
         self.candles.dropna(inplace=True)
         return ('slowk' in self.candles.columns)
 
-    def compute_stochf(self):
+    def compute_slowd(self):
+        slowk, slowd = talib.STOCH(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)
+        self.candles = self.candles.join(slowk.rename('slowd'))
+        self.candles.dropna(inplace=True)
+        return ('slowd' in self.candles.columns)
+
+    def compute_fastk(self):
         fastk,fastd = talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, fastd_period=3, fastd_matype=0)
-        self.candles = self.candles.join([fastk.rename('fastk'),fastd.rename('fastd')])
+        self.candles = self.candles.join(fastk.rename('fastk'))
         self.candles.dropna(inplace=True)
         return ('fastk' in self.candles.columns)
 
-    def compute_stochrsi(self):
+    def compute_fastd(self):
+        fastk,fastd = talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, fastd_period=3, fastd_matype=0)
+        self.candles = self.candles.join(fastd.rename('fastd'))
+        self.candles.dropna(inplace=True)
+        return ('fastd' in self.candles.columns)
+
+    def compute_fastkrsi(self):
         fastkrsi, fastdrsi = talib.STOCHRSI(self.candles['close'], timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)
-        self.candles = self.candles.join([fastkrsi.rename('fastkrsi'),fastdrsi.rename('fastdrsi')])
+        self.candles = self.candles.join(fastkrsi.rename('fastkrsi'))
         self.candles.dropna(inplace=True)
         return ('fastkrsi' in self.candles.columns)
+
+    def compute_fastdrsi(self):
+        fastkrsi, fastdrsi = talib.STOCHRSI(self.candles['close'], timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)
+        self.candles = self.candles.join(fastdrsi.rename('fastdrsi'))
+        self.candles.dropna(inplace=True)
+        return ('fastdrsi' in self.candles.columns)
 
     def compute_trix(self):
         trix = talib.TRIX(self.candles['close'], timeperiod=30)
@@ -209,12 +233,32 @@ class Indicators:
         self.candles.dropna(inplace=True)
         return ('willr' in self.candles.columns)
 
-    def compute_ichimoku(self):
+    def compute_tenkan(self):
+        print("tenkan")
+        print(self.candles)
         self.candles["tenkan"] = (self.candles.high.rolling(9).max()+self.candles.low.rolling(9).min())/2
-        self.candles["kijun"] = (self.candles.high.rolling(26).max()+self.candles.low.rolling(26).min())/2
-        self.candles["ssa"] = ((self.candles.tenkan+self.candles.kijun)/2).shift(26)
-        self.candles["ssb"] = ((self.candles.high.rolling(52).max()+self.candles.low.rolling(52).min())/2).shift(26)
-        # Disable lagging span because of nans
-        #self.candles["ichlag"] = self.candles.close.shift(-26)
         self.candles.dropna(inplace=True)
         return ('tenkan' in self.candles.columns)
+        
+    def compute_kijun(self):
+        print("kijun")
+        print(self.candles)
+        self.candles["kijun"] = (self.candles.high.rolling(26).max()+self.candles.low.rolling(26).min())/2
+        self.candles.dropna(inplace=True)
+        return ('kijun' in self.candles.columns)
+        
+    def compute_ssa(self):
+        print("ssa")
+        print(self.candles)
+        self.compute_kijun()
+        self.compute_tenkan()
+        self.candles["ssa"] = ((self.candles.tenkan+self.candles.kijun)/2).shift(26)
+        self.candles.dropna(inplace=True)
+        return ('ssa' in self.candles.columns)
+
+    def compute_ssb(self):
+        print("ssb")
+        print(self.candles)
+        self.candles["ssb"] = ((self.candles.high.rolling(52).max()+self.candles.low.rolling(52).min())/2).shift(26)
+        self.candles.dropna(inplace=True)
+        return ('ssb' in self.candles.columns)

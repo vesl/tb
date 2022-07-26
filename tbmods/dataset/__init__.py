@@ -16,11 +16,14 @@ class Dataset:
         self.sources = json.loads(config['features'])['sources']
         
     def load(self):
-        talib_features = [feature for feature in self.sources['talib'] if feature in self.features]
+        prev_features = [feature for feature in self.features if '-' in feature]
+        talib_features = set([feature.split('-')[0] for feature in self.features if feature.split('-')[0] in self.sources['talib']])
         df_qdb_features = self.load_qdb_features()
         df_talib_features = self.load_talib_features(df_qdb_features,talib_features)
-        if len(df_talib_features) > 0: return df_qdb_features.join(df_talib_features,how='inner')
-        else: return df_qdb_features
+        if len(df_talib_features) > 0: df_features = df_qdb_features.join(df_talib_features,how='inner')
+        else: df_features = df_qdb_features 
+        if len(prev_features) > 0: df_features = self.load_prev_features(df_features,prev_features)
+        return df_features
         
     def load_qdb_features(self):
         candles = Candles()
@@ -31,5 +34,12 @@ class Dataset:
         indicators = Indicators(df_qdb_features)
         for talib_feature in talib_features:
             indicators.load(talib_feature)
+        print(indicators.candles)
         df_talib_features = indicators.candles.drop(df_qdb_features.columns,axis=1)
         return df_talib_features
+        
+    def load_prev_features(self,df_features,prev_features):
+        for feature in prev_features:
+            split = feature.split('-')
+            df_features = df_features.join(df_features[split[0]].shift(int(split[1])).rename('-'.join(split)))
+        return df_features.loc[:,self.features]
