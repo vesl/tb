@@ -39,7 +39,7 @@ function plotFinanceRSI(plot,dates){
 }
 
 function plotFinanceMACD(plot,dates){
-    plot.createSubPlotLc('macd','finance','macd',dates,function(plotDiv,data){
+    plot.createSubPlotLc('macd','finance','macd,macdsignal,macdhist',dates,function(plotDiv,data){
         const chartMACD = plot.createLcChart(plotDiv)
         const macdSeries = chartMACD.addLineSeries({color:'#FF7070'})
         const macdSignalSeries = chartMACD.addLineSeries({color:'#FFBC70'})
@@ -60,7 +60,7 @@ function plotFinanceMACD(plot,dates){
 }
 
 function plotFinanceADX(plot,dates){
-    plot.createSubPlotLc('adx','finance','adx',dates,function(plotDiv,data){
+    plot.createSubPlotLc('adx','finance','adx,adxr',dates,function(plotDiv,data){
         const chartADX = plot.createLcChart(plotDiv)
         const adxSeries = chartADX.addLineSeries({color:'#F3003A'})
         const adxrSeries = chartADX.addLineSeries({color:'#00F33A'})

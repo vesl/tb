@@ -16,6 +16,7 @@ class Indicators:
         switch = {
             'rsi':self.compute_rsi,
             'adx':self.compute_adx,
+            'adxr':self.compute_adxr,
             'apo':self.compute_apo,
             'aroonup':self.compute_aroonup,
             'aroondown':self.compute_aroondown,
@@ -25,6 +26,8 @@ class Indicators:
             'cmo':self.compute_cmo,
             'dx':self.compute_dx,
             'macd':self.compute_macd,
+            'macdsignal':self.compute_macdsignal,
+            'macdhist':self.compute_macdhist,
             'mfi':self.compute_mfi,
             'minusdi':self.compute_minusdi,
             'minusdm':self.compute_minusdm,
@@ -59,17 +62,33 @@ class Indicators:
 
     def compute_macd(self):
         macd,macdsignal,macdhist = talib.MACD(self.candles['close'], fastperiod=12, slowperiod=26, signalperiod=9)
-        self.candles = self.candles.join([macd.rename('macd'),macdsignal.rename('macdsignal'),macdhist.rename('macdhist')])
+        self.candles = self.candles.join(macd.rename('macd'))
         self.candles.dropna(inplace=True)
         return ('macd' in self.candles.columns)
+    
+    def compute_macdsignal(self):
+        macd,macdsignal,macdhist = talib.MACD(self.candles['close'], fastperiod=12, slowperiod=26, signalperiod=9)
+        self.candles = self.candles.join(macdsignal.rename('macdsignal'))
+        self.candles.dropna(inplace=True)
+        return ('macdsignal' in self.candles.columns)
+
+    def compute_macdhist(self):
+        macd,macdsignal,macdhist = talib.MACD(self.candles['close'], fastperiod=12, slowperiod=26, signalperiod=9)
+        self.candles = self.candles.join(macdhist.rename('macdhist'))
+        self.candles.dropna(inplace=True)
+        return ('macdhist' in self.candles.columns)
 
     def compute_adx(self):
         adx = talib.ADX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
-        adxr = talib.ADXR(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
         self.candles = self.candles.join(adx.rename('adx'))
-        self.candles = self.candles.join(adxr.rename('adxr'))
         self.candles.dropna(inplace=True)
         return ('adx' in self.candles.columns)
+
+    def compute_adxr(self):
+        adxr = talib.ADXR(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+        self.candles = self.candles.join(adxr.rename('adxr'))
+        self.candles.dropna(inplace=True)
+        return ('adxr' in self.candles.columns)
 
     def compute_apo(self):
         apo = talib.APO(self.candles['close'], fastperiod=12, slowperiod=26, matype=0)
@@ -234,22 +253,16 @@ class Indicators:
         return ('willr' in self.candles.columns)
 
     def compute_tenkan(self):
-        print("tenkan")
-        print(self.candles)
         self.candles["tenkan"] = (self.candles.high.rolling(9).max()+self.candles.low.rolling(9).min())/2
         self.candles.dropna(inplace=True)
         return ('tenkan' in self.candles.columns)
         
     def compute_kijun(self):
-        print("kijun")
-        print(self.candles)
         self.candles["kijun"] = (self.candles.high.rolling(26).max()+self.candles.low.rolling(26).min())/2
         self.candles.dropna(inplace=True)
         return ('kijun' in self.candles.columns)
         
     def compute_ssa(self):
-        print("ssa")
-        print(self.candles)
         self.compute_kijun()
         self.compute_tenkan()
         self.candles["ssa"] = ((self.candles.tenkan+self.candles.kijun)/2).shift(26)
@@ -257,8 +270,6 @@ class Indicators:
         return ('ssa' in self.candles.columns)
 
     def compute_ssb(self):
-        print("ssb")
-        print(self.candles)
         self.candles["ssb"] = ((self.candles.high.rolling(52).max()+self.candles.low.rolling(52).min())/2).shift(26)
         self.candles.dropna(inplace=True)
         return ('ssb' in self.candles.columns)
