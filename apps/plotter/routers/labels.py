@@ -23,7 +23,7 @@ sns.set(rc = {'figure.figsize':(11,4)})
 
 @router.get('/cusum/{timescale}/{from_date}/{to_date}/cusum.png')
 def graph_cusum(timescale,from_date,to_date):
-    close = Dataset(timescale,from_date,to_date,'close').load()['close']
+    close = Dataset(timescale,from_date,to_date,'close').load()
     cusum = Filters(close).cusum_events(config['cusum_pct_threshold'])
     log.info('Cusum number {}'.format(len(cusum)))
     # graph
@@ -36,7 +36,7 @@ def graph_cusum(timescale,from_date,to_date):
 
 @router.get('/tbm/{timescale}/{from_date}/{to_date}/tbm.png')
 def graph_tbm(timescale,from_date,to_date):
-    close = Dataset(timescale,from_date,to_date,'close').load()['close']
+    close = Dataset(timescale,from_date,to_date,'close').load()
     cusum = Filters(close).cusum_events(config['cusum_pct_threshold'])
     barriers = TripleBarrier(close,cusum).barriers
     log.info('Sample number {}'.format(len(barriers)))
@@ -54,7 +54,7 @@ def graph_tbm(timescale,from_date,to_date):
 
 @router.get('/balance/{timescale}/{from_date}/{to_date}/balance.png')
 def graph_balance(timescale,from_date,to_date):
-    close = Dataset(timescale,from_date,to_date,'close').load()['close']
+    close = Dataset(timescale,from_date,to_date,'close').load()
     cusum = Filters(close).cusum_events(config['cusum_pct_threshold'])
     barriers = TripleBarrier(close,cusum).barriers
     log.info('Mean ret {}'.format(barriers.ret.mean()))
