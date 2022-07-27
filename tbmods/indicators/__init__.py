@@ -61,7 +61,7 @@ class Indicators:
         return switch[feature]()
 
     def compute_rsi(self):
-        rsi = talib.RSI(self.candles['close'], timeperiod=14)
+        rsi = talib.RSI(self.candles['close'], timeperiod=24)
         self.candles = self.candles.join(rsi.rename('rsi'))
         self.candles.dropna(inplace=True)
         return ('rsi' in self.candles.columns)
