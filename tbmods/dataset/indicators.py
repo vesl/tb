@@ -79,13 +79,13 @@ class Indicators:
         return ('macdhist' in self.candles.columns)
 
     def compute_adx(self):
-        adx = talib.ADX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+        adx = talib.ADX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=48)
         self.candles = self.candles.join(adx.rename('adx'))
         self.candles.dropna(inplace=True)
         return ('adx' in self.candles.columns)
 
     def compute_adxr(self):
-        adxr = talib.ADXR(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+        adxr = talib.ADXR(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=48)
         self.candles = self.candles.join(adxr.rename('adxr'))
         self.candles.dropna(inplace=True)
         return ('adxr' in self.candles.columns)
