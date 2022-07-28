@@ -97,19 +97,19 @@ class Indicators:
         return ('apo' in self.candles.columns)
 
     def compute_aroonup(self):
-        aroondown, aroonup = talib.AROON(self.candles['high'], self.candles['low'], timeperiod=14)
+        aroondown, aroonup = talib.AROON(self.candles['high'], self.candles['low'], timeperiod=48)
         self.candles = self.candles.join(aroonup.rename('aroonup'))
         self.candles.dropna(inplace=True)
         return ('aroonup' in self.candles.columns)
 
     def compute_aroondown(self):
-        aroondown, aroonup = talib.AROON(self.candles['high'], self.candles['low'], timeperiod=14)
+        aroondown, aroonup = talib.AROON(self.candles['high'], self.candles['low'], timeperiod=48)
         self.candles = self.candles.join(aroondown.rename('aroondown'))
         self.candles.dropna(inplace=True)
         return ('aroondown' in self.candles.columns)
 
     def compute_aroonosc(self):
-        aroonosc = talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=14)
+        aroonosc = talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=48)
         self.candles = self.candles.join(aroonosc.rename('aroonosc'))
         self.candles.dropna(inplace=True)
         return ('aroonosc' in self.candles.columns)
