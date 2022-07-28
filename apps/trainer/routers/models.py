@@ -53,15 +53,12 @@ def price_model(timescale,from_date,to_date):
     return 1    
     # RECURSIVE TRAIN
     """
-    print('Rsi 48')
+    print('Macd 9/12/26')
     close = dataset.close
     remove_close = 0
     while len(features) >= 5:
-        print("===> TRAIN")
         if remove_close == 1: features.remove('close')
-        print(features)
         dataset = dataset.loc[:,features]
-        print(dataset.shape)
         Y = TripleBarrier(close,cusum).barriers.side
         X = dataset.loc[Y.index]
         scaler = MinMaxScaler()
@@ -71,12 +68,12 @@ def price_model(timescale,from_date,to_date):
         clf.fit(X_train,Y_train)
         Y_pred = clf.predict(X_test)
         f1 = f1_score(Y_test,Y_pred,average=None)
-        print('score : {}'.format(f1))
+        print('score {}'.format(f1))
         cm = confusion_matrix(Y_test,Y_pred)
         print(cm)
         importances = clf.feature_importances_
         fi = pd.Series(importances, index=features).sort_values(ascending=False)
-        print('fi rsi {}'.format(fi['rsi']))
+        print('feature_importance {}'.format(fi['macd']))
         features = fi.iloc[:-6].index.tolist()
         if not 'close' in features: 
             remove_close = 1
