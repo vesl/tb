@@ -91,7 +91,7 @@ class Indicators:
         return ('adxr' in self.candles.columns)
 
     def compute_apo(self):
-        apo = talib.APO(self.candles['close'], fastperiod=12, slowperiod=26, matype=0)
+        apo = talib.APO(self.candles['close'], fastperiod=24, slowperiod=48, matype=0)
         self.candles = self.candles.join(apo.rename('apo'))
         self.candles.dropna(inplace=True)
         return ('apo' in self.candles.columns)

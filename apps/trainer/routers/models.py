@@ -53,7 +53,7 @@ def price_model(timescale,from_date,to_date):
     return 1    
     # RECURSIVE TRAIN
     """
-    print('Adx 72')
+    print('Apo 48 72')
     close = dataset.close
     remove_close = 0
     while len(features) >= 5:
@@ -73,7 +73,7 @@ def price_model(timescale,from_date,to_date):
         print(cm)
         importances = clf.feature_importances_
         fi = pd.Series(importances, index=features).sort_values(ascending=False)
-        print('feature_importance {}'.format(fi['adx']))
+        print('feature_importance {}'.format(fi['apo']))
         features = fi.iloc[:-6].index.tolist()
         if not 'close' in features: 
             remove_close = 1
