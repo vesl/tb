@@ -61,19 +61,19 @@ class Indicators:
         return ('rsi' in self.candles.columns)
 
     def compute_macd(self):
-        macd,macdsignal,macdhist = talib.MACD(self.candles['close'], fastperiod=12, slowperiod=26, signalperiod=9)
+        macd,macdsignal,macdhist = talib.MACD(self.candles['close'], fastperiod=48, slowperiod=72, signalperiod=24)
         self.candles = self.candles.join(macd.rename('macd'))
         self.candles.dropna(inplace=True)
         return ('macd' in self.candles.columns)
     
     def compute_macdsignal(self):
-        macd,macdsignal,macdhist = talib.MACD(self.candles['close'], fastperiod=12, slowperiod=26, signalperiod=9)
+        macd,macdsignal,macdhist = talib.MACD(self.candles['close'], fastperiod=48, slowperiod=72, signalperiod=24)
         self.candles = self.candles.join(macdsignal.rename('macdsignal'))
         self.candles.dropna(inplace=True)
         return ('macdsignal' in self.candles.columns)
 
     def compute_macdhist(self):
-        macd,macdsignal,macdhist = talib.MACD(self.candles['close'], fastperiod=12, slowperiod=26, signalperiod=9)
+        macd,macdsignal,macdhist = talib.MACD(self.candles['close'], fastperiod=48, slowperiod=72, signalperiod=24)
         self.candles = self.candles.join(macdhist.rename('macdhist'))
         self.candles.dropna(inplace=True)
         return ('macdhist' in self.candles.columns)
