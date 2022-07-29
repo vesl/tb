@@ -133,7 +133,7 @@ class Indicators:
         return ('cmo' in self.candles.columns)
 
     def compute_dx(self):
-        dx = talib.DX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+        dx = talib.DX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=48)
         self.candles = self.candles.join(dx.rename('dx'))
         self.candles.dropna(inplace=True)
         return ('dx' in self.candles.columns)
