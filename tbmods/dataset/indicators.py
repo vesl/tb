@@ -139,7 +139,7 @@ class Indicators:
         return ('dx' in self.candles.columns)
 
     def compute_mfi(self):
-        mfi = talib.MFI(self.candles['high'], self.candles['low'], self.candles['close'], self.candles['volume'], timeperiod=14)
+        mfi = talib.MFI(self.candles['high'], self.candles['low'], self.candles['close'], self.candles['volume'], timeperiod=48)
         self.candles = self.candles.join(mfi.rename('mfi'))
         self.candles.dropna(inplace=True)
         return ('mfi' in self.candles.columns)
