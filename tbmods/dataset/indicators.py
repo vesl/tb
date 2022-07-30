@@ -145,13 +145,13 @@ class Indicators:
         return ('mfi' in self.candles.columns)
 
     def compute_minusdi(self):
-        minusdi = talib.MINUS_DI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+        minusdi = talib.MINUS_DI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=96)
         self.candles = self.candles.join(minusdi.rename('minusdi'))
         self.candles.dropna(inplace=True)
         return ('minusdi' in self.candles.columns)
 
     def compute_minusdm(self):
-        minusdm = talib.MINUS_DM(self.candles['high'], self.candles['low'], timeperiod=14)
+        minusdm = talib.MINUS_DM(self.candles['high'], self.candles['low'], timeperiod=96)
         self.candles = self.candles.join(minusdm.rename('minusdm'))
         self.candles.dropna(inplace=True)
         return ('minusdm' in self.candles.columns)
