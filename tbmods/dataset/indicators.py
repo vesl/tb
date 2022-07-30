@@ -163,13 +163,13 @@ class Indicators:
         return ('mom' in self.candles.columns)
 
     def compute_plusdi(self):
-        plusdi = talib.PLUS_DI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+        plusdi = talib.PLUS_DI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=96)
         self.candles = self.candles.join(plusdi.rename('plusdi'))
         self.candles.dropna(inplace=True)
         return ('plusdi' in self.candles.columns)
 
     def compute_plusdm(self):
-        plusdm = talib.PLUS_DM(self.candles['high'], self.candles['low'], timeperiod=14)
+        plusdm = talib.PLUS_DM(self.candles['high'], self.candles['low'], timeperiod=96)
         self.candles = self.candles.join(plusdm.rename('plusdm'))
         self.candles.dropna(inplace=True)
         return ('plusdm' in self.candles.columns)
