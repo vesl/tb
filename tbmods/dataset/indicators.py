@@ -223,13 +223,13 @@ class Indicators:
         return ('fastd' in self.candles.columns)
 
     def compute_fastkrsi(self):
-        fastkrsi, fastdrsi = talib.STOCHRSI(self.candles['close'], timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)
+        fastkrsi, fastdrsi = talib.STOCHRSI(self.candles['close'], timeperiod=144, fastk_period=120, fastd_period=96, fastd_matype=0)
         self.candles = self.candles.join(fastkrsi.rename('fastkrsi'))
         self.candles.dropna(inplace=True)
         return ('fastkrsi' in self.candles.columns)
 
     def compute_fastdrsi(self):
-        fastkrsi, fastdrsi = talib.STOCHRSI(self.candles['close'], timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)
+        fastkrsi, fastdrsi = talib.STOCHRSI(self.candles['close'], timeperiod=144, fastk_period=120, fastd_period=96, fastd_matype=0)
         self.candles = self.candles.join(fastdrsi.rename('fastdrsi'))
         self.candles.dropna(inplace=True)
         return ('fastdrsi' in self.candles.columns)
