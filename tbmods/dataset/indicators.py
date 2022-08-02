@@ -211,13 +211,13 @@ class Indicators:
         return ('slowd' in self.candles.columns)
 
     def compute_fastk(self):
-        fastk,fastd = talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, fastd_period=3, fastd_matype=0)
+        fastk,fastd = talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=72, fastd_period=48, fastd_matype=0)
         self.candles = self.candles.join(fastk.rename('fastk'))
         self.candles.dropna(inplace=True)
         return ('fastk' in self.candles.columns)
 
     def compute_fastd(self):
-        fastk,fastd = talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, fastd_period=3, fastd_matype=0)
+        fastk,fastd = talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=72, fastd_period=48, fastd_matype=0)
         self.candles = self.candles.join(fastd.rename('fastd'))
         self.candles.dropna(inplace=True)
         return ('fastd' in self.candles.columns)
