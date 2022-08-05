@@ -241,7 +241,7 @@ class Indicators:
         return ('trix' in self.candles.columns)
 
     def compute_ultosc(self):
-        ultosc = talib.ULTOSC(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod1=7, timeperiod2=14, timeperiod3=28)
+    ultosc = talib.ULTOSC(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod1=8, timeperiod2=12, timeperiod3=24)
         self.candles = self.candles.join(ultosc.rename('ultosc'))
         self.candles.dropna(inplace=True)
         return ('ultosc' in self.candles.columns)
