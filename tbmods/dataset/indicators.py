@@ -235,7 +235,7 @@ class Indicators:
         return ('fastdrsi' in self.candles.columns)
 
     def compute_trix(self):
-        trix = talib.TRIX(self.candles['close'], timeperiod=30)
+        trix = talib.TRIX(self.candles['close'], timeperiod=72)
         self.candles = self.candles.join(trix.rename('trix'))
         self.candles.dropna(inplace=True)
         return ('trix' in self.candles.columns)
