@@ -28,12 +28,12 @@ log = Log(config['app'])
 def price_model(timescale,from_date,to_date):
     
     # FEATURES
-    
-  
     json_features = json.loads(config['features'])
     features = json_features['sources']['qdb'] + json_features['sources']['talib']
     dataset = Dataset(timescale,from_date,to_date,features).load()
     features = dataset.columns # pour les features mergees
+    for n in [12,24,48,72,96,120,144,168]:
+        dataset['ma{}'.format(n)] = dataset.close.rolling(n).mean()
     for n in range(1,4):
         for feature in features:
             past_feature = dataset[feature].shift(n)
@@ -47,13 +47,7 @@ def price_model(timescale,from_date,to_date):
     features = ['fastk','volume-3','trix-2','minusdi-2','roc-2','roc-1','ppo-3','trix-3','volume-1','roc','fastk-1','bop','willr-1','ppo-2','volume-2','minusdm-1','macdhist-1','fastk-2','cmo','mom','close','plusdi-1','willr','minusdi-3','macdhist-2']
     dataset = Dataset(timescale,from_date,to_date,features).load()
     print(dataset.columns)
-
-    PENSER A BOUCLER SUR LES MOVING AVERAGE
-
-    return 1    
-    # RECURSIVE TRAIN
     """
-    print('Plus 168')
     close = dataset.close
     remove_close = 0
     while len(features) >= 5:
@@ -73,7 +67,7 @@ def price_model(timescale,from_date,to_date):
         print(cm)
         importances = clf.feature_importances_
         fi = pd.Series(importances, index=features).sort_values(ascending=False)
-        print('feature_importance {}'.format(fi['plusdi']))
+        print('FI {} '.format(fi))
         features = fi.iloc[:-6].index.tolist()
         if not 'close' in features: 
             remove_close = 1
