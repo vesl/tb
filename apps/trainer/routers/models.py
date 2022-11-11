@@ -1,11 +1,7 @@
-from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import MinMaxScaler
+from tbmods.models.classifier import Classifier
 from tbmods.triple_barrier import TripleBarrier
 from fastapi import APIRouter, HTTPException
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score
-from sklearn.metrics import confusion_matrix
 from tbmods.filters import Filters
 from tbmods.dataset import Dataset
 from tbmods.config import Config
@@ -24,11 +20,12 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-@router.get('/price/{timescale}/{from_date}/{to_date}')
-def price_model(timescale,from_date,to_date):
+@router.get('/grid_search/flower/{timescale}/{from_date}/{to_date}')
+def grid_search_flower(timescale,from_date,to_date):
     
-    # FEATURES
+    # GET ALL FEATURES
     json_features = json.loads(config['features'])
+    print(json_features)
     features = json_features['sources']['qdb'] + json_features['sources']['talib']
     dataset = Dataset(timescale,from_date,to_date,features).load()
     features = dataset.columns # pour les features mergees
@@ -40,35 +37,49 @@ def price_model(timescale,from_date,to_date):
             dataset['{}-{}'.format(feature,n)] = past_feature.values
     dataset.dropna(inplace=True)
     dataset = dataset.copy() # pour les perfs, il faut join propre
+    print(dataset.iloc[0].to_string())
+    
     features = dataset.columns
     cusum = Filters(dataset.close).cusum_events(config['cusum_pct_threshold'])
-    """
-
-    features = ['fastk','volume-3','trix-2','minusdi-2','roc-2','roc-1','ppo-3','trix-3','volume-1','roc','fastk-1','bop','willr-1','ppo-2','volume-2','minusdm-1','macdhist-1','fastk-2','cmo','mom','close','plusdi-1','willr','minusdi-3','macdhist-2']
-    dataset = Dataset(timescale,from_date,to_date,features).load()
-    print(dataset.columns)
-    """
-    close = dataset.close
-    remove_close = 0
+    
+    # GRID SEARCH
+    results = []
     while len(features) >= 5:
-        if remove_close == 1: features.remove('close')
+        result = {}
         dataset = dataset.loc[:,features]
-        Y = TripleBarrier(close,cusum).barriers.side
-        X = dataset.loc[Y.index]
-        scaler = MinMaxScaler()
-        X = scaler.fit_transform(X)
-        X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.20, random_state=42)
-        clf = RandomForestClassifier(random_state=42)
-        clf.fit(X_train,Y_train)
-        Y_pred = clf.predict(X_test)
-        f1 = f1_score(Y_test,Y_pred,average=None)
-        print('score {}'.format(f1))
-        cm = confusion_matrix(Y_test,Y_pred)
-        print(cm)
-        importances = clf.feature_importances_
-        fi = pd.Series(importances, index=features).sort_values(ascending=False)
-        print('FI {} '.format(fi))
-        features = fi.iloc[:-6].index.tolist()
-        if not 'close' in features: 
-            remove_close = 1
-            features.append('close')
+        y = TripleBarrier(dataset.close,cusum).barriers.side
+        X = dataset.loc[y.index]
+        clf = Classifier(RandomForestClassifier(
+            n_estimators=300,
+            oob_score=True,
+            n_jobs=-1,
+            verbose=1,
+            class_weight='balanced',
+            random_state=42,
+        ),X,y,features)
+        result['features'] = features
+        result['cv_scores'] = clf.cv()
+        clf.fit()
+        result['f1_score'] = clf.f1_score()
+        result['cm'] = clf.confusion_matrix()
+        result['fi'] = clf.feature_importances()
+        features =  result['fi'].iloc[:-6].index.tolist()
+        if not 'close' in features: features.append('close')
+        results.append(result)
+    
+    # GET BEST RESULT
+    best_result = {}
+    for result in results:
+        if any(f1 < 0.5 for f1 in result['f1_score']): continue
+        avg = sum(result['f1_score'])/3
+        if not 'avg' in best_result or best_result['avg'] < avg:
+            best_result = result
+            best_result['avg'] = avg
+    print("BEST RESULT")
+    print("FEATURES : {}".format(list(best_result['features'])))
+    print("CV_SCORES : {}".format(list(best_result['cv_scores'])))
+    print("F1_SCORE : {}".format(list(best_result['f1_score'])))
+    print("CONFUSION MATRIX :")
+    print(best_result['cm'])
+    print("FEATURES IMPORTANCE :")
+    print(best_result['fi'].sort_values(ascending=False))
