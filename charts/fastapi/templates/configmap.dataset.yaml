@@ -9,50 +9,168 @@ data:
   TB_TBM_DOWN_THRESH: "1.3"
   TB_FEATURES: | 
     {
-      "sources":{
-          "qdb":[
-            "open",
-            "high",
-            "low",
-            "close",
-            "volume"
-          ],
-          "talib":[
-             "rsi",
-             "macd",
-             "macdhist",
-             "macdsignal",
-             "adx",
-             "adxr",
-             "apo",
-             "aroonup",
-             "aroondown",
-             "aroonosc",
-             "bop",
-             "cci",
-             "cmo",
-             "dx",
-             "mfi",
-             "minusdi",
-             "minusdm",
-             "mom",
-             "plusdi",
-             "plusdm",
-             "ppo",
-             "roc",
-             "slowk",
-             "slowd",
-             "fastk",
-             "fastd",
-             "fastkrsi",
-             "fastdrsi",
-             "trix",
-             "ultosc",
-             "willr",
-             "ssa",
-             "ssb",
-             "tenkan",
-             "kijun"
-          ]
-      }
+        "adx": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "adxr": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "apo": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "aroonup": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "aroondown": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "aroonosc": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "bop": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "cci": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "close": {
+            "scaled": "false",
+            "source": "candles",
+        },
+        "cmo": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "dx": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "fastk": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "fastd": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "fastkrsi": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "fastdrsi": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "high": {
+            "scaled": "false",
+            "source": "candles",
+        },
+        "kijun": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "low": {
+            "scaled": "false",
+            "source": "candles",
+        },
+        "ma": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "macd": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "macdhist": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "macdsignal": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "mfi": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "minusdi": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "minusdm": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "mom": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "open": {
+            "scaled": "false",
+            "source": "candles",
+        },
+        "plusdi": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "plusdm": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "ppo": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "roc": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "rsi": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "ssa": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "ssb": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "slowk": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "slowd": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "tenkan": {
+            "scaled": "false",
+            "source": "compute",
+        },
+        "trix": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "ultosc": {
+            "scaled": "true",
+            "source": "compute",
+        },
+        "volume": {
+            "scaled": "false",
+            "source": "candles",
+        },
+        "willr": {
+            "scaled": "true",
+            "source": "compute",
+        }
     }
