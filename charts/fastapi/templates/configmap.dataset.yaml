@@ -7,7 +7,8 @@ data:
   TB_PERIOD_VOL_SPAN: "26"
   TB_TBM_UP_THRESH: "1.9"
   TB_TBM_DOWN_THRESH: "1.3"
-  TB_FEATURES_TECH: |
+  TB_TECH_GRID_SEARCH_LAG: "5"
+  TB_TECH_FEATURES: |
     {
         "adx": {
             "scaled": "true",
