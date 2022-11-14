@@ -12,6 +12,7 @@ class Dataset:
         self.period = period
         self.start = pd.to_datetime(start)
         self.end = pd.to_datetime(end)
+        self.features = pd.DataFrame(index=self.create_index_datetime())
         self.features_list = features_list
         self.dataset_type = dataset_type
         self.features_map_base = json.loads(config['{}_features'.format(self.dataset_type)])
@@ -20,7 +21,7 @@ class Dataset:
     def create_index_datetime(self):
         pd_freqs = {'1m':'T','1h':'H','1d':'D'}
         if not self.period in pd_freqs: log.error('Period {} not managed'.format(self.period))
-        index = pd.date_range(start=self.start,end=self.end,freq=pd_freqs[self.period])
+        index = pd.date_range(start=self.start,end=self.end,freq=pd_freqs[self.period],tz='UTC')
         return index
         
     def create_features_map(self):
