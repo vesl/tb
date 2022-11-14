@@ -35,9 +35,9 @@ class Candles:
         df.index = pd.to_datetime(df.index,unit='ms')
         self.candles = df
 
-    def from_questdb(self,timescale,since,to):
+    def from_questdb(self,period,start,end):
         qdbq = """select first(open),max(high),min(low),last(close),sum(volume),timestamp 
-              from candles_minute where timestamp between '{}' and '{}' sample by {}""".format(since,to,timescale)
+              from candles_minute where timestamp between '{}' and '{}' sample by {}""".format(start,end,period)
         qdbr = questdb.query(qdbq)
         if 'error' in qdbr: return qdbr
         elif len(qdbr['result']) == 0: qdbr['error'] = '0 candle in this period'
