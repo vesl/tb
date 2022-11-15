@@ -29,6 +29,8 @@ class Dataset:
         for feature in self.features_list:
             name, lag = (feature,0) if not '-' in feature else (feature.split('-'))
             if not name in self.features_map_base: log.error('Feature {} does not exists in features_map_base'.format(name))
-            features_map[feature] = self.features_map_base[name]
-            features_map[feature].update({"name":name,"lag":lag})
+            feature_map = self.features_map_base[name]
+            feature_map['name'] = name
+            feature_map['lag'] = lag
+            features_map[feature] = feature_map.copy()
         return features_map
