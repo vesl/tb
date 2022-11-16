@@ -5,14 +5,14 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import confusion_matrix
 import pandas as pd
 
-class Classifier:
+class Tech:
     
     def __init__(self,model,X,y,features):
         self.X = X
         self.y = y
         self.features = features
         self.scaler = MinMaxScaler()
-        self.s_X = self.scaler.fit_transform(X)
+        self.s_X = self.scaler.fit_transform(self.X)
         self.model = model
         
     def fit(self):
@@ -31,8 +31,3 @@ class Classifier:
         
     def feature_importances(self):
         return pd.Series(self.model.feature_importances_,index=self.features)
-
-"""
-Todo : 
-* graph PCA : https://www.icloud.com/notes/0feDxNcxa1ZDwdwiLC-LyZelw
-"""
