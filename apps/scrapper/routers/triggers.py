@@ -37,8 +37,8 @@ def scrap_trades():
             trades.extend(binance_client.historical_trades(config['symbol'],limit=config['binance_hist_limit'],fromId=last_id+1))
         except ClientError as e:
             if e.status_code == 429:
-                log.warning('Too much request. Sleep 2 minutes')
-                time.sleep(120)
+                log.warning('Too much request. Sleep 10 minutes')
+                time.sleep(600)
         last_id = trades[-1]['id']
     log.info("Got {} trades".format(len(trades)))
     
