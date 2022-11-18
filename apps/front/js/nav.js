@@ -1,25 +1,23 @@
 // Nav map
 const navMap = {
     'Scrapper': {
-        'Status': function(){showStatus('scrapper')}
+        'Status': function(){showStatus('scrapper')},
+        'Candles': function(){showCandles()},
     },
     'Plotter': {
         'Status': function(){showStatus('plotter')},
-        'Finance': function(){setupPlotFinance()},
-        'Labels': function(){setupPlotLabels()},
-        'Correlation': function(){setupPlotCorrelation()},
+        'Dataset - Tech': function(){},
     },
 }
 
 // Create Nav
 window.onload = function () {
-
     for (const app in navMap) {
-        navApp = new NavApp(app)
-        for (const appSubNav in navMap[app]) {
-            subnav = new SubNav(appSubNav,navMap[navApp.app][appSubNav])
-            navApp.div.append(subnav.render())
+        $('#nav').append('<li><strong>'+app+'</strong></li>')
+        for (const appPage in navMap[app]) {
+            let a = $('<a href=#>').append(appPage).click(function(){clearContent();navMap[app][appPage]})
+            let li = $('<li>').append(a)
+            $('#nav').append(li)
         }
-        $('#nav').append(navApp.render())
     }
 }
