@@ -1,9 +1,11 @@
 from fastapi import APIRouter, HTTPException
 from binance.spot import Spot
+from binance.error import ClientError
 from tbmods.candles import Candles
 from tbmods.config import Config
 from tbmods.cache import Cache
 from tbmods.log import Log
+import time
 
 router = APIRouter(
     prefix="/triggers",
@@ -31,7 +33,12 @@ def scrap_trades():
     prev_nb_trades = -1
     while (len(trades) < config['binance_trades_pack_size']) and (len(trades) > prev_nb_trades):
         prev_nb_trades = len(trades)
-        trades.extend(binance_client.historical_trades(config['symbol'],limit=config['binance_hist_limit'],fromId=last_id+1))
+        try:
+            trades.extend(binance_client.historical_trades(config['symbol'],limit=config['binance_hist_limit'],fromId=last_id+1))
+        except ClientError as e:
+            if e.status_code == 429:
+                log.warning('Too much request. Sleep 2 minutes')
+                time.sleep(120)
         last_id = trades[-1]['id']
     log.info("Got {} trades".format(len(trades)))
     
@@ -40,7 +47,6 @@ def scrap_trades():
     last_id = candles.from_trades(trades)
     if not last_id:
         log.error("Maybe minute is not finished, try again later")
-        raise HTTPException(status_code=425,detail="Maybe minute is not finished, try again later")
     ingest = candles.ingest()
     if 'error' in ingest:
         log.error("Trades not ingested {}".format(ingest['error']))
