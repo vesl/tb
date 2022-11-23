@@ -1,3 +1,4 @@
+
 // Finance plots
 function setupPlotFinance(){
     plot = new PlotLc('Finance plots',plotFinance)
