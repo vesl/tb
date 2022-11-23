@@ -4,8 +4,7 @@ const navMap = {
         'Status': ()=>{scrapperStatus()},
     },
     'Plotter': {
-        'Status': function(){showStatus('plotter')},
-        'Dataset - Tech': function(){},
+        'Dataset - Tech': ()=>{plotterDatasetTech()},
     },
 }
 
