@@ -7,16 +7,37 @@ function contentTitle(title) {
     $('#content-title').text(title)
 }
 
-function contentPre(text){
-    $('#content').append('<pre class="bg-light text-dark rounded">'+text+'</pre>')
-}
-
 function contentHTML(html){
     $('#content').append(html)
 }
 
-function contentDatePicker(){
-    $.get('/datepicker.html',(datepicker)=>{
-        contentHTML(datepicker)
-    })
+
+function contentPre(html,cls=''){
+    contentHTML('<pre class="bg-light text-dark rounded '+cls+'">'+html+'</pre>')
+}
+
+function contentButton(title,fn,cls=''){
+    var button = $('<button class="btn btn-primary '+cls+'" type="button">')
+    button.append(title)
+    button.click(fn)
+    contentHTML(button)
+}
+
+function contentCollapse(title,html){
+    var id = title.replace(' ','-').toLowerCase()
+    contentButton(title,()=>{$('.collapse-'+id).collapse('toggle')})
+    contentPre(html,'mt-3 collapse collapse-'+id)
+}
+
+function contentDatePicker(next){
+    contentHTML($('<div id="datepicker" class="mt-3 mb-3">'))
+    $('#datepicker').load('/datepicker.html')
+}
+
+function contentShowLoading(node){
+    node.load('/loading.html')
+}
+
+function contentRemoveLoading(node){
+    node.children("#loading").remove()
 }
