@@ -1,9 +1,8 @@
 from fastapi import APIRouter, HTTPException
-from tbmods.dataset import Dataset
+from tbmods.dataset.tech import DatasetTech
 from tbmods.config import Config
 from tbmods.log import Log
 import pandas as pd
-import requests
 import json
 
 router = APIRouter(
@@ -14,14 +13,13 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-
-
-# Format dataframe to lightwieght chart
-def df_to_lc(df):
-    df['time'] = df.index.astype(int)/1000000000
-    return df.to_json(orient="records")
-
 # Routes
-@router.get('/tech/features')
-async def tech_features():
+@router.get('/tech/features/list')
+async def tech_features_list():
     return config['tech_features']
+    
+@router.get('/tech/feature/{feature}/{period}/{start}/{end}')
+async def tech_features(feature,period,start,end):
+    dataset = DatasetTech(period,start,end,[feature])
+    return dataset.features.to_json(orient="records")
+    

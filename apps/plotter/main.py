@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from plotter.routers import status,finance,labels,correlation
+from plotter.routers import dataset
 
 ## init api
 app = FastAPI(
@@ -9,7 +9,4 @@ app = FastAPI(
 )
 
 ## init routers
-app.include_router(labels.router)
-app.include_router(finance.router)
-app.include_router(correlation.router)
-app.include_router(status.router)
+app.include_router(dataset.router)
