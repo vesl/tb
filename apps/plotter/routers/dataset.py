@@ -14,12 +14,13 @@ config = Config()
 log = Log(config['app'])
 
 # Routes
-@router.get('/tech/features/list')
-async def tech_features_list():
+@router.get('/tech/features/map')
+async def tech_features_map():
     return config['tech_features']
     
-@router.get('/tech/feature/{feature}/{period}/{start}/{end}')
-async def tech_features(feature,period,start,end):
-    dataset = DatasetTech(period,start,end,[feature])
+@router.get('/tech/feature/{features}/{period}/{start}/{end}')
+async def tech_features(features,period,start,end):
+    dataset = DatasetTech(period,start,end,features.split(','))
+    dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
     
