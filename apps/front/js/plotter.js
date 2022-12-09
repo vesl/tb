@@ -6,15 +6,15 @@ function plotterDatasetTech(){
         contentCollapse('Features list',JSON.stringify(featuresMap,null,2))
         contentDatePicker()
         contentButton('Plot features',()=>{plotterPlotDatasetTechFeatures()})
-        contentHTML('<p id="plot-features">')
     })
 }
 
 function plotterLabels(){
     contentTitle('Labels')
     contentDatePicker()
-    contentButton('Plot labels',()=>{plotterPlotLabels()})
-    contentHTML('<p id="plot-labels">')
+    contentButton('Plot cusum',()=>{plotterPlotLabelsCusum()},'m-2')
+    contentButton('Plot TBM',()=>{plotterPlotLabelsTbm()},'m-2')
+    contentButton('Plot repartition',()=>{plotterPlotLabelsRepartition()},'m-2')
 }
 
 function plotterGetDatasetTechFeaturesMap(then){
@@ -40,6 +40,7 @@ function plotterGetDatasetTechFeatureData(dataset,feature){
 }
 
 function plotterPlotDatasetTechFeatures(){
+    contentHTML('<p id="plot-features">')
     var container = $('#plot-features')
     var dpValues = getDpValues()
     if (!container.is(':empty') || !dpValues){container.empty();return;}
@@ -58,8 +59,23 @@ function plotterPlotDatasetTechFeatures(){
     })
 }
 
-function plotterPlotLabels(){
-    var container = $('#plot-labels')
+function plotterPlotLabelsCusum(){
+    contentHTML('<p id="plot-labels-cusum">')
+    var container = $('#plot-labels-cusum')
+    var dpValues = getDpValues()
+    if (!container.is(':empty') || !dpValues){container.empty();return;}
+}
+
+function plotterPlotLabelsTbm(){
+    contentHTML('<p id="plot-tbm">')
+    var container = $('#plot-labels-tbm')
+    var dpValues = getDpValues()
+    if (!container.is(':empty') || !dpValues){container.empty();return;}
+}
+
+function plotterPlotLabelsRepartiton(){
+    contentHTML('<p id="plot-repartition">')
+    var container = $('#plot-labels-repartition')
     var dpValues = getDpValues()
     if (!container.is(':empty') || !dpValues){container.empty();return;}
 }
