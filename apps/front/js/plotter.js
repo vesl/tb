@@ -5,9 +5,16 @@ function plotterDatasetTech(){
     plotterGetDatasetTechFeaturesMap((featuresMap)=>{
         contentCollapse('Features list',JSON.stringify(featuresMap,null,2))
         contentDatePicker()
-        contentButton('Plot features',()=>{plotterDatasetTechFeatures()})
+        contentButton('Plot features',()=>{plotterPlotDatasetTechFeatures()})
         contentHTML('<p id="plot-features">')
     })
+}
+
+function plotterLabels(){
+    contentTitle('Labels')
+    contentDatePicker()
+    contentButton('Plot labels',()=>{plotterPlotLabels()})
+    contentHTML('<p id="plot-labels">')
 }
 
 function plotterGetDatasetTechFeaturesMap(then){
@@ -32,7 +39,7 @@ function plotterGetDatasetTechFeatureData(dataset,feature){
     return featureData
 }
 
-function plotterDatasetTechFeatures(){
+function plotterPlotDatasetTechFeatures(){
     var container = $('#plot-features')
     var dpValues = getDpValues()
     if (!container.is(':empty') || !dpValues){container.empty();return;}
@@ -49,4 +56,10 @@ function plotterDatasetTechFeatures(){
             plotterLineLcChart(featureContainer,featureData)
         })
     })
+}
+
+function plotterPlotLabels(){
+    var container = $('#plot-labels')
+    var dpValues = getDpValues()
+    if (!container.is(':empty') || !dpValues){container.empty();return;}
 }
