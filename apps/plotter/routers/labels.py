@@ -22,7 +22,7 @@ sns.set(rc = {'figure.figsize':(11,4)})
 @router.get('/cusum/{period}/{start}/{end}')
 def graph_cusum(period,start,end):
     dataset = DatasetTech(period,start,end,['close'])
-    close = dataset.features.close
+    close = dataset.candles.candles.close
     cusum = dataset.cusum
     image = BytesIO()
     fig, ax = plt.subplots()
@@ -35,7 +35,7 @@ def graph_cusum(period,start,end):
 @router.get('/tbm/{period}/{start}/{end}')
 def graph_tbm(period,start,end):
     dataset = DatasetTech(period,start,end,['close'])
-    close = dataset.features.close
+    close = dataset.candles.candles.close
     tbm = dataset.tbm
     image = BytesIO()
     fig, ax = plt.subplots()
@@ -52,7 +52,6 @@ def graph_tbm(period,start,end):
 @router.get('/balance/{period}/{start}/{end}')
 def graph_balance(period,start,end):
     dataset = DatasetTech(period,start,end,['close'])
-    close = dataset.features.close
     tbm = dataset.tbm
     image = BytesIO()
     fig, ax = plt.subplots()
