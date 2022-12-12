@@ -1,20 +1,24 @@
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score
+from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import confusion_matrix
+from tbmods.dataset.tech import DatasetTech
+from sklearn.feature_selection import chi2
+from sklearn.metrics import f1_score
 import pandas as pd
 
-class Tech:
+class ModelTech:
     
-    def __init__(self,model,X,y,features):
-        self.X = X
-        self.y = y
-        self.features = features
+    def __init__(self,period,start,end,features_list):
+        self.dataset = DatasetTech(period,start,end,features_list)
         self.scaler = MinMaxScaler()
-        self.s_X = self.scaler.fit_transform(self.X)
-        self.model = model
-        
+
+    def chi2_test(self):
+        X = self.scaler.fit_transform(self.dataset.features)
+        test = [chi2(X,self.dataset.labels)[0]]
+        return pd.DataFrame(test,columns=self.dataset.features.columns)
+
+"""
     def fit(self):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.s_X, self.y, test_size=0.2)
         self.model.fit(self.X_train, self.y_train)
@@ -31,3 +35,4 @@ class Tech:
         
     def feature_importances(self):
         return pd.Series(self.model.feature_importances_,index=self.features)
+"""

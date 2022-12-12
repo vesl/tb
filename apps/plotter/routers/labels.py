@@ -4,10 +4,9 @@ from tbmods.dataset.tech import DatasetTech
 from tbmods.config import Config
 import matplotlib.pyplot as plt
 from tbmods.log import Log
-import seaborn as sns
 from io import BytesIO
+import seaborn as sns
 import base64
-import json
 
 router = APIRouter(
     prefix="/labels",
@@ -16,8 +15,6 @@ router = APIRouter(
 
 config = Config()
 log = Log(config['app'])
-
-sns.set(rc = {'figure.figsize':(11,4)})
 
 @router.get('/cusum/{period}/{start}/{end}')
 def graph_cusum(period,start,end):
@@ -28,6 +25,7 @@ def graph_cusum(period,start,end):
     fig, ax = plt.subplots()
     sns.lineplot(x=close.index,y=close.values,color='green',label='price',alpha=0.3,ax=ax)
     sns.scatterplot(x=cusum.index,y=close.loc[cusum.index],hue='event',data=cusum,ax=ax)
+    fig.set_size_inches(15,6)
     fig.savefig(image, format='png')
     image_base64 = base64.b64encode(image.getvalue())
     return {"image_base64": image_base64,"count_cusum":len(cusum)}
@@ -45,6 +43,7 @@ def graph_tbm(period,start,end):
         mid_price = (b.top+b.bot)/2
         ax.fill([i,b.vertical,b.vertical,i,i],[b.close,b.close,b.top,b.top,b.close],color='green',alpha=0.2)
         ax.fill([i,b.vertical,b.vertical,i,i],[b.bot,b.bot,b.close,b.close,b.bot],color='red',alpha=0.2)
+    fig.set_size_inches(15,6)
     fig.savefig(image, format='png')
     image_base64 = base64.b64encode(image.getvalue())
     return {"image_base64": image_base64,"count_tbm":len(tbm)}
@@ -56,6 +55,7 @@ def graph_balance(period,start,end):
     image = BytesIO()
     fig, ax = plt.subplots()
     sns.countplot(x='side',data=tbm)
+    fig.set_size_inches(15,6)
     fig.savefig(image, format='png')
     image_base64 = base64.b64encode(image.getvalue())
     return {"image_base64": image_base64}

@@ -14,7 +14,6 @@ log = Log(config['app'])
 class DatasetTech(Dataset):
     
     def __init__(self,period,start,end,features_list):
-        
         super().__init__(period,start,end,features_list,'tech')
         self.candles = Candles()
         self.candles.from_questdb(self.period,self.start,self.end)
