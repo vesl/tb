@@ -77,7 +77,7 @@ function plotterPlotDatasetTechCorrelation(dpValues,container){
 function plotterPlotLabelsCusum(dpValues,container){
     $.get('/api/plotter/labels/cusum/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
         contentRemoveLoading(container)
-        container.append('<h6><b>Cusum events</b> count <b>'+data.count_cusum+'</b></h6>')
+        container.append('<h6><b>Cusum events</b> count <b>'+data.count_cusum+'</b> <b>threshold</b> '+data.threshold+'</h6>')
         container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
     })
 }

@@ -28,7 +28,7 @@ def graph_cusum(period,start,end):
     fig.set_size_inches(15,6)
     fig.savefig(image, format='png')
     image_base64 = base64.b64encode(image.getvalue())
-    return {"image_base64": image_base64,"count_cusum":len(cusum)}
+    return {"image_base64": image_base64,"count_cusum":len(cusum),"threshold":config['cusum_pct_threshold']}
 
 @router.get('/tbm/{period}/{start}/{end}')
 def graph_tbm(period,start,end):
