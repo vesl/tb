@@ -16,8 +16,8 @@ function contentPre(html,cls=''){
     contentHTML('<pre class="bg-light text-dark rounded '+cls+'">'+html+'</pre>')
 }
 
-function contentButton(title,fn,cls=''){
-    var button = $('<button class="btn btn-primary '+cls+'" type="button">')
+function contentButton(title,fn){
+    var button = $('<button class="btn btn-primary m-2" data-bs-toggle="button" type="button">')
     button.append(title)
     button.click(fn)
     contentHTML(button)
