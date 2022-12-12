@@ -3,10 +3,10 @@ kind: ConfigMap
 metadata:
   name: dataset
 data:
-  TB_CUSUM_PCT_THRESHOLD: "2"
+  TB_CUSUM_PCT_THRESHOLD: "0.5"
   TB_PERIOD_VOL_SPAN: "26"
-  TB_TBM_UP_THRESH: "1.9"
-  TB_TBM_DOWN_THRESH: "0.9"
+  TB_TBM_UP_THRESH: "0.9"
+  TB_TBM_DOWN_THRESH: "0.8"
   TB_TECH_GRID_SEARCH_LAG: "20"
   TB_TECH_FEATURES: |
     {
