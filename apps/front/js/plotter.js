@@ -14,7 +14,7 @@ function plotterLabels(){
     contentDatePicker()
     contentButton('Plot cusum',()=>{plotterPlotLabelsCusum()},'m-2')
     contentButton('Plot TBM',()=>{plotterPlotLabelsTbm()},'m-2')
-    contentButton('Plot repartition',()=>{plotterPlotLabelsRepartition()},'m-2')
+    contentButton('Plot balance',()=>{plotterPlotLabelsBalance()},'m-2')
 }
 
 function plotterGetDatasetTechFeaturesMap(then){
@@ -52,7 +52,7 @@ function plotterPlotDatasetTechFeatures(){
             let props = plotterDatasetTechFeaturesMap[feature]
             let featureContainer = $('<div id="plot-'+feature+'">')
             let featureData = plotterGetDatasetTechFeatureData(JSON.parse(dataset),feature)
-            container.append('<b>'+feature.toUpperCase()+'</b> source: <b>'+props['source']+'</b> scaled: <b>'+props['scaled']+'</b>')
+            container.append('<h6><b>'+feature.toUpperCase()+'</b> source: <b>'+props['source']+'</b> scaled: <b>'+props['scaled']+'</b></h6>')
             container.append(featureContainer)
             plotterLineLcChart(featureContainer,featureData)
         })
@@ -64,18 +64,36 @@ function plotterPlotLabelsCusum(){
     var container = $('#plot-labels-cusum')
     var dpValues = getDpValues()
     if (!container.is(':empty') || !dpValues){container.empty();return;}
+    contentShowLoading(container)
+    $.get('/api/plotter/labels/cusum/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
+        contentRemoveLoading(container)
+        container.append('<h6><b>Cusum events</b> couunt <b>'+data.count_cusum+'</b></h6>')
+        container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
+    })
 }
 
 function plotterPlotLabelsTbm(){
-    contentHTML('<p id="plot-tbm">')
+    contentHTML('<p id="plot-labels-tbm">')
     var container = $('#plot-labels-tbm')
     var dpValues = getDpValues()
     if (!container.is(':empty') || !dpValues){container.empty();return;}
+    contentShowLoading(container)
+    $.get('/api/plotter/labels/tbm/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
+        contentRemoveLoading(container)
+        container.append('<h6><b>Tbm samples</b> count <b>'+data.count_tbm+'</b></h6>')
+        container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
+    })
 }
 
-function plotterPlotLabelsRepartiton(){
-    contentHTML('<p id="plot-repartition">')
-    var container = $('#plot-labels-repartition')
+function plotterPlotLabelsBalance(){
+    contentHTML('<p id="plot-labels-balance">')
+    var container = $('#plot-labels-balance')
     var dpValues = getDpValues()
     if (!container.is(':empty') || !dpValues){container.empty();return;}
+    contentShowLoading(container)
+    $.get('/api/plotter/labels/balance/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
+        contentRemoveLoading(container)
+        container.append('<h6><b>Balance</b></h6>')
+        container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
+    })
 }

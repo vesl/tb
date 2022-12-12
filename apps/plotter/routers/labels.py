@@ -1,14 +1,12 @@
 from fastapi import APIRouter, HTTPException
 from starlette.responses import FileResponse
-import matplotlib.pyplot as plt
-from tbmods.triple_barrier import TripleBarrier
-from tbmods.dataset import Dataset
-from tbmods.filters import Filters
+from tbmods.dataset.tech import DatasetTech
 from tbmods.config import Config
+import matplotlib.pyplot as plt
 from tbmods.log import Log
 import seaborn as sns
-import pandas as pd
-import requests
+from io import BytesIO
+import base64
 import json
 
 router = APIRouter(
@@ -21,46 +19,44 @@ log = Log(config['app'])
 
 sns.set(rc = {'figure.figsize':(11,4)})
 
-@router.get('/cusum/{timescale}/{from_date}/{to_date}/cusum.png')
-def graph_cusum(timescale,from_date,to_date):
-    close = Dataset(timescale,from_date,to_date,'close').load()
-    cusum = Filters(close).cusum_events(config['cusum_pct_threshold'])
-    log.info('Cusum number {}'.format(len(cusum)))
-    # graph
+@router.get('/cusum/{period}/{start}/{end}')
+def graph_cusum(period,start,end):
+    dataset = DatasetTech(period,start,end,['close'])
+    close = dataset.features.close
+    cusum = dataset.cusum
+    image = BytesIO()
     fig, ax = plt.subplots()
     sns.lineplot(x=close.index,y=close.values,color='green',label='price',alpha=0.3,ax=ax)
     sns.scatterplot(x=cusum.index,y=close.loc[cusum.index],hue='event',data=cusum,ax=ax)
-    fig.savefig('/tmp/cusum.png')
-    fig.clf()
-    return FileResponse('/tmp/cusum.png',media_type="image/png")
+    fig.savefig(image, format='png')
+    image_base64 = base64.b64encode(image.getvalue())
+    return {"image_base64": image_base64,"count_cusum":len(cusum)}
 
-@router.get('/tbm/{timescale}/{from_date}/{to_date}/tbm.png')
-def graph_tbm(timescale,from_date,to_date):
-    close = Dataset(timescale,from_date,to_date,'close').load()
-    cusum = Filters(close).cusum_events(config['cusum_pct_threshold'])
-    barriers = TripleBarrier(close,cusum).barriers
-    log.info('Sample number {}'.format(len(barriers)))
-    # graph
+@router.get('/tbm/{period}/{start}/{end}')
+def graph_tbm(period,start,end):
+    dataset = DatasetTech(period,start,end,['close'])
+    close = dataset.features.close
+    tbm = dataset.tbm
+    image = BytesIO()
     fig, ax = plt.subplots()
     sns.lineplot(x=close.index,y=close.values,color='green',label='price',alpha=0.3,ax=ax)
-    sns.scatterplot(x='first_touch',y='close_touch',data=barriers,hue='side',palette=['r','k','g'],ax=ax)
-    for i,b in barriers.iterrows():
+    sns.scatterplot(x='first_touch',y='close_touch',data=tbm,hue='side',palette=['r','k','g'],ax=ax)
+    for i,b in tbm.iterrows():
         mid_price = (b.top+b.bot)/2
         ax.fill([i,b.vertical,b.vertical,i,i],[b.close,b.close,b.top,b.top,b.close],color='green',alpha=0.2)
         ax.fill([i,b.vertical,b.vertical,i,i],[b.bot,b.bot,b.close,b.close,b.bot],color='red',alpha=0.2)
-    fig.savefig('/tmp/tbm.png')
-    fig.clf()
-    return FileResponse('/tmp/tbm.png',media_type="image/png")
+    fig.savefig(image, format='png')
+    image_base64 = base64.b64encode(image.getvalue())
+    return {"image_base64": image_base64,"count_tbm":len(tbm)}
 
-@router.get('/balance/{timescale}/{from_date}/{to_date}/balance.png')
-def graph_balance(timescale,from_date,to_date):
-    close = Dataset(timescale,from_date,to_date,'close').load()
-    cusum = Filters(close).cusum_events(config['cusum_pct_threshold'])
-    barriers = TripleBarrier(close,cusum).barriers
-    log.info('Mean ret {}'.format(barriers.ret.mean()))
-    # graph
+@router.get('/balance/{period}/{start}/{end}')
+def graph_balance(period,start,end):
+    dataset = DatasetTech(period,start,end,['close'])
+    close = dataset.features.close
+    tbm = dataset.tbm
+    image = BytesIO()
     fig, ax = plt.subplots()
-    sns.countplot(x='side',data=barriers)
-    fig.savefig('/tmp/balance.png')
-    fig.clf()
-    return FileResponse('/tmp/balance.png',media_type="image/png")
+    sns.countplot(x='side',data=tbm)
+    fig.savefig(image, format='png')
+    image_base64 = base64.b64encode(image.getvalue())
+    return {"image_base64": image_base64}

@@ -22,12 +22,14 @@ class DatasetTech(Dataset):
         self.sources_map = {'ohlc': self.load_ohlc,'indicators': self.load_indicators}
         [self.load_features(name,props) for name,props in self.features_map.items()]
         self.load_labels()
-        self.merge_features_labels_indexes()
+        self.merge_indexes()
     
-    def merge_features_labels_indexes(self):
+    def merge_indexes(self):
         self.index = self.features.index.intersection(self.labels.index)
         self.labels = self.labels.loc[self.index]
         self.features = self.features.loc[self.index]
+        self.tbm = self.tbm.loc[self.index]
+        self.cusum = self.cusum.loc[self.index]
 
     def load_features(self,name,props):
         log.info("Load feature {}".format(name))
@@ -39,8 +41,9 @@ class DatasetTech(Dataset):
         self.features = self.features[np.isfinite(self.features).all(1)]
         
     def load_labels(self):
-        cusum = Filters(self.candles.candles.close).cusum_events(config['cusum_pct_threshold'])
-        self.labels = TripleBarrier(self.candles.candles.close,cusum).barriers.side
+        self.cusum = Filters(self.candles.candles.close).cusum_events(config['cusum_pct_threshold'])
+        self.tbm = TripleBarrier(self.candles.candles.close,self.cusum).barriers
+        self.labels = self.tbm.side
         
     def load_ohlc(self,props):
         return self.candles.candles[props['name']]
