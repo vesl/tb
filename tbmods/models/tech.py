@@ -14,7 +14,7 @@ class ModelTech:
         self.features_list = features_list
         self.dataset = DatasetTech(period,start,end,self.features_list)
         self.X = self.scaler.fit_transform(self.dataset.features)
-        self.y = self.labels
+        self.y = self.dataset.labels
 
     def chi2_test(self):
         return pd.DataFrame([chi2(self.X,self.y)[0]],columns=self.features_list)
