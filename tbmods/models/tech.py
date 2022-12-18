@@ -10,22 +10,22 @@ import pandas as pd
 class ModelTech:
     
     def __init__(self,period,start,end,features_list):
-        self.dataset = DatasetTech(period,start,end,features_list)
         self.scaler = MinMaxScaler()
+        self.features_list = features_list
+        self.dataset = DatasetTech(period,start,end,self.features_list)
+        self.X = self.scaler.fit_transform(self.dataset.features)
+        self.y = self.labels
 
     def chi2_test(self):
-        X = self.scaler.fit_transform(self.dataset.features)
-        test = [chi2(X,self.dataset.labels)[0]]
-        return pd.DataFrame(test,columns=self.dataset.features.columns)
+        return pd.DataFrame([chi2(self.X,self.y)[0]],columns=self.features_list)
 
-"""
     def fit(self):
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.s_X, self.y, test_size=0.2)
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2)
         self.model.fit(self.X_train, self.y_train)
         self.y_pred = self.model.predict(self.X_test)
 
     def cv(self):
-        return cross_val_score(self.model,self.s_X,self.y,cv=5)
+        return cross_val_score(self.model,self.X,self.y,cv=5)
 
     def f1_score(self):
         return f1_score(self.y_test,self.y_pred,average=None)
@@ -34,5 +34,4 @@ class ModelTech:
         return confusion_matrix(self.y_test,self.y_pred)
         
     def feature_importances(self):
-        return pd.Series(self.model.feature_importances_,index=self.features)
-"""
+        return pd.Series(self.model.feature_importances_,index=self.features_list)
