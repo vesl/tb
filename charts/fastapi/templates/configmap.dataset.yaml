@@ -9,6 +9,15 @@ data:
   TB_TBM_DOWN_THRESH: "0.8"
   TB_TECH_GRID_SEARCH_LAG: "20"
   TB_TECH_FEATURES_SELECTED: 'adx,adxr,apo,aroonup,aroondown,aroonosc,bop,cci,close,cmo,dx,fastk,fastd,fastkrsi,fastdrsi,high,kijun,low,ma,macd,macdhist,macdsignal,mfi,minusdi,minusdm,mom,open,plusdi,plusdm,ppo,roc,rocp,rocr,rsi,ssa,ssb,slowk,slowd,tenkan,trix,ultosc,volume,willr'
+  TB_TECH_CLF_CONFIG: |
+    {
+        "n_estimators":"300",
+        "oob_score":"True",
+        "n_jobs":"-1",
+        "verbose":"1",
+        "class_weight":"balanced",
+        "random_state":"42"
+    }
   TB_TECH_FEATURES: |
     {
         "adx": {
