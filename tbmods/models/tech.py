@@ -1,5 +1,6 @@
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import confusion_matrix
 from tbmods.dataset.tech import DatasetTech
@@ -15,14 +16,24 @@ class ModelTech:
         self.dataset = DatasetTech(period,start,end,self.features_list)
         self.X = self.scaler.fit_transform(self.dataset.features)
         self.y = self.dataset.labels
+    
+    def clf_init(self,config):
+        self.clf = RandomForestClassifier(
+            n_estimators=int(config['n_estimators']),
+            oob_score=bool(config['oob_score']),
+            n_jobs=int(config['n_jobs']),
+            verbose=int(config['verbose']),
+            class_weight=config['class_weight'],
+            random_state=int(config['random_state']),
+        )
 
     def chi2_test(self):
         return pd.DataFrame([chi2(self.X,self.y)[0]],columns=self.features_list)
 
     def fit(self):
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2)
-        self.model.fit(self.X_train, self.y_train)
-        self.y_pred = self.model.predict(self.X_test)
+        self.clf.fit(self.X_train, self.y_train)
+        self.y_pred = self.clf.predict(self.X_test)
 
     def cv(self):
         return cross_val_score(self.model,self.X,self.y,cv=5)
