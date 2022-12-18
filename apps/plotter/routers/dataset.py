@@ -33,11 +33,11 @@ def graph_correlation(features,period,start,end):
     chi2_test = model.chi2_test()
     image = BytesIO()
     fig,ax = plt.subplots()
+    fig.set_size_inches(15,10)
     sns.heatmap(chi2_test,ax=ax,annot=True,annot_kws={"fontsize":7},fmt=".0f")
     ax.set_ylabel("Correlation")
     ax.set_xlabel("Features")
-    ax.set_xticklabels(model.dataset.features.columns,fontsize=8)
-    fig.set_size_inches(15,10)
+    ax.set_xticklabels(model.features_list,fontsize=8)
     fig.savefig(image, format='png')
     image_base64 = base64.b64encode(image.getvalue())
     return {"image_base64": image_base64}
