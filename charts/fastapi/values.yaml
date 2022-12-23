@@ -31,3 +31,4 @@ apps:
    configmaps:
      - questdb
      - dataset
+     - mongodb

@@ -23,4 +23,4 @@ def grid_search_tech(period,start,end):
     model = ModelTech(period,start,end,features_list)
     model.clf_init(json.loads(config['tech_clf_config']))
     model.fit()
-    print(model.meta)
+    model.save_meta()
