@@ -22,6 +22,10 @@ serverBlock: |-
       rewrite /api/plotter/(.*) /$1 break;
       proxy_pass http://plotter.tb.svc.k8s.slav.rocks;
     }
+    location /api/trainer {
+      rewrite /api/trainer/(.*) /$1 break;
+      proxy_pass http://trainer.tb.svc.k8s.slav.rocks;
+    }
   }
 service:
   type: ClusterIP
