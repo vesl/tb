@@ -28,6 +28,10 @@ apps:
    dev: true
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/sklearn.talib:latest
    replicas: 1
+   volumes:
+     - name: cache
+       mountPath: /var/cache/trainer
+       hostPath: /var/cache/tb/trainer
    configmaps:
      - questdb
      - dataset
