@@ -3,6 +3,10 @@ function contentClear(){
     $('#content').empty()
 }
 
+function contentClearContent(){
+    $('#content').empty()
+}
+
 function contentTitle(title) {
     $('#content-title').text(title)
 }
