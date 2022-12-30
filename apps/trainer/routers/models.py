@@ -19,21 +19,20 @@ log = Log(config['app'])
 
 @router.get('/tech/train/{period}/{start}/{end}')
 def tech_train(period,start,end):
-    
-    cache = Cache(config['app'])
-    cache.data['/models/tech'] = {"run":True}
-    cache.write()
-    
     features_list = config['tech_features_selected'].split(',')
     tech_model = ModelTech(period,start,end,features_list)
+    tech_model.update_status(False)
+    tech_model.update_status({"Load dataset":"..."})
+    tech_model.load_dataset()
+    tech_model.update_status({"Load dataset":"OK"})
     tech_model.clf_init(json.loads(config['tech_clf_config']))
+    tech_model.update_status({"Fit":"..."})
     tech_model.fit()
     tech_model.save_meta()
+    tech_model.update_status({"Fit":"OK"})
+    tech_model.update_status(False)
     
-    cache.data['/models/tech'] = {"run":False}
-    cache.write()
-    
-@router.get('/tech/run')
+@router.get('/tech/check_run')
 def tech_run():
     cache = Cache(config['app'])
-    return cache.data['/models/tech']
+    return cache.data["models/tech/status"]
