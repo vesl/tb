@@ -1,6 +1,6 @@
 function trainerCheckRun(next){
     $.get('/api/trainer/models/tech/check_run',(data)=>{
-        if (data["run"] == true) {
+        if (Object.keys(data).length > 0) {
             contentClearContent()
             contentHTML('Trainer is already running ...')
             contentPre(JSON.stringify(data,undefined, 2))
