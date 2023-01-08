@@ -6,6 +6,7 @@ const navMap = {
     'Plotter': {
         'Dataset - Tech': ()=>{plotterDatasetTech()},
         'Labels': ()=>{plotterLabels()},
+        'Model - Tech - Results': ()=>{plotterModelTechResults()},
     },
     'Trainer': {
         'Model - Tech': ()=>{trainerModelTech()},  
