@@ -28,7 +28,6 @@ function contentCanvas(id){
 function contentBarChart(name,x,y){
     contentCanvas('chart-'+name)
     const ctx = document.getElementById('chart-'+name)
-    console.log(ctx)
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -41,7 +40,6 @@ function contentBarChart(name,x,y){
 function contentLineChart(name,x,y){
     contentCanvas('chart-'+name)
     const ctx = document.getElementById('chart-'+name)
-    console.log(ctx)
     new Chart(ctx, {
         type: 'line',
         data: {
