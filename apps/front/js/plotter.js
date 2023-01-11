@@ -1,4 +1,5 @@
 var plotterDatasetTechFeaturesMap = "";
+var plotterModelTechMap = [];
 
 function plotterGetDatasetTechFeaturesMap(then){
     $.get('/api/plotter/dataset/tech/features/map',(featuresMapJson)=>{
@@ -95,5 +96,58 @@ function plotterPlotLabelsBalance(dpValues,container){
         contentRemoveLoading(container)
         container.append('<h6><b>Balance</b></h6>')
         container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
+    })
+}
+
+function plotterGetModelTechMap(next){
+    $.get('/api/plotter/models/tech/results/list',(list)=>{
+        plotterModelTechMap = list
+        next()
+    })
+}
+
+function plotterPlotConfusionMatrix(labels,confusion_matrix){
+    contentHTML('<th scope="col">#</th>')
+    labels.forEach((label)=>{contentHTML('<th scope="col" class="bg-success p-2">'+label+'</th>')})
+    contentHTML('</tr>')
+    confusion_matrix.forEach((row,i)=>{
+        contentHTML('<tr>')
+        contentHTML('<th class="bg-success p-2" scope="row">'+labels[i]+'</th>')
+        row.forEach((col,j)=>{
+            contentHTML('<td class="'+(i == j ? 'bg-primary': 'bg-dark')+' p-2">'+(col/row.reduce((sum, a) => sum + a, 0)).toFixed(2)+'</td>')
+        })
+        contentHTML('</tr>')
+    })
+}
+
+function PlotterPlotFeatureImportances(feature_importances){
+    contentHTML('<table class="table table-bordered table-hover table-dark"><tbody id="table-feature-importances"><thead><tr><th scope="col">Feature</th><th scope="col">Importance</th></tr></thead>')
+    table = $('#table-feature-importances')
+    feature_importances = Object.entries(feature_importances).sort((a,b) => b[1]-a[1])
+    feature_importances.forEach((i)=>{table.append('<tr><td>'+i[0]+'</td><td>'+i[1]+'</td></tr>')})
+}
+
+function plotterPlotModelTechResults(results){
+    contentTitle('Model - Tech - Results - '+results.name)
+    let labels = [-1,0,1]
+    contentClearContent()
+    contentHTML('<h3>F1 score mean: '+results.score.f1_score_mean+'</h3>')
+    contentCollapse('Classifier configuration',JSON.stringify(results.clf_config,null,2))
+    contentCollapse('Features',JSON.stringify(results.features,null,2))
+    plotterPlotConfusionMatrix(labels,results.score.confusion_matrix)
+    contentBarChart('f1-score',labels,results.score.f1_score)
+    contentLineChart('cross-val-score',[1,2,3,4,5],results.score.cross_val_score)
+    PlotterPlotFeatureImportances(JSON.parse(results.score.feature_importances))
+    console.log(results)
+}
+
+function plotterModelTechResults(){
+    contentTitle('Model - Tech - Results')
+    plotterGetModelTechMap(()=>{
+        Object.entries(plotterModelTechMap).forEach((results)=>{
+            results = results[1]
+            results.score.f1_score_mean = (results.score.f1_score.reduce((a, b) => a + b, 0) / results.score.f1_score.length).toFixed(3)
+            contentButton('<b>'+results.name+'</b> f1 score mean: <b>'+results.score.f1_score_mean+'</b>',()=>{plotterPlotModelTechResults(results)})
+        })
     })
 }
