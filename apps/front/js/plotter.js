@@ -53,7 +53,7 @@ function plotterLabels(){
 
 function plotterPlotDatasetTechFeatures(dpValues,container){
     var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
-    $.get('/api/plotter/dataset/tech/feature/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
+    $.get('/api/plotter/dataset/tech/features/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
         contentRemoveLoading(container)
         featuresList.forEach((feature)=>{
             let props = plotterDatasetTechFeaturesMap[feature]
