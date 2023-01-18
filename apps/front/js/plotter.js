@@ -53,12 +53,12 @@ function plotterLabels(){
 
 function plotterPlotDatasetTechFeatures(dpValues,container){
     var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
-    $.get('/api/plotter/dataset/tech/feature/'+featuresList.toString()+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
+    $.get('/api/plotter/dataset/tech/feature/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
         contentRemoveLoading(container)
         featuresList.forEach((feature)=>{
             let props = plotterDatasetTechFeaturesMap[feature]
             let featureContainer = $('<div id="plot-'+feature+'">')
-            let featureData = plotterGetDatasetTechFeatureData(JSON.parse(dataset),feature)
+            let featureData = plotterGetDatasetTechFeatureData(JSON.parse(dataset),feature+'-0')
             container.append('<h6><b>'+feature.toUpperCase()+'</b> source: <b>'+props['source']+'</b> scaled: <b>'+props['scaled']+'</b></h6>')
             container.append(featureContainer)
             plotterLineLcChart(featureContainer,featureData)

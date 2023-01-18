@@ -8,7 +8,7 @@ data:
   TB_TBM_UP_THRESH: "0.9"
   TB_TBM_DOWN_THRESH: "0.8"
   TB_TECH_GRID_SEARCH_LAG: "20"
-  TB_TECH_FEATURES_SELECTED: 'adx,adxr,apo,aroonup,aroondown,aroonosc,bop,cci,close,cmo,dx,fastk,fastd,fastkrsi,fastdrsi,high,kijun,low,ma,macd,macdhist,macdsignal,mfi,minusdi,minusdm,mom,open,plusdi,plusdm,ppo,roc,rocp,rocr,rsi,ssa,ssb,slowk,slowd,tenkan,trix,ultosc,volume,willr'
+  TB_TECH_FEATURES_SELECTED: 'adx-0,adxr-0,apo-0,aroonup-0,aroondown-0,aroonosc-0,bop-0,cci-0,close-0,cmo-0,dx-0,fastk-0,fastd-0,fastkrsi-0,fastdrsi-0,high-0,kijun-0,low-0,ma-0,macd-0,macdhist-0,macdsignal-0,mfi-0,minusdi-0,minusdm-0,mom-0,open-0,plusdi-0,plusdm-0,ppo-0,roc-0,rocp-0,rocr-0,rsi-0,ssa-0,ssb-0,slowk-0,slowd-0,tenkan-0,trix-0,ultosc-0,volume-0,willr-0'
   TB_TECH_CLF_CONFIG: |
     {
         "n_estimators":"300",

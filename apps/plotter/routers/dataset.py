@@ -21,15 +21,15 @@ log = Log(config['app'])
 async def tech_features_map():
     return config['tech_features']
     
-@router.get('/tech/feature/{features}/{period}/{start}/{end}')
-async def tech_features(features,period,start,end):
-    dataset = DatasetTech(period,start,end,features.split(','))
+@router.get('/tech/feature/{period}/{start}/{end}')
+async def tech_features(period,start,end):
+    dataset = DatasetTech(period,start,end,config['tech_features_selected'].split(','))
     dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
 
 @router.get('/tech/correlation/{features}/{period}/{start}/{end}')
 def graph_correlation(features,period,start,end):
-    tech_model = ModelTech(period,start,end,features.split(','))
+    tech_model = ModelTech(period,start,end,config['tech_features_selected'].split(','))
     tech_model.load_dataset()
     chi2_test = tech_model.chi2_test()
     image = BytesIO()
