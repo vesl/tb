@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from tbmods.dataset.tech import DatasetTech
+from tbmods.darwin.tech import DarwinTech
 from tbmods.models.tech import ModelTech
 from tbmods.config import Config
 from tbmods.cache import Cache
@@ -36,3 +37,9 @@ def tech_train(period,start,end):
 def tech_run():
     cache = Cache(config['app'])
     return cache.data["models/tech/status"]
+    
+@router.get('/tech/darwin/{period}/{start}/{end}')
+def tech_darwin(period,start,end):
+    tech_darwin = DarwinTech(period,start,end)
+    tech_darwin.evolve()
+    return "ok"
