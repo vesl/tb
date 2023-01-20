@@ -16,8 +16,10 @@ function plotterLineLcChart(node,data){
 
 function plotterGetDatasetTechFeatureData(dataset,feature){
     let featureData = []
+    regex_feature_name = new RegExp('^'+feature+'\-')
+    feature_fmt_name = Object.keys(dataset[0]).find(value => regex_feature_name.test(value))
     for (const i in dataset) {
-        featureData.push({'time':dataset[i]['time'],'value':dataset[i][feature]})
+        featureData.push({'time':dataset[i]['time'],'value':dataset[i][feature_fmt_name]})
     }
     return featureData
 }
@@ -58,7 +60,7 @@ function plotterPlotDatasetTechFeatures(dpValues,container){
         featuresList.forEach((feature)=>{
             let props = plotterDatasetTechFeaturesMap[feature]
             let featureContainer = $('<div id="plot-'+feature+'">')
-            let featureData = plotterGetDatasetTechFeatureData(JSON.parse(dataset),feature+'-0')
+            let featureData = plotterGetDatasetTechFeatureData(JSON.parse(dataset),feature)
             container.append('<h6><b>'+feature.toUpperCase()+'</b> source: <b>'+props['source']+'</b> scaled: <b>'+props['scaled']+'</b></h6>')
             container.append(featureContainer)
             plotterLineLcChart(featureContainer,featureData)
