@@ -6,7 +6,7 @@ class Financial:
     def __init__(self,candles):
         self.candles=candles 
     
-    def compute(self,feature):
+    def compute(self,feature,args):
         return {
           "adx": self.compute_adx,
           "adxr": self.compute_adxr,
@@ -46,119 +46,177 @@ class Financial:
           "trix": self.compute_trix,
           "ultosc": self.compute_ultosc,
           "willr": self.compute_willr,
-        }[feature]()
+        }[feature](args)
 
-    def compute_adx(self):
-        return talib.ADX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+    def compute_adx(self,args):
+        timeperiod = int(args[0])
+        return talib.ADX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=timeperiod)
         
-    def compute_adxr(self):
-        return talib.ADXR(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+    def compute_adxr(self,args):
+        timeperiod = int(args[0])
+        return talib.ADXR(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=timeperiod)
 
-    def compute_apo(self):
-        return talib.APO(self.candles['close'], fastperiod=12, slowperiod=26, matype=0)
+    def compute_apo(self,args):
+        fastperiod=int(args[0])
+        slowperiod=int(fastperiod*int(args[1]))
+        return talib.APO(self.candles['close'], fastperiod=fastperiod, slowperiod=slowperiod, matype=0)
 
-    def compute_aroonup(self):
-        return talib.AROON(self.candles['high'], self.candles['low'], timeperiod=14)[1]
+    def compute_aroonup(self,args):
+        timeperiod = int(args[0])
+        return talib.AROON(self.candles['high'], self.candles['low'], timeperiod=timeperiod)[1]
 
-    def compute_aroondown(self):
-        return talib.AROON(self.candles['high'], self.candles['low'], timeperiod=14)[0]
+    def compute_aroondown(self,args):
+        timeperiod = int(args[0])
+        return talib.AROON(self.candles['high'], self.candles['low'], timeperiod=timeperiod)[0]
         
-    def compute_aroonosc(self):
-        return talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=14)
+    def compute_aroonosc(self,args):
+        timeperiod = int(args[0])
+        return talib.AROONOSC(self.candles['high'], self.candles['low'], timeperiod=timeperiod)
 
-    def compute_bop(self):
+    def compute_bop(self,args):
         return talib.BOP(self.candles['open'], self.candles['high'], self.candles['low'], self.candles['close'])
         
-    def compute_cci(self):
-        return talib.CCI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+    def compute_cci(self,args):
+        timeperiod = int(args[0])
+        return talib.CCI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=timeperiod)
 
-    def compute_cmo(self):
-        return talib.CMO(self.candles['close'], timeperiod=14)
+    def compute_cmo(self,args):
+        timeperiod = int(args[0])
+        return talib.CMO(self.candles['close'], timeperiod=timeperiod)
 
-    def compute_dx(self):
-        return talib.DX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+    def compute_dx(self,args):
+        timeperiod = int(args[0])
+        return talib.DX(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=timeperiod)
 
-    def compute_fastk(self):
-        return talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, fastd_period=3, fastd_matype=0)[0]
+    def compute_fastk(self,args):
+        fastk_period=int(args[0])
+        fastd_period=int(args[1])
+        return talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=fastk_period, fastd_period=fastd_period, fastd_matype=0)[0]
 
-    def compute_fastd(self):
-        return talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, fastd_period=3, fastd_matype=0)[1]
+    def compute_fastd(self,args):
+        fastk_period=int(args[0])
+        fastd_period=int(args[1])
+        return talib.STOCHF(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=fastk_period, fastd_period=fastd_period, fastd_matype=0)[1]
 
-    def compute_fastkrsi(self):
-        return talib.STOCHRSI(self.candles['close'], timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)[0]
+    def compute_fastkrsi(self,args):
+        timeperiod = int(args[0])
+        fastk_period = int(args[1])
+        fastd_period = int(args[2])
+        return talib.STOCHRSI(self.candles['close'], timeperiod=timeperiod, fastk_period=fastk_period, fastd_period=fastd_period, fastd_matype=0)[0]
 
-    def compute_fastdrsi(self):
-        return talib.STOCHRSI(self.candles['close'], timeperiod=14, fastk_period=5, fastd_period=3, fastd_matype=0)[1]
+    def compute_fastdrsi(self,args):
+        timeperiod = int(args[0])
+        fastk_period = int(args[1])
+        fastd_period = int(args[2])
+        return talib.STOCHRSI(self.candles['close'], timeperiod=timeperiod, fastk_period=fastk_period, fastd_period=fastd_period, fastd_matype=0)[1]
 
-    def compute_kijun(self):
-        return (self.candles.high.rolling(26).max()+self.candles.low.rolling(26).min())/2
+    def compute_kijun(self,args):
+        rolling = int(args[0])
+        return (self.candles.high.rolling(rolling).max()+self.candles.low.rolling(rolling).min())/2
 
-    def compute_ma(self):
-        # A custom avec un argument
-        return self.candles.close.rolling(12).mean()
+    def compute_ma(self,args):
+        rolling = int(args[0])
+        return self.candles.close.rolling(rolling).mean()
         
-    def compute_macd(self):
-        return talib.MACD(self.candles['close'], fastperiod=12, slowperiod=26, signalperiod=9)[0]
+    def compute_macd(self,args):
+        fastperiod = int(args[0])
+        slowperiod = int(fastperiod*int(args[1]))
+        signalperiod = int(int(fastperiod)/int(args[1])+1)
+        return talib.MACD(self.candles['close'], fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[0]
 
-    def compute_macdhist(self):
-        return talib.MACD(self.candles['close'], fastperiod=12, slowperiod=26, signalperiod=9)[2]
+    def compute_macdhist(self,args):
+        fastperiod = int(args[0])
+        slowperiod = int(fastperiod*int(args[1]))
+        signalperiod = int(int(fastperiod)/int(args[1])+1)
+        return talib.MACD(self.candles['close'], fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[2]
         
-    def compute_macdsignal(self):
-        return talib.MACD(self.candles['close'], fastperiod=12, slowperiod=26, signalperiod=9)[1]
+    def compute_macdsignal(self,args):
+        fastperiod = int(args[0])
+        slowperiod = int(fastperiod*int(args[1]))
+        signalperiod = int(int(fastperiod)/int(args[1])+1)
+        return talib.MACD(self.candles['close'], fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[1]
         
-    def compute_mfi(self):
-        return talib.MFI(self.candles['high'], self.candles['low'], self.candles['close'], self.candles['volume'], timeperiod=14)
+    def compute_mfi(self,args):
+        timeperiod = int(args[0])
+        return talib.MFI(self.candles['high'], self.candles['low'], self.candles['close'], self.candles['volume'], timeperiod=timeperiod)
         
-    def compute_minusdi(self):
-        return talib.MINUS_DI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+    def compute_minusdi(self,args):
+        timeperiod = int(args[0])
+        return talib.MINUS_DI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=timeperiod)
 
-    def compute_minusdm(self):
-        return talib.MINUS_DM(self.candles['high'], self.candles['low'], timeperiod=14)
+    def compute_minusdm(self,args):
+        timeperiod = int(args[0])
+        return talib.MINUS_DM(self.candles['high'], self.candles['low'], timeperiod=timeperiod)
         
-    def compute_mom(self):
-        return talib.MOM(self.candles['close'], timeperiod=10)
+    def compute_mom(self,args):
+        timeperiod = int(args[0])
+        return talib.MOM(self.candles['close'], timeperiod=timeperiod)
 
-    def compute_plusdi(self):
-        return talib.PLUS_DI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+    def compute_plusdi(self,args):
+        timeperiod = int(args[0])
+        return talib.PLUS_DI(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=timeperiod)
 
-    def compute_plusdm(self):
-        return talib.PLUS_DM(self.candles['high'], self.candles['low'], timeperiod=14)
+    def compute_plusdm(self,args):
+        timeperiod = int(args[0])
+        return talib.PLUS_DM(self.candles['high'], self.candles['low'], timeperiod=timeperiod)
 
-    def compute_ppo(self):
-        return talib.PPO(self.candles['close'], fastperiod=12, slowperiod=26, matype=0)
+    def compute_ppo(self,args):
+        fastperiod=int(args[0])
+        slowperiod=int(fastperiod*int(args[1]))
+        return talib.PPO(self.candles['close'], fastperiod=fastperiod, slowperiod=slowperiod, matype=0)
 
-    def compute_roc(self):
-        return talib.ROC(self.candles['close'], timeperiod=10)
+    def compute_roc(self,args):
+        timeperiod = int(args[0])
+        return talib.ROC(self.candles['close'], timeperiod=timeperiod)
         
-    def compute_rocp(self):
-        return talib.ROCP(self.candles['close'], timeperiod=10)
+    def compute_rocp(self,args):
+        timeperiod = int(args[0])
+        return talib.ROCP(self.candles['close'], timeperiod=timeperiod)
 
-    def compute_rocr(self):
-        return talib.ROCR(self.candles['close'], timeperiod=10)
+    def compute_rocr(self,args):
+        timeperiod = int(args[0])
+        return talib.ROCR(self.candles['close'], timeperiod=timeperiod)
         
-    def compute_rsi(self):
-        return talib.RSI(self.candles['close'], timeperiod=24)
+    def compute_rsi(self,args):
+        timeperiod = int(args[0])
+        return talib.RSI(self.candles['close'], timeperiod=timeperiod)
 
-    def compute_slowk(self):
-        return talib.STOCH(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)[0]
+    def compute_ssa(self,args):
+        shift = int(args[0])
+        arg_tenkan = [int(shift/3)+1]
+        arg_kijun = [shift]
+        return ((self.compute_tenkan(arg_tenkan)+self.compute_kijun(arg_kijun)/2).shift(shift))
 
-    def compute_slowd(self):
-        return talib.STOCH(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=5, slowk_period=3, slowk_matype=0, slowd_period=3, slowd_matype=0)[1]
+    def compute_ssb(self,args):
+        rolling = int(args[0])
+        return ((self.candles.high.rolling(rolling).max()+self.candles.low.rolling(rolling).min())/2).shift(int(rolling/2))
 
-    def compute_trix(self):
-        return talib.TRIX(self.candles['close'], timeperiod=30)
+    def compute_slowk(self,args):
+        fastk_period=int(args[0])
+        slowk_period=int(fastk_period*int(args[1]))
+        slowd_period=int(fastk_period*int(args[1]))
+        return talib.STOCH(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=fastk_period, slowk_period=slowk_period, slowk_matype=0, slowd_period=slowd_period, slowd_matype=0)[0]
 
-    def compute_tenkan(self):
-        return (self.candles.high.rolling(9).max()+self.candles.low.rolling(9).min())/2
+    def compute_slowd(self,args):
+        fastk_period=int(args[0])
+        slowk_period=int(fastk_period*int(args[1]))
+        slowd_period=int(fastk_period*int(args[1]))
+        return talib.STOCH(self.candles['high'], self.candles['low'], self.candles['close'], fastk_period=fastk_period, slowk_period=slowk_period, slowk_matype=0, slowd_period=slowd_period, slowd_matype=0)[1]
 
-    def compute_ssa(self):
-        return ((self.compute_tenkan()+self.compute_kijun())/2).shift(26)
+    def compute_tenkan(self,args):
+        rolling = int(args[0])
+        return (self.candles.high.rolling(rolling).max()+self.candles.low.rolling(rolling).min())/2
 
-    def compute_ssb(self):
-        return ((self.candles.high.rolling(52).max()+self.candles.low.rolling(52).min())/2).shift(26)
+    def compute_trix(self,args):
+        timeperiod = int(args[0])
+        return talib.TRIX(self.candles['close'], timeperiod=timeperiod)
 
-    def compute_ultosc(self):
-        return talib.ULTOSC(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod1=7, timeperiod2=14, timeperiod3=28)
+    def compute_ultosc(self,args):
+        timeperiod1=int(args[0])
+        timeperiod2=timeperiod1*int(args[1])
+        timeperiod3=timeperiod1*int(args[1])*int(args[1])
+        return talib.ULTOSC(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod1=timeperiod1, timeperiod2=timeperiod2, timeperiod3=timeperiod3)
 
-    def compute_willr(self):
-        return talib.WILLR(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=14)
+    def compute_willr(self,args):
+        timeperiod = int(args[0])
+        return talib.WILLR(self.candles['high'], self.candles['low'], self.candles['close'], timeperiod=timeperiod)

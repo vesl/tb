@@ -8,7 +8,7 @@ data:
   TB_TBM_UP_THRESH: "0.9"
   TB_TBM_DOWN_THRESH: "0.8"
   TB_TECH_GRID_SEARCH_LAG: "20"
-  TB_TECH_FEATURES_SELECTED: 'adx-0,adxr-0,apo-0,aroonup-0,aroondown-0,aroonosc-0,bop-0,cci-0,close-0,cmo-0,dx-0,fastk-0,fastd-0,fastkrsi-0,fastdrsi-0,high-0,kijun-0,low-0,ma-0,macd-0,macdhist-0,macdsignal-0,mfi-0,minusdi-0,minusdm-0,mom-0,open-0,plusdi-0,plusdm-0,ppo-0,roc-0,rocp-0,rocr-0,rsi-0,ssa-0,ssb-0,slowk-0,slowd-0,tenkan-0,trix-0,ultosc-0,volume-0,willr-0'
+  TB_TECH_FEATURES_SELECTED: 'adx-0-14,adxr-0-14,apo-0-12.2,aroonup-0-14,aroondown-0-14,aroonosc-0-14,bop-0,cci-0-14,close-0,cmo-0-14,dx-0-14,fastk-0-5.3,fastd-0-5.3,fastkrsi-0-14.5.3,fastdrsi-0-14.5.3,high-0,kijun-0-26,low-0,ma-0-12,macd-0-12.3,macdhist-0-12.3,macdsignal-0-12.3,mfi-0-14,minusdi-0-14,minusdm-0-14,mom-0-10,open-0,plusdi-0-14,plusdm-0-14,ppo-0-12.2,roc-0-10,rocp-0-10,rocr-0-10,rsi-0-24,ssa-0-26,ssb-0-52.52.26,slowk-0-5.3.3,slowd-0-5.3.3,tenkan-0-9.9,trix-0-30,ultosc-0-7.14.28,volume-0,willr-0-14'
   TB_TECH_CLF_CONFIG: |
     {
         "n_estimators":"300",
@@ -22,35 +22,43 @@ data:
     {
         "adx": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "adxr": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "apo": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "aroonup": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "aroondown": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "aroonosc": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "bop": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "0"
         },
         "cci": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "close": {
             "scaled": "False",
@@ -58,27 +66,33 @@ data:
         },
         "cmo": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "dx": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "fastk": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "2"
         },
         "fastd": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "2"
         },
         "fastkrsi": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "3"
         },
         "fastdrsi": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "3"
         },
         "high": {
             "scaled": "False",
@@ -86,7 +100,8 @@ data:
         },
         "kijun": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "low": {
             "scaled": "False",
@@ -94,35 +109,43 @@ data:
         },
         "ma": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "macd": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "2"
         },
         "macdhist": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "2"
         },
         "macdsignal": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "2"
         },
         "mfi": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "minusdi": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "minusdm": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "mom": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "open": {
             "scaled": "False",
@@ -130,59 +153,73 @@ data:
         },
         "plusdi": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "plusdm": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "ppo": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "2"
         },
         "roc": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "rocp": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "rocr": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "rsi": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "ssa": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "ssb": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "slowk": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "2"
         },
         "slowd": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "2"
         },
         "tenkan": {
             "scaled": "False",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "trix": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         },
         "ultosc": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "2"
         },
         "volume": {
             "scaled": "False",
@@ -190,6 +227,7 @@ data:
         },
         "willr": {
             "scaled": "True",
-            "source": "indicators"
+            "source": "indicators",
+            "nb_args": "1"
         }
     }

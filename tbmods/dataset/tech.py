@@ -19,7 +19,6 @@ class DatasetTech:
         self.end = pd.to_datetime(end)
         self.features = pd.DataFrame(index=self.create_index_datetime())
         self.features_list = features_list
-        self.features_map_base = json.loads(config['tech_features'])
         self.features_map = self.create_features_map()
         self.candles = Candles()
         self.candles.from_questdb(self.period,self.start,self.end)
@@ -37,15 +36,20 @@ class DatasetTech:
         
     def create_features_map(self):
         features_map = {}
+        config_tech_features = json.loads(config['tech_features'])
         for feature in self.features_list:
-            name, lag = (feature,0) if not '-' in feature else (feature.split('-'))
-            if not name in self.features_map_base: log.error('Feature {} does not exists in features_map_base'.format(name))
-            feature_map = self.features_map_base[name]
+            props = feature.split('-')
+            name = props[0]
+            lag = props[1]
+            args = None if len(props) == 2 else props[2].split('.')
+            if not name in config_tech_features: log.error('Feature {} does not exists in config tech_features'.format(name))
+            feature_map = config_tech_features[name]
             feature_map['name'] = name
             feature_map['lag'] = lag
+            feature_map['args'] = args
             features_map[feature] = feature_map.copy()
         return features_map
-    
+
     def merge_indexes(self):
         self.index = self.features.index.intersection(self.labels.index)
         self.labels = self.labels.loc[self.index]
@@ -71,4 +75,4 @@ class DatasetTech:
         return self.candles.candles[props['name']]
             
     def load_indicators(self,props):
-        return self.financial.compute(props['name'])
+        return self.financial.compute(props['name'],props['args'])
