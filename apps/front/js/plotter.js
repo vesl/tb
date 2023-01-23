@@ -135,7 +135,7 @@ function plotterPlotModelTechResults(results){
     contentClearContent()
     contentHTML('<h3>F1 score mean: '+results.score.f1_score_mean+'</h3>')
     contentCollapse('Classifier configuration',JSON.stringify(results.clf_config,null,2))
-    contentCollapse('Features',JSON.stringify(results.features,null,2))
+    contentCollapse('Features',JSON.stringify(Object.keys(JSON.parse(results.score.feature_importances)),null,2))
     plotterPlotConfusionMatrix(labels,results.score.confusion_matrix)
     contentBarChart('f1-score',labels,results.score.f1_score)
     contentLineChart('cross-val-score',[1,2,3,4,5],results.score.cross_val_score)
