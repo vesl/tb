@@ -1,7 +1,7 @@
 from tbmods.models.tech import ModelTech
 from tbmods.log import Log
 from tbmods.config import Config
-from random import random,choices
+from random import random,randint,choices
 import pandas as pd
 import json
 
@@ -23,14 +23,20 @@ class DarwinTech:
         self.pop = []
 
     def new_random_genotype(self):
-        features = config['tech_features_selected'].split(',')
+        args = {}
+        features_map = json.loads(config['tech_features'])
+        features = list(features_map.keys())
         if random() < self.cut_features_thresh: features = list(dict.fromkeys(choices(features,k=round(len(features)*random())+1)))
+        for feature in features:
+            if 'nb_args' in features_map[feature]: 
+                args[feature] = '.'.join([str(randint(2,12)) for i in range(int(features_map[feature]['nb_args']))])
         lag = round(random()*self.lag_factor)+1
-        [features.extend(['{}-{}'.format(feature,ilag) for ilag in range(1,lag+1)]) for feature in features.copy()]
-        features.sort()
+        features_list = []
+        [features_list.extend(['{}-{}-{}'.format(feature,ilag,args[feature]) if feature in args else '{}-{}'.format(feature,ilag) for ilag in range(lag+1)]) for feature in features.copy()]
+        features_list.sort()
         n_estimators = round(random()*self.n_estimators_factor)+1
         return {
-            "features": features,
+            "features": features_list,
             "config": {
                 "n_estimators":n_estimators,
                 "oob_score":True,

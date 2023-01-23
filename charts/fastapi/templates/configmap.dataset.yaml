@@ -33,7 +33,7 @@ data:
         "apo": {
             "scaled": "False",
             "source": "indicators",
-            "nb_args": "1"
+            "nb_args": "2"
         },
         "aroonup": {
             "scaled": "True",
@@ -52,8 +52,7 @@ data:
         },
         "bop": {
             "scaled": "True",
-            "source": "indicators",
-            "nb_args": "0"
+            "source": "indicators"
         },
         "cci": {
             "scaled": "True",
