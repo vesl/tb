@@ -11,6 +11,7 @@ from tbmods.config import Config
 from tbmods.cache import Cache
 from datetime import datetime
 import pandas as pd
+import joblib
 
 config = Config()
 
@@ -93,3 +94,6 @@ class ModelTech:
         mongodb = MongoDB()
         mongodb.insert('models','tech',self.meta)
         mongodb.close()
+        
+    def save_model(self):
+        joblib.dump(self.clf,'/var/cache/models/{}'.format(self.name))

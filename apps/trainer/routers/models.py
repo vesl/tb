@@ -31,6 +31,7 @@ def tech_train(period,start,end):
     tech_model.fit()
     tech_model.save_meta()
     tech_model.update_status({"Fit":"OK"})
+    tech_model.save_model()
     tech_model.update_status(False)
     
 @router.get('/tech/check_run')

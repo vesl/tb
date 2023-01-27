@@ -33,6 +33,9 @@ apps:
      - name: cache
        mountPath: /var/cache/trainer
        hostPath: /var/cache/tb/trainer
+     - name: models
+       mountPath: /var/cache/models
+       hostPath: /var/cache/tb/models
    configmaps:
      - questdb
      - dataset
