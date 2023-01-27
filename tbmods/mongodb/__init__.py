@@ -13,3 +13,6 @@ class MongoDB:
         
     def find(self,db,collection,search={}):
         return self.client[db][collection].find(search,{"_id":0})
+    
+    def close(self):
+        self.client.close()

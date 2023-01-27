@@ -21,7 +21,6 @@ class ModelTech:
         self.start = start
         self.end = end
         self.features_list = features_list
-        self.mongodb = MongoDB()
         self.name = "tech-{}".format(datetime.now().strftime("%Y%m%d-%H%M%S"))
         self.init_meta()
         
@@ -91,5 +90,6 @@ class ModelTech:
         return pd.DataFrame([chi2(self.X,self.y)[0]],columns=self.features_list)
         
     def save_meta(self):
-        self.mongodb.insert('models','tech',self.meta)
-        
+        mongodb = MongoDB()
+        mongodb.insert('models','tech',self.meta)
+        mongodb.close()

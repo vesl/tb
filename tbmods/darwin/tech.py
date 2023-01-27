@@ -14,29 +14,34 @@ class DarwinTech:
         self.period = period
         self.start = start
         self.end = end
-        self.pop_size = 10 # a augmenter après les tests
-        self.lag_factor = 50 # a augmenter après les tests
-        self.cut_features_thresh = 0.3 # a diminuer après les tests
+        self.pop_size = 20
+        self.lag_factor = 18
         self.current_gen = 0
-        self.max_gen = 300
+        self.max_gen = 50
         self.n_estimators_factor = 500
+        self.keep_best_features = 0.33
+        self.max_features = 200
         self.pop = []
-
-    def new_random_genotype(self):
-        args = {}
+        
+    def new_features(self):
         features_map = json.loads(config['tech_features'])
         features = list(features_map.keys())
-        if random() < self.cut_features_thresh: features = list(dict.fromkeys(choices(features,k=round(len(features)*random())+1)))
-        for feature in features:
-            if 'nb_args' in features_map[feature]: 
-                args[feature] = '.'.join([str(randint(2,12)) for i in range(int(features_map[feature]['nb_args']))])
         lag = round(random()*self.lag_factor)+1
         features_list = []
-        [features_list.extend(['{}-{}-{}'.format(feature,ilag,args[feature]) if feature in args else '{}-{}'.format(feature,ilag) for ilag in range(lag+1)]) for feature in features.copy()]
+        for feature in features:
+            args = False
+            if 'nb_args' in features_map[feature]: args = '.'.join([str(int((randint(2,18)/(i+1))+1)) for i in range(int(features_map[feature]['nb_args']))])
+            for ilag in range(lag+1):
+                if args: features_list.append('{}-{}-{}'.format(feature,ilag,args))
+                else: features_list.append('{}-{}'.format(feature,ilag))
         features_list.sort()
+        return features_list.copy()
+        
+    def new_random_genotype(self):
         n_estimators = round(random()*self.n_estimators_factor)+1
+        features = self.new_features()
         return {
-            "features": features_list,
+            "features": features,
             "config": {
                 "n_estimators":n_estimators,
                 "oob_score":True,
@@ -54,7 +59,9 @@ class DarwinTech:
         
     def fill_pop(self):
         while len(self.pop)<self.pop_size:
-            self.pop.append(self.new_id(self.new_random_genotype()))
+            genotype = self.new_random_genotype()
+            new_id = self.new_id(genotype)
+            self.pop.append(new_id)
         
     def train_pop(self):
         for i in self.pop:
@@ -67,21 +74,22 @@ class DarwinTech:
         self.pop = sorted(self.pop.copy(),key=lambda i: i.meta['score']['f1_score_mean'],reverse=True)
         
     def orgy(self):
-        old_pop = self.pop
+        old_pop = self.pop.copy()
         self.pop = []
         while len(old_pop) > 2:
             male = old_pop[0]
             female = old_pop[2]
+            child = self.fuck(male,female)
+            self.pop.append(child)
             del old_pop[0]
             del old_pop[1]
-            self.pop.append(self.fuck(male,female))
     
     def fuck(self,male,female):
-        male_features_feature_importances = pd.Series(json.loads(male.meta['score']['feature_importances'])).sort_values(ascending=False) 
-        female_features_feature_importances = pd.Series(json.loads(female.meta['score']['feature_importances'])).sort_values(ascending=False)
-        best_male_features_feature_importances = male_features_feature_importances.index[:round(len(male_features_feature_importances)/2)]
-        best_female_features_feature_importances = female_features_feature_importances.index[:round(len(female_features_feature_importances)/2)]
-        features = list(set(list(best_male_features_feature_importances) + list(best_female_features_feature_importances)))
+        feature_importances = pd.concat([pd.Series(json.loads(male.meta['score']['feature_importances'])),pd.Series(json.loads(female.meta['score']['feature_importances']))]).sort_values(ascending=False)
+        best_features = list(set(list(feature_importances.index[:round(len(feature_importances)*self.keep_best_features)])))
+        features = best_features + self.new_features()
+        if len(features) > self.max_features: features = features[:self.max_features]
+        features = list(set(features))
         n_estimators_male = male.meta['clf_config']['n_estimators']
         n_estimators_female = male.meta['clf_config']['n_estimators']
         n_estimators = (n_estimators_male+n_estimators_female)/2
