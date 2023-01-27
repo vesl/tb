@@ -16,7 +16,6 @@ apps:
 
 # Plotter
  - name: plotter
-   dev: true
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/seaborn.sklearn:latest
    replicas: 1
    configmaps:
@@ -26,7 +25,6 @@ apps:
 
 # Trainer
  - name: trainer
-   dev: true
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/sklearn.talib:latest
    replicas: 1
    volumes:
@@ -40,3 +38,21 @@ apps:
      - questdb
      - dataset
      - mongodb
+
+# Trader
+ - name: trader
+   dev: true
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/sklearn.talib:latest
+   replicas: 1
+   volumes:
+     - name: cache
+       mountPath: /var/cache/trader
+       hostPath: /var/cache/tb/trader
+     - name: models
+       mountPath: /var/cache/models
+       hostPath: /var/cache/tb/models
+   configmaps:
+     - questdb
+     - dataset
+     - mongodb
+     
