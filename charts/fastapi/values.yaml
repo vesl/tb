@@ -22,6 +22,7 @@ apps:
      - questdb
      - dataset
      - mongodb
+     - model
 
 # Trainer
  - name: trainer
@@ -38,6 +39,7 @@ apps:
      - questdb
      - dataset
      - mongodb
+     - model
 
 # Trader
  - name: trader
@@ -55,4 +57,5 @@ apps:
      - questdb
      - dataset
      - mongodb
+     - model
      

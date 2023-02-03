@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: model
+data:
+  TB_TECH_SELECTED_MODEL: "tech-20230127-124444"
+  TB_TECH_CLF_CONFIG: |
+    {
+        "n_estimators":"323",
+        "oob_score":"True",
+        "n_jobs":"-1",
+        "verbose":"1",
+        "class_weight":"balanced",
+        "random_state":"42"
+    }
