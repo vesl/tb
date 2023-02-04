@@ -27,14 +27,11 @@ def get_backtest(period,start,end):
     price = dataset.candles.candles.close
     events = Filters(price).cusum_events(config['cusum_pct_threshold'])
     # init market
-    market = MarketBacktest()
-    market.wallet = {
-        "USDC":1000,
-        "BTC":0
-    }
+    market = MarketBacktest("USDC",1000,"BTC",0)
     # process
     while current_time <= end_time:
         try:
+            market.set_time(current_time)
             market.set_price(price.loc[current_time])
             if current_time in events.index:
                 X = scaler.transform([dataset.features.loc[current_time]])
