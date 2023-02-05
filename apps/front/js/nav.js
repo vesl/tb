@@ -11,6 +11,9 @@ const navMap = {
     'Trainer': {
         'Model - Tech': ()=>{trainerModelTech()},  
     },
+    'Trader': {
+        'Backtest': ()=>{traderBacktest()},
+    }
 }
 
 // Create Nav

@@ -26,6 +26,10 @@ serverBlock: |-
       rewrite /api/trainer/(.*) /$1 break;
       proxy_pass http://trainer.tb.svc.k8s.slav.rocks;
     }
+    location /api/trader {
+      rewrite /api/trader/(.*) /$1 break;
+      proxy_pass http://trader.tb.svc.k8s.slav.rocks;
+    }
   }
 service:
   type: ClusterIP
