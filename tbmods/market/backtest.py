@@ -1,5 +1,6 @@
 from tbmods.mongodb import MongoDB
 from tbmods.config import Config
+from tbmods.cache import Cache
 from datetime import datetime
 from tbmods.log import Log
 import joblib
@@ -94,7 +95,14 @@ class MarketBacktest:
     def exit(self):
         for time in self.open_trades.copy():
             self.sell(time)
-        
+
+    def update_status(self,update):
+        cache = Cache(config['app'])
+        if type(update) is bool: self.status = {}
+        else: self.status.update(update)
+        cache.data["backtest/status"] = self.status
+        cache.write()
+    
     def save_meta(self):
         meta = {
             "name": self.name,
@@ -107,5 +115,5 @@ class MarketBacktest:
             "open_trades": {str(time): trade for time, trade in self.open_trades.items()}
         }
         mongodb = MongoDB()
-        mongodb.insert('market','backtest',meta)
+        mongodb.update('market','backtest',meta,{"name":self.name},True)
         mongodb.close()
