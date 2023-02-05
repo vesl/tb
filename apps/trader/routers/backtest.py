@@ -39,3 +39,5 @@ def get_backtest(period,start,end):
             else: market.trigger()
         except KeyError: log.warning("Missing price for : {}".format(current_time))
         current_time += pd.Timedelta(hours=1)
+    market.exit()
+    market.save_meta()

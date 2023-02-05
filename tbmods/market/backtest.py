@@ -1,4 +1,6 @@
+from tbmods.mongodb import MongoDB
 from tbmods.config import Config
+from datetime import datetime
 from tbmods.log import Log
 import joblib
 
@@ -8,6 +10,7 @@ log = Log(config['app'])
 class MarketBacktest:
     
     def __init__(self,stable,stable_start,coin,coin_start):
+        self.name = "backtest-{}".format(datetime.now().strftime("%Y%m%d-%H%M%S"))
         self.stable = stable
         self.stable_start = stable_start
         self.coin = coin
@@ -67,10 +70,10 @@ class MarketBacktest:
 
     def sell(self,time):
         qty = self.open_trades[time]['qty']
-        offer = qty * self.price
+        offer = (qty * self.price)*0.99
         if offer > 50 and self.wallet[self.coin] - qty >= 0:
             self.wallet[self.stable] += offer
-            self.wallet[self.coin] -= (qty * 0.99)
+            self.wallet[self.coin] -= qty
             self.close_trades[time] = self.open_trades[time]
             self.close_trades.update({"sell_time": time, "sell_price": self.price, "offer": offer})
             self.open_trades.pop(time)
@@ -79,11 +82,30 @@ class MarketBacktest:
         else: return False
 
     def buy(self,bid):
-        qty = bid / self.price
+        qty = (bid / self.price)*0.99
         if bid > 50 and self.wallet[self.stable] - bid > 0:
-            self.wallet[self.stable] -= (bid * 0.99)
+            self.wallet[self.stable] -= bid
             self.wallet[self.coin] += qty
             self.open_trades[self.time] = { "qty": qty, "bid": bid, "buy_price": self.price, "buy_time": self.time, "jumps":0, "stop_loss": self.price*0.9 }
             log.info("Buy {} for {} price {} {} : {} {} : {}".format(qty,bid,self.price,self.stable,self.wallet[self.stable],self.coin,self.wallet[self.coin]))
             return True
         else: return False
+        
+    def exit(self):
+        for time in self.open_trades.copy():
+            self.sell(time)
+        
+    def save_meta(self):
+        meta = {
+            "name": self.name,
+            "stable": self.stable,
+            "stable_start": self.stable_start,
+            "coin": self.coin,
+            "coin_start": self.coin_start,
+            "wallet": self.wallet,
+            "close_trades": {str(time): trade for time, trade in self.close_trades.items()},
+            "open_trades": {str(time): trade for time, trade in self.open_trades.items()}
+        }
+        mongodb = MongoDB()
+        mongodb.insert('market','backtest',meta)
+        mongodb.close()
