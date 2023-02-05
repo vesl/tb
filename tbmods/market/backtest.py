@@ -70,10 +70,10 @@ class MarketBacktest:
         offer = qty * self.price
         if offer > 50 and self.wallet[self.coin] - qty >= 0:
             self.wallet[self.stable] += offer
-            self.wallet[self.coin] -= qty * 0.99
+            self.wallet[self.coin] -= (qty * 0.99)
             self.close_trades[time] = self.open_trades[time]
             self.close_trades.update({"sell_time": time, "sell_price": self.price, "offer": offer})
-            del self.open_trades[time]
+            self.open_trades.pop(time)
             log.info("Sell {} for {} price {} {} : {} {} : {}".format(qty,offer,self.price,self.stable,self.wallet[self.stable],self.coin,self.wallet[self.coin]))
             return True
         else: return False
@@ -81,7 +81,7 @@ class MarketBacktest:
     def buy(self,bid):
         qty = bid / self.price
         if bid > 50 and self.wallet[self.stable] - bid > 0:
-            self.wallet[self.stable] -= bid * 0.99
+            self.wallet[self.stable] -= (bid * 0.99)
             self.wallet[self.coin] += qty
             self.open_trades[self.time] = { "qty": qty, "bid": bid, "buy_price": self.price, "buy_time": self.time, "jumps":0, "stop_loss": self.price*0.9 }
             log.info("Buy {} for {} price {} {} : {} {} : {}".format(qty,bid,self.price,self.stable,self.wallet[self.stable],self.coin,self.wallet[self.coin]))
