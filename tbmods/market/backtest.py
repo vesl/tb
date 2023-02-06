@@ -10,12 +10,15 @@ log = Log(config['app'])
 
 class MarketBacktest:
     
-    def __init__(self,stable,stable_start,coin,coin_start):
+    def __init__(self,stable,stable_start,coin,coin_start,time_period,time_start,time_end):
         self.name = "backtest-{}".format(datetime.now().strftime("%Y%m%d-%H%M%S"))
         self.stable = stable
         self.stable_start = stable_start
         self.coin = coin
         self.coin_start = coin_start
+        self.time_period = time_period
+        self.time_start = time_start
+        self.time_end = time_end
         self.wallet = {
             stable : stable_start,
             coin : coin_start,
@@ -76,7 +79,7 @@ class MarketBacktest:
             self.wallet[self.stable] += offer
             self.wallet[self.coin] -= qty
             self.close_trades[time] = self.open_trades[time]
-            self.close_trades.update({"sell_time": time, "sell_price": self.price, "offer": offer})
+            self.close_trades[time].update({"sell_time": time, "sell_price": self.price, "offer": offer})
             self.open_trades.pop(time)
             log.info("Sell {} for {} price {} {} : {} {} : {}".format(qty,offer,self.price,self.stable,self.wallet[self.stable],self.coin,self.wallet[self.coin]))
             return True
@@ -112,7 +115,10 @@ class MarketBacktest:
             "coin_start": self.coin_start,
             "wallet": self.wallet,
             "close_trades": {str(time): trade for time, trade in self.close_trades.items()},
-            "open_trades": {str(time): trade for time, trade in self.open_trades.items()}
+            "open_trades": {str(time): trade for time, trade in self.open_trades.items()},
+            "time_period": self.time_period,
+            "time_start": self.time_start,
+            "time_end": self.time_end
         }
         mongodb = MongoDB()
         mongodb.update('market','backtest',meta,{"name":self.name},True)
