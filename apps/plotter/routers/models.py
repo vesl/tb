@@ -1,12 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from starlette.responses import FileResponse
 from tbmods.mongodb import MongoDB
 from tbmods.config import Config
-import matplotlib.pyplot as plt
 from tbmods.log import Log
-from io import BytesIO
-import seaborn as sns
-import base64
 import json
 
 router = APIRouter(
