@@ -79,7 +79,7 @@ class MarketBacktest:
             self.wallet[self.stable] += offer
             self.wallet[self.coin] -= qty
             self.close_trades[time] = self.open_trades[time]
-            self.close_trades[time].update({"sell_time": time, "sell_price": self.price, "offer": offer})
+            self.close_trades[time].update({"sell_time": self.time, "sell_price": self.price, "offer": offer})
             self.open_trades.pop(time)
             log.info("Sell {} for {} price {} {} : {} {} : {}".format(qty,offer,self.price,self.stable,self.wallet[self.stable],self.coin,self.wallet[self.coin]))
             return True
