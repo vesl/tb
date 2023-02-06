@@ -78,3 +78,7 @@ function contentShowLoading(node){
 function contentRemoveLoading(node){
     node.children("#loading").remove()
 }
+
+function contentColorPosNeg(int){
+    return int > 0 ? 'success':'danger'
+}
