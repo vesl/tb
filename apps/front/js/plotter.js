@@ -1,5 +1,6 @@
 var plotterDatasetTechFeaturesMap = "";
 var plotterModelTechMap = [];
+var plotterBacktestMap = [];
 
 function plotterGetDatasetTechFeaturesMap(then){
     $.get('/api/plotter/dataset/tech/features/map',(featuresMapJson)=>{
@@ -12,6 +13,41 @@ function plotterLineLcChart(node,data){
     var plot = LightweightCharts.createChart(document.getElementById(node[0].id),{height:200})
     let series = plot.addLineSeries({color:'#'+((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0")})
     series.setData(data)
+}
+
+function plotterOhlcLcChart(node,data,close_trades){
+    var plot = LightweightCharts.createChart(document.getElementById(node[0].id),{height:300})
+    let series = plot.addCandlestickSeries()
+    let volumeSeries = plot.addHistogramSeries({
+        priceFormat: {type: 'volume',},
+        priceScaleId: '',
+        scaleMargins: {top: 0.7,bottom: 0,},
+        color: '#939393'
+    });
+    let volumeData = []
+    data.forEach((record)=>{
+        volumeData.push({'time':record.time,'value':record.volume})
+    })
+    let markers = []
+    for (const [time,trade] of Object.entries(close_trades)){
+		markers.push({
+			time: Date.parse(trade.buy_time)/1000,
+			position: 'belowBar',
+			color: '#2196F3',
+			shape: 'arrowUp',
+			text: 'Buy @ ' + trade.buy_time,
+		});
+        markers.push({
+			time: Date.parse(trade.sell_time)/1000,
+			position: 'aboveBar',
+			color: '#e91e63',
+			shape: 'arrowDown',
+			text: 'Sell @ ' + trade.buy_time,
+		});
+    }
+    volumeSeries.setData(volumeData)
+    series.setData(data)
+    series.setMarkers(markers);
 }
 
 function plotterGetDatasetTechFeatureData(dataset,feature){
@@ -65,6 +101,103 @@ function plotterPlotDatasetTechFeatures(dpValues,container){
             container.append(featureContainer)
             plotterLineLcChart(featureContainer,featureData)
         })
+    })
+}
+
+function plotterPlotTrades(dpValues,wallet_stable,open_trades,close_trades,container){
+    var featureList = ['open','high','low','close']
+    $.get('/api/plotter/dataset/tech/ohlc/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
+        contentRemoveLoading(container)
+        // Plot trades
+        let ohlcContainer = $('<div id="plot-trades-ohlc">')
+        container.append('<h6>Trades plot</h6>')
+        container.append(ohlcContainer)
+        dataset = JSON.parse(dataset)
+        plotterOhlcLcChart(ohlcContainer,dataset,close_trades)
+        // Plot Wallet
+        container.append('<h6>Wallet plot</h6>')
+        let walletContainer = $('<div id="plot-wallet">')
+        container.append(walletContainer)
+        wallet_dataset = []
+        for (const [time,trade] of Object.entries(close_trades)){
+            wallet_stable+=(trade.offer-trade.bid)
+            wallet_dataset.push({'time':Date.parse(time)/1000,'value':wallet_stable})
+        }
+        wallet_dataset.sort(function(a,b){
+            var x = a['time']; var y = b['time'];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        })
+        plotterLineLcChart(walletContainer,wallet_dataset)
+        // Table open_trades
+        contentHTML(`
+        <h6>Open trades</h6>
+        <table class="table table-bordered table-hover table-dark">
+            <tbody id="table-open-trades">
+                <thead>
+                    <tr>
+                        <th scope="col">Bid</th>
+                        <th scope="col">Buy price</th>
+                        <th scope="col">Buy time</th>
+                        <th scope="col">Stop loss</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Jumps</th>
+                    </tr>
+                </thead>
+            </tbody>
+        </table>`)
+        tableOpenTrades = $('#table-open-trades')
+        for (const [time,trade] of Object.entries(open_trades)) {
+            pnl = trade.offer-trade.bid
+            tableOpenTrades.append(`
+            <tr class="table-primary">
+                <td>`+trade.bid+`</td>
+                <td>`+trade.buy_price+`</td>
+                <td>`+trade.buy_time+`</td>
+                <td>`+trade.stop_loss+`</td>
+                <td>`+trade.qty+`</td>
+                <td>`+trade.jumps+`</td>
+            </tr>
+            `)
+        }
+        // Table closed trades
+        contentHTML(`
+        <h6>Closed trades</h6>
+        <table class="table table-bordered table-hover table-dark">
+            <tbody id="table-close-trades">
+                <thead>
+                    <tr>
+                        <th scope="col">Bid</th>
+                        <th scope="col">Buy price</th>
+                        <th scope="col">Buy time</th>
+                        <th scope="col">Offer</th>
+                        <th scope="col">Sell price</th>
+                        <th scope="col">Sell time</th>
+                        <th scope="col">Stop loss</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Jumps</th>
+                        <th scope="col">PNL</th>
+                    </tr>
+                </thead>
+            </tbody>
+        </table>`)
+        tableCloseTrades = $('#table-close-trades')
+        for (const [time,trade] of Object.entries(close_trades)) {
+            pnl = trade.offer-trade.bid
+            tableCloseTrades.append(`
+            <tr class="table-`+contentColorPosNeg(pnl)+`">
+                <td>`+trade.bid+`</td>
+                <td>`+trade.buy_price+`</td>
+                <td>`+trade.buy_time+`</td>
+                <td>`+trade.offer+`</td>
+                <td>`+trade.sell_price+`</td>
+                <td>`+trade.sell_time+`</td>
+                <td>`+trade.stop_loss+`</td>
+                <td>`+trade.qty+`</td>
+                <td>`+trade.jumps+`</td>
+                <td>`+pnl+`</td>
+            </tr>
+            `)
+        }
     })
 }
 
@@ -140,7 +273,6 @@ function plotterPlotModelTechResults(results){
     contentBarChart('f1-score',labels,results.score.f1_score)
     contentLineChart('cross-val-score',[1,2,3,4,5],results.score.cross_val_score)
     PlotterPlotFeatureImportances(JSON.parse(results.score.feature_importances))
-    console.log(results)
 }
 
 function plotterModelTechResults(){
@@ -150,6 +282,44 @@ function plotterModelTechResults(){
             results = results[1]
             results.score.f1_score_mean = (results.score.f1_score.reduce((a, b) => a + b, 0) / results.score.f1_score.length).toFixed(3)
             contentButton('<b>'+results.name+'</b> f1 score mean: <b>'+results.score.f1_score_mean+'</b>',()=>{plotterPlotModelTechResults(results)})
+        })
+    })
+}
+
+function plotterGetBacktestMap(next){
+    $.get('/api/plotter/market/backtest/results/list',(list)=>{
+        plotterBacktestMap = list
+        next()
+    })
+}
+
+function plotterPlotBacktestResults(results){
+    contentTitle('Backtest - Results - '+results.name)
+    contentClearContent()
+    let pnl = Math.round(results.wallet[results.stable] - results.stable_start)
+    let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
+    let dpValues = {'period':results.time_period,'start':results.time_start,'end':results.time_end}
+    contentHTML('<h3>Perf: '+pnl_pct+'%</h3>')
+    contentHTML('<h3>PNL: <span class="text-'+contentColorPosNeg(pnl)+'">'+pnl+'$<span>')
+    contentHTML('<h4>Wallet</h4>')
+    contentHTML('<li>Coin: <b>'+results.coin+'</b> Stable: <b>'+results.stable+'</b></li>')
+    contentHTML('<li>Start Coin: <b>'+results.coin_start+'</b> End Stable: <b>'+results.stable_start+'</b></li>')
+    contentHTML('<li>End Coin: <b>'+results.wallet[results.coin]+'</b> End Stable: <b>'+results.wallet[results.stable]+'</b></li>')
+    contentHTML('<h4>Time</h4>')
+    contentHTML('<li>Period: <b>'+results.time_period+'</b> Start: <b>'+results.time_start+'</b> End: <b>'+results.time_end+'</b>')
+    contentDiv('trades-ohlc')
+    let container = $('#trades-ohlc')
+    contentShowLoading(container)
+    plotterPlotTrades(dpValues,results.stable_start,results.open_trades,results.close_trades,container)
+}
+
+function plotterBacktestResults(){
+    contentTitle('Backtest - Results')
+    plotterGetBacktestMap(()=>{
+        Object.entries(plotterBacktestMap).forEach((results)=>{
+            results = results[1]
+            let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
+            contentButton('<b>'+results.name+'</b> Perf: <b>'+pnl_pct+'%</b>',()=>{plotterPlotBacktestResults(results)})
         })
     })
 }
