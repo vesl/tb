@@ -1,11 +1,13 @@
 from fastapi import APIRouter, HTTPException
 from tbmods.dataset.tech import DatasetTech
 from tbmods.models.tech import ModelTech
+from tbmods.candles import Candles
 from tbmods.config import Config
 import matplotlib.pyplot as plt
 from tbmods.log import Log
 from io import BytesIO
 import seaborn as sns
+import pandas as pd
 import base64
 
 router = APIRouter(
@@ -26,6 +28,14 @@ async def tech_features(period,start,end):
     dataset = DatasetTech(period,start,end,config['tech_features_selected'].split(','))
     dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
+
+@router.get('/tech/ohlc/{period}/{start}/{end}')
+async def ohlc_features(period,start,end):
+    start = pd.to_datetime(start)
+    candles = Candles()
+    candles.from_questdb(period,pd.to_datetime(start),pd.to_datetime(end))
+    candles.candles["time"] = candles.candles.index.astype(int)/1000000000 #format data to LC
+    return candles.candles.to_json(orient="records")
 
 @router.get('/tech/correlation/{features}/{period}/{start}/{end}')
 def graph_correlation(features,period,start,end):
