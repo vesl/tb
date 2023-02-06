@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from plotter.routers import dataset,labels,models
+from plotter.routers import dataset,labels,models,market
 
 ## init api
 app = FastAPI(
@@ -12,3 +12,4 @@ app = FastAPI(
 app.include_router(dataset.router)
 app.include_router(labels.router)
 app.include_router(models.router)
+app.include_router(market.router)
