@@ -298,7 +298,11 @@ function plotterPlotBacktestResults(results){
     contentClearContent()
     let pnl = Math.round(results.wallet[results.stable] - results.stable_start)
     let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
-    let dpValues = {'period':results.time_period,'start':results.time_start,'end':results.time_end}
+    let dpValues = {
+        'period':'1h',
+        'start': new Date(Object.keys(results.close_trades)[0]).toLocaleDateString("en-US",{year:"numeric",month:"2-digit",day:"2-digit"}).replace(/\//g,'-'),
+        'end': new Date().toLocaleDateString("en-US",{year:"numeric",month:"2-digit",day:"2-digit"}).replace(/\//g,'-')
+    }
     contentHTML('<h3>Perf: '+pnl_pct+'%</h3>')
     contentHTML('<h3>PNL: <span class="text-'+contentColorPosNeg(pnl)+'">'+pnl+'$<span>')
     contentHTML('<h4>Wallet</h4>')
@@ -306,7 +310,7 @@ function plotterPlotBacktestResults(results){
     contentHTML('<li>Start Coin: <b>'+results.coin_start+'</b> End Stable: <b>'+results.stable_start+'</b></li>')
     contentHTML('<li>End Coin: <b>'+results.wallet[results.coin]+'</b> End Stable: <b>'+results.wallet[results.stable]+'</b></li>')
     contentHTML('<h4>Time</h4>')
-    contentHTML('<li>Period: <b>'+results.time_period+'</b> Start: <b>'+results.time_start+'</b> End: <b>'+results.time_end+'</b>')
+    contentHTML('<li>Period: <b>'+dpValues.period+'</b> Start: <b>'+dpValues.start+'</b> End: <b>'+dpValues.end+'</b>')
     contentDiv('trades-ohlc')
     let container = $('#trades-ohlc')
     contentShowLoading(container)
