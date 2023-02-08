@@ -54,6 +54,7 @@ class MarketBacktest:
             switch[state[0]](state[1])
             
     def up_stop_loss(self,confidence):
+        if confidence < 0.9: self.exit()
         for time in self.open_trades:
             self.open_trades[time]['jumps'] += 1
             self.open_trades[time]['stop_loss'] += self.price*((1-confidence)*self.open_trades[time]['jumps']*3)
