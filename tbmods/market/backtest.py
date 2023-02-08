@@ -54,7 +54,7 @@ class MarketBacktest:
             switch[state[0]](state[1])
             
     def up_stop_loss(self,confidence):
-        if confidence < 0.9: self.exit()
+        #if confidence >= 0.9: self.exit()
         for time in self.open_trades:
             self.open_trades[time]['jumps'] += 1
             self.open_trades[time]['stop_loss'] += self.price*((1-confidence)*self.open_trades[time]['jumps']*3)
@@ -76,25 +76,25 @@ class MarketBacktest:
     def sell(self,time):
         qty = self.open_trades[time]['qty']
         offer = (qty * self.price)*0.99
-        if offer > 50 and self.wallet[self.coin] - qty >= 0:
+        if offer > 20:
             self.wallet[self.stable] += offer
             self.wallet[self.coin] -= qty
+            if self.wallet[self.coin] < 0: self.wallet[self.coin] = 0
             self.close_trades[time] = self.open_trades[time]
             self.close_trades[time].update({"sell_time": self.time, "sell_price": self.price, "offer": offer})
             self.open_trades.pop(time)
             log.info("Sell {} for {} price {} {} : {} {} : {}".format(qty,offer,self.price,self.stable,self.wallet[self.stable],self.coin,self.wallet[self.coin]))
-            return True
-        else: return False
+        else: log.info("Unable to sell {} wallet {}".format(qty,self.wallet[self.coin]))
 
     def buy(self,bid):
         qty = (bid / self.price)*0.99
-        if bid > 50 and self.wallet[self.stable] - bid > 0:
+        if bid > 50 and self.wallet[self.stable] - bid >= 0:
             self.wallet[self.stable] -= bid
             self.wallet[self.coin] += qty
-            self.open_trades[self.time] = { "qty": qty, "bid": bid, "buy_price": self.price, "buy_time": self.time, "jumps":0, "stop_loss": self.price*0.95 }
+            self.open_trades[self.time] = { "qty": qty, "bid": bid, "buy_price": self.price, "buy_time": self.time, "jumps":0, "stop_loss": self.price*0.9 }
             log.info("Buy {} for {} price {} {} : {} {} : {}".format(qty,bid,self.price,self.stable,self.wallet[self.stable],self.coin,self.wallet[self.coin]))
             return True
-        else: return False
+        else: log.info("Unable to buy {} wallet {}".format(bid,self.wallet[self.stable]))
         
     def exit(self):
         for time in self.open_trades.copy():
