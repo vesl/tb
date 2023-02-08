@@ -55,8 +55,8 @@ class MarketBacktest:
             
     def up_stop_loss(self,confidence):
         for time in self.open_trades:
-            self.open_trades[time]['stop_loss'] += self.price*((1-confidence)*self.open_trades[time]['jumps']*2)
             self.open_trades[time]['jumps'] += 1
+            self.open_trades[time]['stop_loss'] += self.price*((1-confidence)*self.open_trades[time]['jumps']*3)
 
     def cut_stop_loss(self):
         for time in self.open_trades.copy():
