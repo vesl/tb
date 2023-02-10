@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from trader.routers import status, backtest
+from trader.routers import status, market
 
 ## init api
 app = FastAPI(
@@ -9,4 +9,4 @@ app = FastAPI(
 )
 ## init routers
 app.include_router(status.router)
-app.include_router(backtest.router)
+app.include_router(market.router)

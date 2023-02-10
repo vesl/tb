@@ -1,5 +1,5 @@
 function traderBacktestCheckRun(next){
-    $.get('/api/trader/backtest/check_run',(data)=>{
+    $.get('/api/trader/market/backtest/check_run',(data)=>{
         if (Object.keys(data).length > 0) {
             contentClearContent()
             contentHTML('Backtest is already running ...')
@@ -12,7 +12,7 @@ function traderBacktestCheckRun(next){
 
 function traderTradeBacktest(){
     var dpValues = getDpValues()
-    if (dpValues) $.get('/api/trader/backtest/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end)
+    if (dpValues) $.get('/api/trader/market/backtest/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end)
     setTimeout(()=>{traderBacktest()},2000)
 }
 

@@ -9,14 +9,14 @@ from tbmods.log import Log
 import pandas as pd
 
 router = APIRouter(
-    prefix="/backtest",
-    tags=["backtest"],
+    prefix="/market",
+    tags=["markett"],
 )
 
 config = Config()
 log = Log(config['app'])
 
-@router.get('/{period}/{start}/{end}')
+@router.get('/backtest/{period}/{start}/{end}')
 def get_backtest(period,start,end):
     # init market
     market_backtest = MarketBacktest("USDC",1000,"BTC",0)
@@ -48,7 +48,7 @@ def get_backtest(period,start,end):
     market_backtest.save_meta()
     market_backtest.update_status(False)
 
-@router.get('/check_run')
-def tech_run():
+@router.get('/{prefix}/check_run')
+def market_run(prefix):
     cache = Cache(config['app'])
-    return cache.data["backtest/status"]
+    return cache.data["{}/status".format(prefix)]
