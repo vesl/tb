@@ -19,7 +19,7 @@ log = Log(config['app'])
 @router.get('/{period}/{start}/{end}')
 def get_backtest(period,start,end):
     # init market
-    market_backtest = MarketBacktest("USDC",1000,"BTC",0,period,start,end)
+    market_backtest = MarketBacktest("USDC",1000,"BTC",0)
     market_backtest.update_status(False)
     # prepare time
     current_time = pd.to_datetime(start,utc=True)
