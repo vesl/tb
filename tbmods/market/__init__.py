@@ -12,6 +12,7 @@ class Market:
     
     def __init__(self,prefix,stable,coin):
         self.wallet = {}
+        self.status = {}
         self.coin = coin
         self.stable = stable
         self.prefix = prefix
