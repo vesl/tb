@@ -60,6 +60,7 @@ def get_paper():
     # init market
     market_paper = MarketPaper("USDC",1000,"BTC",0)
     market_paper.name = 'paper'
+    market_paper.load_meta()
     # prepare time
     start = config['tech_data_start']
     period = config['tech_data_period']

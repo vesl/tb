@@ -70,6 +70,18 @@ class Market:
         else: self.status.update(update)
         cache.data["{}/status".format(self.prefix)] = self.status
         cache.write()
+        
+    def load_meta(self):
+        mongodb = MongoDB()
+        meta = mongodb.find_one('market','paper')
+        if 'name' in meta: self.name = meta['name']
+        if 'stable' in meta: self.stable = meta['stable']
+        if 'stable_start' in meta: self.stable_start = meta['stable_start']
+        if 'coin' in meta: self.coin = meta['coin']
+        if 'coin_start' in meta: self.coin_start = meta['coin_start']
+        if 'wallet' in meta: self.wallet = meta['wallet']
+        if 'open_trades' in meta: self.open_trades = meta['open_trades']
+        if 'close_trades' in meta: self.close_trades = meta['close_trades']
     
     def save_meta(self):
         meta = {
