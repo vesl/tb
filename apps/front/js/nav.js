@@ -8,6 +8,7 @@ const navMap = {
         'Labels': ()=>{plotterLabels()},
         'Model - Tech - Results': ()=>{plotterModelTechResults()},
         'Backtest - Results': ()=>{plotterBacktestResults()},
+        'Paper - Results': ()=>{plotterPaperResults()}
     },
     'Trainer': {
         'Model - Tech': ()=>{trainerModelTech()},  

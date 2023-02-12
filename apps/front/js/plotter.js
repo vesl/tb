@@ -293,8 +293,8 @@ function plotterGetBacktestMap(next){
     })
 }
 
-function plotterPlotBacktestResults(results){
-    contentTitle('Backtest - Results - '+results.name)
+function plotterPlotMarketResults(prefix,results){
+    contentTitle(prefix+' - Results - '+results.name)
     contentClearContent()
     let pnl = Math.round(results.wallet[results.stable] - results.stable_start)
     let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
@@ -323,7 +323,13 @@ function plotterBacktestResults(){
         Object.entries(plotterBacktestMap).forEach((results)=>{
             results = results[1]
             let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
-            contentButton('<b>'+results.name+'</b> Perf: <b>'+pnl_pct+'%</b>',()=>{plotterPlotBacktestResults(results)})
+            contentButton('<b>'+results.name+'</b> Perf: <b>'+pnl_pct+'%</b>',()=>{plotterPlotMarketResults('Backtest',results)})
         })
+    })
+}
+
+function plotterPaperResults(){
+    $.get('/api/plotter/market/paper/results',results=>{
+        plotterPlotMarketResults('Paper',results)
     })
 }
