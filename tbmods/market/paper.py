@@ -5,7 +5,7 @@ from tbmods.log import Log
 config = Config()
 log = Log(config['app'])
 
-class MarketBacktest(Market):
+class MarketPaper(Market):
     
     def __init__(self,stable,stable_start,coin,coin_start):
         super().__init__('paper',stable,coin)
