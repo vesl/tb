@@ -53,6 +53,7 @@ class DatasetTech:
     def merge_indexes(self):
         self.index = self.features.index.intersection(self.labels.index)
         self.labels = self.labels.loc[self.index]
+        self.full_features = self.features.copy()
         self.features = self.features.loc[self.index]
         self.tbm = self.tbm.loc[self.index]
         self.cusum = self.cusum.loc[self.index]
