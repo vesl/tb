@@ -75,11 +75,11 @@ def get_paper():
         last_time = pd.to_datetime('now',utc=True).floor('H')
         market_paper.update_status({"last_time":str(last_time)})
     next_time = last_time + pd.Timedelta(hours=1)
-    log.info("Last time {}".format(last_time))
-    log.info("Next time {}".format(next_time))
     # prepare data
     dataset,scaler,price,events = prepare_data(period,start,end)
     if next_time in dataset.full_features.index:
+        log.info("Last time {}".format(last_time))
+        log.info("Next time {}".format(next_time))
         if next_time in events.index:
             log.info("Event detected !")
             X = scaler.transform([dataset.full_features.loc[next_time]])
