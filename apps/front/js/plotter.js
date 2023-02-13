@@ -296,6 +296,10 @@ function plotterGetBacktestMap(next){
 function plotterPlotMarketResults(prefix,results){
     contentTitle(prefix+' - Results - '+results.name)
     contentClearContent()
+    if (Object.keys(results.close_trades) == 0 && Object.keys(results.open_trades) == 0) {
+        contentHTML("Waiting for trades ...")
+        return
+    }
     let pnl = Math.round(results.wallet[results.stable] - results.stable_start)
     let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
     let dpValues = {
