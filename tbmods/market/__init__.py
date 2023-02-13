@@ -40,6 +40,7 @@ class Market:
             }
             log.info("{} - Got event seems {} confidence {}".format(self.time,state[0],state[1]))
             switch[state[0]](state[1])
+        else: self.cut_stop_loss()
             
     def up_stop_loss(self,confidence):
         for time in self.open_trades:
