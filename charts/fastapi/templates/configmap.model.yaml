@@ -3,13 +3,13 @@ kind: ConfigMap
 metadata:
   name: model
 data:
-  TB_TECH_SELECTED_MODEL: "tech-20230213-222141"
+  TB_TECH_SELECTED_MODEL: "tech-20230214-180738"
   TB_TECH_CLF_CONFIG: |
     {
-        "n_estimators":"323",
+        "n_estimators":"419",
         "oob_score":"True",
         "n_jobs":"-1",
-        "verbose":"1",
+        "verbose":"0",
         "class_weight":"balanced",
         "random_state":"42"
     }
