@@ -28,7 +28,7 @@ def scrap_trades():
     log.info('Last id is {}'.format(last_id))
     
     # init binance client and get 10 packs of 1000 trades to be sure to get at least 2 candles (we drop last one)
-    binance_client = Spot(key=config['binance_api_key'], secret=config['binance_api_secret'])
+    binance_client = Spot(config['binance_api_key'],config['binance_api_secret'])
     trades = []
     prev_nb_trades = -1
     while (len(trades) < config['binance_trades_pack_size']) and (len(trades) > prev_nb_trades):
