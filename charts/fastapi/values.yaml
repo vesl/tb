@@ -44,7 +44,7 @@ apps:
 # Trader
  - name: trader
    dev: true
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/sklearn.talib:latest
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/binance.sklearn:latest
    replicas: 1
    volumes:
      - name: cache
@@ -53,7 +53,10 @@ apps:
      - name: models
        mountPath: /var/cache/models
        hostPath: /var/cache/tb/models
+   secrets:
+     - binance
    configmaps:
+     - binance
      - questdb
      - dataset
      - mongodb
