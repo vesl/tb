@@ -2,6 +2,7 @@ from tbmods.market.backtest import MarketBacktest
 from sklearn.preprocessing import MinMaxScaler
 from tbmods.dataset.tech import DatasetTech
 from tbmods.market.paper import MarketPaper
+from tbmods.market.live import MarketLive
 from datetime import datetime, timedelta
 from tbmods.filters import Filters
 from tbmods.config import Config
@@ -21,7 +22,7 @@ log = Log(config['app'])
 def prepare_data(period,start,end):
     dataset = DatasetTech(period,start,end,config['tech_features_selected'].split(','))
     scaler = MinMaxScaler()
-    scaler.fit_transform(dataset.features)
+    scaler.fit_transform(dataset.features.values)
     price = dataset.candles.candles.close
     events = Filters(price).cusum_events(config['cusum_pct_threshold'])
     return dataset,scaler,price,events
@@ -44,7 +45,7 @@ def get_backtest(period,start,end):
             market_backtest.set_price(price.loc[current_time])
             market_backtest.update_status({"Process":str(current_time)})
             if current_time in events.index:
-                X = scaler.transform([dataset.features.loc[current_time]])
+                X = scaler.transform([dataset.features.loc[current_time].values])
                 market_backtest.trigger(X)
             else: market_backtest.trigger()
         except KeyError: log.warning("Missing price for : {}".format(current_time))
@@ -90,6 +91,12 @@ def get_paper():
         market_paper.update_status({"last_time":str(next_time)})
         market_paper.save_meta()
     log.info("Duration : {}".format(datetime.now()-timer))
+
+@router.get('/live')
+def get_live():
+    market_live = MarketLive('USDC','BTC')
+    market_live.get_balance(market_live.stable)
+    market_live.get_balance(market_live.coin)
 
 @router.get('/{prefix}/check_run')
 def market_run(prefix):
