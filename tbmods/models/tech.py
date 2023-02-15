@@ -60,10 +60,11 @@ class ModelTech:
         )
         self.meta.update({"clf_config":config})
 
-    def fit(self):
+    def fit(self,save=False):
         self.scale()
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2)
-        self.clf.fit(self.X_train, self.y_train)
+        if save: self.clf.fit(self.X,self.y)
+        else: self.clf.fit(self.X_train, self.y_train)
         self.y_pred = self.clf.predict(self.X_test)
         self.meta.update({
             "score": {
