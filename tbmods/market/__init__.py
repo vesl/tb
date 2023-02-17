@@ -32,7 +32,7 @@ class Market:
         
     def trigger(self,event=False):
         if event is not False:
-            state = self.predict(event)
+            state = self.predict( event)
             switch = {
                 "bearish": self.trigger_bearish,
                 "rangish": self.trigger_rangish,

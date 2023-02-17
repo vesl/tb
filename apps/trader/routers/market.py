@@ -30,7 +30,7 @@ def prepare_data(period,start,end):
 @router.get('/backtest/{period}/{start}/{end}')
 def get_backtest(period,start,end):
     # init market
-    market_backtest = MarketBacktest("USDC",1000,"BTC",0)
+    market_backtest = MarketBacktest("BUSD",1000,"BTC",0)
     market_backtest.update_status(False)
     # prepare time
     current_time = pd.to_datetime(start,utc=True)
@@ -59,7 +59,7 @@ def get_backtest(period,start,end):
 def get_paper():
     timer = datetime.now()
     # init market
-    market_paper = MarketPaper("USDC",1000,"BTC",0)
+    market_paper = MarketPaper("BUSD",1000,"BTC",0)
     market_paper.name = 'paper'
     market_paper.load_meta()
     # prepare time
@@ -79,6 +79,8 @@ def get_paper():
     # prepare data
     dataset,scaler,price,events = prepare_data(period,start,end)
     if next_time in dataset.full_features.index:
+        market_paper.set_time(next_time)
+        market_paper.set_price(dataset.full_features.iloc[-1]['close-0'])
         log.info("Last time {}".format(last_time))
         log.info("Next time {}".format(next_time))
         if next_time in events.index:
@@ -94,10 +96,9 @@ def get_paper():
 
 @router.get('/live')
 def get_live():
-    market_live = MarketLive('USDC','BTC')
-    market_live.get_balance(market_live.stable)
-    market_live.get_balance(market_live.coin)
-
+    market_live = MarketLive('BUSD','BTC')
+    print(market_live.wallet)
+    
 @router.get('/{prefix}/check_run')
 def market_run(prefix):
     cache = Cache(config['app'])
