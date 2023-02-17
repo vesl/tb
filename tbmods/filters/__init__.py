@@ -12,8 +12,12 @@ class Filters:
         cusum_events = pd.DataFrame(columns=['event'])
         close_diff = self.close.pct_change().dropna()
         for date in close_diff.index:
-            spos,sneg = 0,0
-            spos,sneg = max(0,spos+close_diff.loc[date]),min(0,sneg+close_diff.loc[date])
-            if sneg < -threshold: cusum_events = pd.concat([cusum_events,pd.DataFrame({'event':sneg},index=[date])])
-            elif spos > threshold: cusum_events = pd.concat([cusum_events,pd.DataFrame({'event':spos},index=[date])])
+            if close_diff.loc[date] < -threshold: cusum_events = pd.concat([cusum_events,pd.DataFrame({'event':close_diff.loc[date]},index=[date])])
+            elif close_diff.loc[date] > threshold: cusum_events = pd.concat([cusum_events,pd.DataFrame({'event':close_diff.loc[date]},index=[date])])
         return cusum_events
+
+    def cusum_event(self,threshold):
+        threshold = float(threshold)/100
+        last_pct = self.close.pct_change().dropna().iloc[-1]
+        if (last_pct < -threshold) or (last_pct > threshold): return True
+        else: return False
