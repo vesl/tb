@@ -15,9 +15,3 @@ class Filters:
             if close_diff.loc[date] < -threshold: cusum_events = pd.concat([cusum_events,pd.DataFrame({'event':close_diff.loc[date]},index=[date])])
             elif close_diff.loc[date] > threshold: cusum_events = pd.concat([cusum_events,pd.DataFrame({'event':close_diff.loc[date]},index=[date])])
         return cusum_events
-
-    def cusum_event(self,threshold):
-        threshold = float(threshold)/100
-        last_pct = self.close.pct_change().dropna().iloc[-1]
-        if (last_pct < -threshold) or (last_pct > threshold): return True
-        else: return False
