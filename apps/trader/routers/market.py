@@ -70,27 +70,26 @@ def get_paper():
     end_time = pd.to_datetime(end,utc=True)
     # get last_time and next_time
     cache = Cache(config['app'])
-    if len(cache.data['paper/status']) > 0 : last_time = pd.to_datetime(cache.data['paper/status']["last_time"])
-    else:
-        log.info("Empty cache init last_time")
-        last_time = pd.to_datetime('now',utc=True).floor('H')
-        market_paper.update_status({"last_time":str(last_time)})
-    next_time = last_time + pd.Timedelta(hours=1)
+    last_time = pd.to_datetime(cache.data['paper/status']["last_time"])
+    current_time = last_time + pd.Timedelta(hours=1)
+    next_time = current_time + pd.Timedelta(hours=1)
     # prepare data
     dataset,scaler,price,events = prepare_data(period,start,end)
     if next_time in dataset.full_features.index:
         market_paper.set_time(next_time)
-        market_paper.set_price(dataset.full_features.iloc[-1]['close-0'])
+        market_paper.set_price(dataset.candles.candles.close.loc[next_time])
+        print(events.tail())
         log.info("Last time {}".format(last_time))
+        log.info("Current time {}".format(current_time))
         log.info("Next time {}".format(next_time))
-        if next_time in events.index:
+        if current_time in events.index:
             log.info("Event detected !")
-            X = scaler.transform([dataset.full_features.loc[next_time]])
+            X = scaler.transform([dataset.full_features.loc[current_time]])
             market_paper.trigger(X)
         else:
             log.info("No event detected last one {}".format(events.index[-1]))
             market_paper.trigger()
-        market_paper.update_status({"last_time":str(next_time)})
+        market_paper.update_status({"last_time":str(current_time)})
         market_paper.save_meta()
     log.info("Duration : {}".format(datetime.now()-timer))
 
