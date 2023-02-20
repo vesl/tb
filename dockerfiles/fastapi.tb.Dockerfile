@@ -9,6 +9,7 @@ RUN pip install binance-connector
 RUN pip install seaborn
 RUN pip install scikit-learn
 RUN pip install pymongo
+RUN pip install questdb
 RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz -O /tmp/ta-lib-0.4.0-src.tar.gz
 RUN cd /tmp/ && tar -xzvf ta-lib-0.4.0-src.tar.gz
 RUN cd /tmp/ta-lib/ && ./configure --prefix=/usr && make && make install
