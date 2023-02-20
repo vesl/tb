@@ -1,8 +1,10 @@
 from tbmods.config import Config
+from tbmods.log import Log
 import requests
 import socket
 
 config = Config()
+log = Log(config['app'])
 
 class QuestDB:
     """
@@ -27,7 +29,7 @@ class QuestDB:
         params = {"query":query,"fmt":"json"}
         try:
             response = requests.get("http://{}:9000/exec".format(self.host),params=params).json()
-            if 'error' in response: query_response['error'] = response['error']
+            if 'error' in response: log.error("QuestDB : {}".format(response['error']))
             if 'dataset' in response: query_response['result'] = response['dataset']
         except requests.exceptions.RequestException as e:
             query_response['error'] = e
