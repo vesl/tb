@@ -43,7 +43,6 @@ apps:
 
 # Trader
  - name: trader
-   dev: true
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/binance.sklearn:latest
    replicas: 1
    volumes:
