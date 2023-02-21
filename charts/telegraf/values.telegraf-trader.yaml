@@ -37,6 +37,5 @@ config:
     - http:
         urls:
           - "http://trader.tb.svc.k8s.slav.rocks/market/paper"
-          - "http://trader.tb.svc.k8s.slav.rocks/klines/update/BTCUSDT"
         timeout: "120s"
         data_format: "json_v2"

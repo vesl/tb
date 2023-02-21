@@ -2,6 +2,7 @@ from tbmods.indicators.financial import Financial
 from tbmods.triple_barrier import TripleBarrier
 from tbmods.filters import Filters
 from tbmods.candles import Candles
+from tbmods.klines import Klines
 from tbmods.config import Config
 from tbmods.log import Log
 import pandas as pd
@@ -13,25 +14,28 @@ log = Log(config['app'])
 
 class DatasetTech:
 
-    def __init__(self,period,start,end,features_list):
+    def __init__(self,symbol,period,start,end,features_list):
+        # init vars
+        self.symbol = symbol
         self.period = period
         self.start = pd.to_datetime(start)
         self.end = pd.to_datetime(end)
         self.features = pd.DataFrame(index=self.create_index_datetime())
         self.features_list = features_list
         self.features_map = self.create_features_map()
-        self.candles = Candles()
-        self.candles.from_questdb(self.period,self.start,self.end)
-        self.financial = Financial(self.candles.candles)
+        # load klines
+        self.klines = Klines(self.symbol)
+        self.klines.load_df(self.period,self.start,self.end)
+        # load features
+        self.financial = Financial(self.klines.df)
         self.sources_map = {'ohlc': self.load_ohlc,'indicators': self.load_indicators}
         [self.load_features(name,props) for name,props in self.features_map.items()]
+        # compute labels
         self.load_labels()
         self.merge_indexes()
     
     def create_index_datetime(self):
-        pd_freqs = {'1m':'T','1h':'H','1d':'D'}
-        if not self.period in pd_freqs: log.error('Period {} not managed'.format(self.period))
-        index = pd.date_range(start=self.start,end=self.end,freq=pd_freqs[self.period],tz='UTC')
+        index = pd.date_range(start=self.start,end=self.end,freq='H',tz='UTC')
         return index
         
     def create_features_map(self):
@@ -68,12 +72,12 @@ class DatasetTech:
         self.features = self.features[np.isfinite(self.features).all(1)]
         
     def load_labels(self):
-        self.cusum = Filters(self.candles.candles.close).cusum_events(config['cusum_pct_threshold'])
-        self.tbm = TripleBarrier(self.candles.candles.close,self.cusum).barriers
+        self.cusum = Filters(self.klines.df.close).cusum_events(config['cusum_pct_threshold'])
+        self.tbm = TripleBarrier(self.klines.df.close,self.cusum).barriers
         self.labels = self.tbm.side
         
     def load_ohlc(self,props):
-        return self.candles.candles[props['name']]
+        return self.klines.df[props['name']]
             
     def load_indicators(self,props):
         return self.financial.compute(props['name'],props['args'])
