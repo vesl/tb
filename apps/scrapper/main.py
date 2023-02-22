@@ -1,5 +1,5 @@
+from scrapper.routers import klines
 from fastapi import FastAPI
-from scrapper.routers import status,triggers,klines
 
 ## init api
 app = FastAPI(
@@ -9,5 +9,3 @@ app = FastAPI(
 )
 ## init routers
 app.include_router(klines.router)
-app.include_router(triggers.router)
-app.include_router(status.router)
