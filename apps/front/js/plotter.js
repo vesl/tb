@@ -1,64 +1,9 @@
+// Global vars 
 var plotterDatasetTechFeaturesMap = "";
 var plotterModelTechMap = [];
 var plotterBacktestMap = [];
 
-function plotterGetDatasetTechFeaturesMap(then){
-    $.get('/api/plotter/dataset/tech/features/map',(featuresMapJson)=>{
-        plotterDatasetTechFeaturesMap = JSON.parse(featuresMapJson)
-        then(plotterDatasetTechFeaturesMap)
-    })
-}
-
-function plotterLineLcChart(node,data){
-    var plot = LightweightCharts.createChart(document.getElementById(node[0].id),{height:200})
-    let series = plot.addLineSeries({color:'#'+((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0")})
-    series.setData(data)
-}
-
-function plotterOhlcLcChart(node,data,close_trades){
-    var plot = LightweightCharts.createChart(document.getElementById(node[0].id),{height:300})
-    let series = plot.addCandlestickSeries()
-    let volumeSeries = plot.addHistogramSeries({
-        priceFormat: {type: 'volume',},
-        priceScaleId: '',
-        scaleMargins: {top: 0.7,bottom: 0,},
-        color: '#939393'
-    });
-    let volumeData = []
-    data.forEach((record)=>{
-        volumeData.push({'time':record.time,'value':record.volume})
-    })
-    let markers = []
-    for (const [time,trade] of Object.entries(close_trades)){
-		markers.push({
-			time: Date.parse(trade.buy_time)/1000,
-			position: 'belowBar',
-			color: '#2196F3',
-			shape: 'arrowUp',
-			text: 'Buy @ ' + trade.buy_time,
-		});
-        markers.push({
-			time: Date.parse(trade.sell_time)/1000,
-			position: 'aboveBar',
-			color: '#e91e63',
-			shape: 'arrowDown',
-			text: 'Sell @ ' + trade.buy_time,
-		});
-    }
-    volumeSeries.setData(volumeData)
-    series.setData(data)
-    series.setMarkers(markers);
-}
-
-function plotterGetDatasetTechFeatureData(dataset,feature){
-    let featureData = []
-    regex_feature_name = new RegExp('^'+feature+'\-')
-    feature_fmt_name = Object.keys(dataset[0]).find(value => regex_feature_name.test(value))
-    for (const i in dataset) {
-        featureData.push({'time':dataset[i]['time'],'value':dataset[i][feature_fmt_name]})
-    }
-    return featureData
-}
+// Common
 
 function plotterPlotToggle(name,next){
     var dpValues = getDpValues()
@@ -71,37 +16,10 @@ function plotterPlotToggle(name,next){
     else $('#'+container[0].id).remove()
 }
 
-function plotterDatasetTech(){
-    contentTitle('Dataset - Tech')
-    plotterGetDatasetTechFeaturesMap((featuresMap)=>{
-        contentCollapse('Features list',JSON.stringify(featuresMap,null,2))
-        contentDatePicker()
-        contentButton('Plot features',()=>{plotterPlotToggle('features',plotterPlotDatasetTechFeatures)})
-        contentButton('Plot correlation',()=>{plotterPlotToggle('correlation',plotterPlotDatasetTechCorrelation)})
-    })
-}
-
-function plotterLabels(){
-    contentTitle('Labels')
-    contentDatePicker()
-    contentButton('Plot cusum',()=>{plotterPlotToggle('cusum',plotterPlotLabelsCusum)})
-    contentButton('Plot TBM',()=>{plotterPlotToggle('tbm',plotterPlotLabelsTbm)})
-    contentButton('Plot balance',()=>{plotterPlotToggle('balance',plotterPlotLabelsBalance)})
-}
-
-function plotterPlotDatasetTechFeatures(dpValues,container){
-    var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
-    $.get('/api/plotter/dataset/tech/features/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
-        contentRemoveLoading(container)
-        featuresList.forEach((feature)=>{
-            let props = plotterDatasetTechFeaturesMap[feature]
-            let featureContainer = $('<div id="plot-'+feature+'">')
-            let featureData = plotterGetDatasetTechFeatureData(JSON.parse(dataset),feature)
-            container.append('<h6><b>'+feature.toUpperCase()+'</b> source: <b>'+props['source']+'</b> scaled: <b>'+props['scaled']+'</b></h6>')
-            container.append(featureContainer)
-            plotterLineLcChart(featureContainer,featureData)
-        })
-    })
+function plotterLineLcChart(node,data){
+    var plot = LightweightCharts.createChart(document.getElementById(node[0].id),{height:200})
+    let series = plot.addLineSeries({color:'#'+((1 << 24) * Math.random() | 0).toString(16).padStart(6, "0")})
+    series.setData(data)
 }
 
 function plotterPlotTrades(dpValues,wallet_stable,open_trades,close_trades,container){
@@ -201,6 +119,85 @@ function plotterPlotTrades(dpValues,wallet_stable,open_trades,close_trades,conta
     })
 }
 
+function plotterOhlcLcChart(node,data,close_trades){
+    var plot = LightweightCharts.createChart(document.getElementById(node[0].id),{height:300})
+    let series = plot.addCandlestickSeries()
+    let volumeSeries = plot.addHistogramSeries({
+        priceFormat: {type: 'volume',},
+        priceScaleId: '',
+        scaleMargins: {top: 0.7,bottom: 0,},
+        color: '#939393'
+    });
+    let volumeData = []
+    data.forEach((record)=>{
+        volumeData.push({'time':record.time,'value':record.volume})
+    })
+    let markers = []
+    for (const [time,trade] of Object.entries(close_trades)){
+		markers.push({
+			time: Date.parse(trade.buy_time)/1000,
+			position: 'belowBar',
+			color: '#2196F3',
+			shape: 'arrowUp',
+			text: 'Buy @ ' + trade.buy_time,
+		});
+        markers.push({
+			time: Date.parse(trade.sell_time)/1000,
+			position: 'aboveBar',
+			color: '#e91e63',
+			shape: 'arrowDown',
+			text: 'Sell @ ' + trade.buy_time,
+		});
+    }
+    volumeSeries.setData(volumeData)
+    series.setData(data)
+    series.setMarkers(markers);
+}
+
+// Dataset - Tech
+
+function plotterDatasetTech(){
+    contentTitle('Dataset - Tech')
+    plotterGetDatasetTechFeaturesMap((featuresMap)=>{
+        contentCollapse('Features list',JSON.stringify(featuresMap,null,2))
+        contentDatePicker()
+        contentButton('Plot features',()=>{plotterPlotToggle('features',plotterPlotDatasetTechFeatures)})
+        contentButton('Plot correlation',()=>{plotterPlotToggle('correlation',plotterPlotDatasetTechCorrelation)})
+    })
+}
+
+function plotterGetDatasetTechFeaturesMap(then){
+    $.get('/api/plotter/dataset/tech/features/map',(featuresMapJson)=>{
+        plotterDatasetTechFeaturesMap = JSON.parse(featuresMapJson)
+        then(plotterDatasetTechFeaturesMap)
+    })
+}
+
+function plotterGetDatasetTechFeatureData(dataset,feature){
+    let featureData = []
+    regex_feature_name = new RegExp('^'+feature+'\-')
+    feature_fmt_name = Object.keys(dataset[0]).find(value => regex_feature_name.test(value))
+    for (const i in dataset) {
+        featureData.push({'time':dataset[i]['time'],'value':dataset[i][feature_fmt_name]})
+    }
+    return featureData
+}
+
+function plotterPlotDatasetTechFeatures(dpValues,container){
+    var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
+    $.get('/api/plotter/dataset/tech/features/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
+        contentRemoveLoading(container)
+        featuresList.forEach((feature)=>{
+            let props = plotterDatasetTechFeaturesMap[feature]
+            let featureContainer = $('<div id="plot-'+feature+'">')
+            let featureData = plotterGetDatasetTechFeatureData(JSON.parse(dataset),feature)
+            container.append('<h6><b>'+feature.toUpperCase()+'</b> source: <b>'+props['source']+'</b> scaled: <b>'+props['scaled']+'</b></h6>')
+            container.append(featureContainer)
+            plotterLineLcChart(featureContainer,featureData)
+        })
+    })
+}
+
 function plotterPlotDatasetTechCorrelation(dpValues,container){
     var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
     $.get('/api/plotter/dataset/tech/correlation/'+featuresList.toString()+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
@@ -208,6 +205,16 @@ function plotterPlotDatasetTechCorrelation(dpValues,container){
         container.append('<h6><b>Features correlation</b></h6>')
         container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
     })
+}
+
+// Labels
+
+function plotterLabels(){
+    contentTitle('Labels')
+    contentDatePicker()
+    contentButton('Plot cusum',()=>{plotterPlotToggle('cusum',plotterPlotLabelsCusum)})
+    contentButton('Plot TBM',()=>{plotterPlotToggle('tbm',plotterPlotLabelsTbm)})
+    contentButton('Plot balance',()=>{plotterPlotToggle('balance',plotterPlotLabelsBalance)})
 }
 
 function plotterPlotLabelsCusum(dpValues,container){
@@ -234,11 +241,19 @@ function plotterPlotLabelsBalance(dpValues,container){
     })
 }
 
-function plotterGetModelTechMap(next){
-    $.get('/api/plotter/models/tech/results/list',(list)=>{
-        plotterModelTechMap = list
-        next()
-    })
+// Models - Tech Results
+
+function plotterPlotModelTechResults(results){
+    contentTitle('Model - Tech - Results - '+results.name)
+    let labels = [-1,0,1]
+    contentClearContent()
+    contentHTML('<h3>F1 score mean: '+results.score.f1_score_mean+'</h3>')
+    contentCollapse('Classifier configuration',JSON.stringify(results.clf_config,null,2))
+    contentCollapse('Features',JSON.stringify(Object.keys(JSON.parse(results.score.feature_importances))))
+    plotterPlotConfusionMatrix(labels,results.score.confusion_matrix)
+    contentBarChart('f1-score',labels,results.score.f1_score)
+    contentLineChart('cross-val-score',[1,2,3,4,5],results.score.cross_val_score)
+    PlotterPlotFeatureImportances(JSON.parse(results.score.feature_importances))
 }
 
 function plotterPlotConfusionMatrix(labels,confusion_matrix){
@@ -262,26 +277,15 @@ function PlotterPlotFeatureImportances(feature_importances){
     feature_importances.forEach((i)=>{table.append('<tr><td>'+i[0]+'</td><td>'+i[1]+'</td></tr>')})
 }
 
-function plotterPlotModelTechResults(results){
-    contentTitle('Model - Tech - Results - '+results.name)
-    let labels = [-1,0,1]
-    contentClearContent()
-    contentHTML('<h3>F1 score mean: '+results.score.f1_score_mean+'</h3>')
-    contentCollapse('Classifier configuration',JSON.stringify(results.clf_config,null,2))
-    contentCollapse('Features',JSON.stringify(Object.keys(JSON.parse(results.score.feature_importances))))
-    plotterPlotConfusionMatrix(labels,results.score.confusion_matrix)
-    contentBarChart('f1-score',labels,results.score.f1_score)
-    contentLineChart('cross-val-score',[1,2,3,4,5],results.score.cross_val_score)
-    PlotterPlotFeatureImportances(JSON.parse(results.score.feature_importances))
-}
+// Backtests - Results
 
-function plotterModelTechResults(){
-    contentTitle('Model - Tech - Results')
-    plotterGetModelTechMap(()=>{
-        Object.entries(plotterModelTechMap).forEach((results)=>{
+function plotterBacktestResults(){
+    contentTitle('Backtest - Results')
+    plotterGetBacktestMap(()=>{
+        Object.entries(plotterBacktestMap).forEach((results)=>{
             results = results[1]
-            results.score.f1_score_mean = (results.score.f1_score.reduce((a, b) => a + b, 0) / results.score.f1_score.length).toFixed(3)
-            contentButton('<b>'+results.name+'</b> f1 score mean: <b>'+results.score.f1_score_mean+'</b>',()=>{plotterPlotModelTechResults(results)})
+            let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
+            contentButton('<b>'+results.name+'</b> Perf: <b>'+pnl_pct+'%</b>',()=>{plotterPlotMarketResults('Backtest',results)})
         })
     })
 }
@@ -321,19 +325,28 @@ function plotterPlotMarketResults(prefix,results){
     plotterPlotTrades(dpValues,results.stable_start,results.open_trades,results.close_trades,container)
 }
 
-function plotterBacktestResults(){
-    contentTitle('Backtest - Results')
-    plotterGetBacktestMap(()=>{
-        Object.entries(plotterBacktestMap).forEach((results)=>{
-            results = results[1]
-            let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
-            contentButton('<b>'+results.name+'</b> Perf: <b>'+pnl_pct+'%</b>',()=>{plotterPlotMarketResults('Backtest',results)})
-        })
-    })
-}
+// Paper - Results
 
 function plotterPaperResults(){
     $.get('/api/plotter/market/paper/results',results=>{
         plotterPlotMarketResults('Paper',results)
+    })
+}
+
+function plotterModelTechResults(){
+    contentTitle('Model - Tech - Results')
+    plotterGetModelTechMap(()=>{
+        Object.entries(plotterModelTechMap).forEach((results)=>{
+            results = results[1]
+            results.score.f1_score_mean = (results.score.f1_score.reduce((a, b) => a + b, 0) / results.score.f1_score.length).toFixed(3)
+            contentButton('<b>'+results.name+'</b> f1 score mean: <b>'+results.score.f1_score_mean+'</b>',()=>{plotterPlotModelTechResults(results)})
+        })
+    })
+}
+
+function plotterGetModelTechMap(next){
+    $.get('/api/plotter/models/tech/results/list',(list)=>{
+        plotterModelTechMap = list
+        next()
     })
 }
