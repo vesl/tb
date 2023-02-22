@@ -1,8 +1,5 @@
 // Nav map
 const navMap = {
-    'Scrapper': {
-        'Status': ()=>{scrapperStatus()},
-    },
     'Plotter': {
         'Dataset - Tech': ()=>{plotterDatasetTech()},
         'Labels': ()=>{plotterLabels()},
