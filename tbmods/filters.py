@@ -1,4 +1,3 @@
-from tbmods.candles import Candles
 import pandas as pd
 import json
 

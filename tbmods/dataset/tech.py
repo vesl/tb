@@ -1,7 +1,6 @@
 from tbmods.indicators.financial import Financial
 from tbmods.triple_barrier import TripleBarrier
 from tbmods.filters import Filters
-from tbmods.candles import Candles
 from tbmods.klines import Klines
 from tbmods.config import Config
 from tbmods.log import Log
