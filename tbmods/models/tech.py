@@ -17,7 +17,8 @@ config = Config()
 
 class ModelTech:
 
-    def __init__(self,period,start,end,features_list):
+    def __init__(self,symbol,period,start,end,features_list):
+        self.symbol = symbol
         self.period = period
         self.start = start
         self.end = end
@@ -36,7 +37,7 @@ class ModelTech:
         cache.write()
 
     def load_dataset(self):
-        self.dataset = DatasetTech(self.period,self.start,self.end,self.features_list)
+        self.dataset = DatasetTech(self.symbol,self.period,self.start,self.end,self.features_list)
         self.meta.update({
             "period":self.period,
             "start":self.start,
