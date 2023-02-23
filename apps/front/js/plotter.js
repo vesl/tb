@@ -24,7 +24,7 @@ function plotterLineLcChart(node,data){
 
 function plotterPlotTrades(dpValues,wallet_stable,open_trades,close_trades,container){
     var featureList = ['open','high','low','close']
-    $.get('/api/plotter/dataset/tech/ohlc/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
+    $.get('/api/plotter/dataset/tech/ohlc/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
         contentRemoveLoading(container)
         // Plot trades
         let ohlcContainer = $('<div id="plot-trades-ohlc">')
@@ -122,16 +122,6 @@ function plotterPlotTrades(dpValues,wallet_stable,open_trades,close_trades,conta
 function plotterOhlcLcChart(node,data,close_trades){
     var plot = LightweightCharts.createChart(document.getElementById(node[0].id),{height:300})
     let series = plot.addCandlestickSeries()
-    let volumeSeries = plot.addHistogramSeries({
-        priceFormat: {type: 'volume',},
-        priceScaleId: '',
-        scaleMargins: {top: 0.7,bottom: 0,},
-        color: '#939393'
-    });
-    let volumeData = []
-    data.forEach((record)=>{
-        volumeData.push({'time':record.time,'value':record.volume})
-    })
     let markers = []
     for (const [time,trade] of Object.entries(close_trades)){
 		markers.push({
@@ -149,7 +139,6 @@ function plotterOhlcLcChart(node,data,close_trades){
 			text: 'Sell @ ' + trade.buy_time,
 		});
     }
-    volumeSeries.setData(volumeData)
     series.setData(data)
     series.setMarkers(markers);
 }
@@ -306,8 +295,10 @@ function plotterPlotMarketResults(prefix,results){
     }
     let pnl = Math.round(results.wallet[results.stable] - results.stable_start)
     let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
+    var period = (prefix == 'Backtest') ? 'historical':'live'
     let dpValues = {
-        'period':'1h',
+        'symbol':'BTCUSDT',
+        'period':period,
         'start': new Date(Object.keys(results.close_trades)[0]).toLocaleDateString("en-US",{year:"numeric",month:"2-digit",day:"2-digit"}).replace(/\//g,'-'),
         'end': new Date().toLocaleDateString("en-US",{year:"numeric",month:"2-digit",day:"2-digit"}).replace(/\//g,'-')
     }

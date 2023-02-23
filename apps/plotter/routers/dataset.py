@@ -32,6 +32,7 @@ async def tech_features(symbol,period,start,end):
 @router.get('/tech/ohlc/{symbol}/{period}/{start}/{end}')
 async def ohlc_features(symbol,period,start,end):
     start = pd.to_datetime(start)
+    end = pd.to_datetime(end)
     klines = Klines(symbol)
     klines.load_df(period,start,end)
     klines.df['time'] = klines.df.index.astype(int)/1000000000 #format data to LC

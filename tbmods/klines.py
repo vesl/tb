@@ -52,6 +52,6 @@ class Klines:
         ) for row in self.df.itertuples()]
         return self.questdb.ingest(rows)
         
-    def load_df(self,table,start,end):
-        qdbr = self.questdb.query("SELECT * FROM {}_{} where open_time between '{}' and '{}'".format(table,self.symbol,start,end))
+    def load_df(self,period,start,end):
+        qdbr = self.questdb.query("SELECT * FROM {}_{} where open_time between '{}' and '{}'".format(period,self.symbol,start,end))
         self.df = self.qdb_to_df(qdbr['result'])
