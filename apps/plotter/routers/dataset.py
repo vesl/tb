@@ -23,9 +23,9 @@ log = Log(config['app'])
 async def tech_features_map():
     return config['tech_features']
     
-@router.get('/tech/features/{period}/{start}/{end}')
-async def tech_features(period,start,end):
-    dataset = DatasetTech('BTCUSDT','historical',start,end,config['tech_features_selected'].split(','))
+@router.get('/tech/features/{symbol}/{period}/{start}/{end}')
+async def tech_features(symbol,period,start,end):
+    dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
     dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
 

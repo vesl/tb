@@ -185,7 +185,7 @@ function plotterGetDatasetTechFeatureData(dataset,feature){
 
 function plotterPlotDatasetTechFeatures(dpValues,container){
     var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
-    $.get('/api/plotter/dataset/tech/features/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
+    $.get('/api/plotter/dataset/tech/features/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
         contentRemoveLoading(container)
         featuresList.forEach((feature)=>{
             let props = plotterDatasetTechFeaturesMap[feature]
@@ -200,7 +200,7 @@ function plotterPlotDatasetTechFeatures(dpValues,container){
 
 function plotterPlotDatasetTechCorrelation(dpValues,container){
     var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
-    $.get('/api/plotter/dataset/tech/correlation/'+featuresList.toString()+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
+    $.get('/api/plotter/dataset/tech/correlation/'+featuresList.toString()+'/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
         contentRemoveLoading(container)
         container.append('<h6><b>Features correlation</b></h6>')
         container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
