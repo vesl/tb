@@ -12,7 +12,7 @@ function trainerCheckRun(next){
 
 function trainerTrainModelTech(){
     var dpValues = getDpValues()
-    if (dpValues) $.get('/api/trainer/models/tech/train/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end)
+    if (dpValues) $.get('/api/trainer/models/tech/train/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end)
     setTimeout(()=>{trainerModelTech()},2000)
 }
 
