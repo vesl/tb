@@ -16,10 +16,10 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-@router.get('/cusum/{period}/{start}/{end}')
-def graph_cusum(period,start,end):
-    dataset = DatasetTech(period,start,end,['close-0'])
-    close = dataset.candles.candles.close
+@router.get('/cusum/{symbol}/{period}/{start}/{end}')
+def graph_cusum(symbol,period,start,end):
+    dataset = DatasetTech(symbol,period,start,end,['close-0'])
+    close = dataset.klines.df.close
     cusum = dataset.cusum
     image = BytesIO()
     fig, ax = plt.subplots()
@@ -30,10 +30,10 @@ def graph_cusum(period,start,end):
     image_base64 = base64.b64encode(image.getvalue())
     return {"image_base64": image_base64,"count_cusum":len(cusum),"threshold":config['cusum_pct_threshold']}
 
-@router.get('/tbm/{period}/{start}/{end}')
-def graph_tbm(period,start,end):
-    dataset = DatasetTech(period,start,end,['close-0'])
-    close = dataset.candles.candles.close
+@router.get('/tbm/{symbol}/{period}/{start}/{end}')
+def graph_tbm(symbol,period,start,end):
+    dataset = DatasetTech(symbol,period,start,end,['close-0'])
+    close = dataset.klines.df.close
     tbm = dataset.tbm
     image = BytesIO()
     fig, ax = plt.subplots()
@@ -49,9 +49,9 @@ def graph_tbm(period,start,end):
     image_base64 = base64.b64encode(image.getvalue())
     return {"image_base64": image_base64,"count_tbm":len(tbm)}
 
-@router.get('/balance/{period}/{start}/{end}')
-def graph_balance(period,start,end):
-    dataset = DatasetTech(period,start,end,['close-0'])
+@router.get('/balance/{symbol}/{period}/{start}/{end}')
+def graph_balance(symbol,period,start,end):
+    dataset = DatasetTech(symbol,period,start,end,['close-0'])
     tbm = dataset.tbm
     image = BytesIO()
     fig, ax = plt.subplots()
