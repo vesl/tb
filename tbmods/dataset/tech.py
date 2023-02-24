@@ -29,9 +29,6 @@ class DatasetTech:
         self.financial = Financial(self.klines.df)
         self.sources_map = {'ohlc': self.load_ohlc,'indicators': self.load_indicators}
         [self.load_features(name,props) for name,props in self.features_map.items()]
-        # compute labels
-        self.load_labels()
-        self.merge_indexes()
     
     def create_index_datetime(self):
         index = pd.date_range(start=self.start,end=self.end,freq='H',tz='UTC')
@@ -74,9 +71,11 @@ class DatasetTech:
         self.cusum = Filters(self.klines.df.close).cusum_events(config['cusum_pct_threshold'])
         self.tbm = TripleBarrier(self.klines.df.close,self.cusum).barriers
         self.labels = self.tbm.side
+        self.merge_indexes()
         
     def load_ohlc(self,props):
         return self.klines.df[props['name']]
+        
             
     def load_indicators(self,props):
         return self.financial.compute(props['name'],props['args'])
