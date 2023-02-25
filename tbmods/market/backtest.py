@@ -22,7 +22,7 @@ class MarketBacktest(Market):
 
     def sell(self,time):
         qty = self.open_trades[time]['qty']
-        offer = (qty * self.price)*0.99
+        offer = (qty * self.price)*0.999
         if offer > 20:
             self.wallet[self.stable] += offer
             self.wallet[self.coin] -= qty
@@ -34,11 +34,11 @@ class MarketBacktest(Market):
         else: log.info("Unable to sell {} wallet {}".format(qty,self.wallet[self.coin]))
 
     def buy(self,bid):
-        qty = (bid / self.price)*0.99
+        qty = (bid / self.price)*0.999
         if bid > 50 and self.wallet[self.stable] - bid >= 0:
             self.wallet[self.stable] -= bid
             self.wallet[self.coin] += qty
-            self.open_trades[self.time] = { "qty": qty, "bid": bid, "buy_price": self.price, "buy_time": self.time, "jumps":0, "stop_loss": self.price*0.9 }
+            self.open_trades[self.time] = { "qty": qty, "bid": bid, "buy_price": self.price, "buy_time": self.time, "jumps":0, "stop_loss": self.price*0.97, "take_profit" : self.price+(self.price*0.1) }
             log.info("Buy {} for {} price {} {} : {} {} : {}".format(qty,bid,self.price,self.stable,self.wallet[self.stable],self.coin,self.wallet[self.coin]))
             return True
         else: log.info("Unable to buy {} wallet {}".format(bid,self.wallet[self.stable]))

@@ -28,11 +28,11 @@ class Market:
             1: "rangish",
             2: "bullish"
         }
-        return switch[list(prediction).index(max(prediction))],max(prediction)
+        return switch[list(prediction).index(max(prediction))],max(prediction)+prediction[1]
         
     def trigger(self,event=False):
         if event is not False:
-            state = self.predict( event)
+            state = self.predict(event)
             switch = {
                 "bearish": self.trigger_bearish,
                 "rangish": self.trigger_rangish,
@@ -40,12 +40,19 @@ class Market:
             }
             log.info("{} - Got event seems {} confidence {}".format(self.time,state[0],state[1]))
             switch[state[0]](state[1])
-        else: self.cut_stop_loss()
+        self.cut_stop_loss()
             
     def up_stop_loss(self,confidence):
         for time in self.open_trades:
-            self.open_trades[time]['jumps'] += 1
-            self.open_trades[time]['stop_loss'] += self.price*((1-confidence)*self.open_trades[time]['jumps']*3)
+            if self.open_trades[time]["jumps"] > 0:
+                diff = self.open_trades[time]["take_profit"] - self.open_trades[time]["stop_loss"]
+                self.open_trades[time]["stop_loss"] = self.open_trades[time]["take_profit"] - ((diff / self.open_trades[time]["jumps"]) * (1 - confidence))
+            
+    def up_take_profit(self,confidence):
+        for time in self.open_trades:
+            if self.price >= self.open_trades[time]["take_profit"]:
+                self.open_trades[time]["take_profit"] = (self.price+(self.price*0.1)) * confidence
+                self.open_trades[time]["jumps"] += 1
 
     def cut_stop_loss(self):
         for time in self.open_trades.copy():
@@ -53,12 +60,12 @@ class Market:
 
     def trigger_bearish(self,confidence):
         self.up_stop_loss(confidence)
-        self.cut_stop_loss()
         
     def trigger_rangish(self,confidence):
-        self.cut_stop_loss()
+        self.up_take_profit()
         
     def trigger_bullish(self,confidence):
+        self.up_take_profit()
         self.buy(confidence * self.wallet[self.stable])
         
     def exit(self):

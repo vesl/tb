@@ -75,7 +75,6 @@ class DatasetTech:
         
     def load_ohlc(self,props):
         return self.klines.df[props['name']]
-        
-            
+
     def load_indicators(self,props):
         return self.financial.compute(props['name'],props['args'])
