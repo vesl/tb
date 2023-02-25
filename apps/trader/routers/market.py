@@ -38,10 +38,6 @@ def get_backtest(symbol,period,start,end):
     # prepare data
     market_backtest.update_status({"Prepare data":"{...}"})
     dataset,scaler,price,events = prepare_data(symbol,period,start,end)
-    
-    market_backtest.update_status(False)
-    print(price)
-    print(toto)
     # process
     while current_time <= end_time:
         try:
