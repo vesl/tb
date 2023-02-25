@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: model
 data:
-  TB_TECH_SELECTED_MODEL: "tech-20230225-044805"
+  TB_TECH_SELECTED_MODEL: "tech-20230225-091230"
   TB_TECH_CLF_CONFIG: |
     {
         "n_estimators":"405",
