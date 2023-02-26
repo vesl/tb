@@ -2,7 +2,7 @@ apps:
 
 # Scrapper
  - name: scrapper
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/binance.fastapi:latest
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi.tb:latest
    replicas: 1
    volumes:
      - name: cache
@@ -16,7 +16,7 @@ apps:
 
 # Plotter
  - name: plotter
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/seaborn.sklearn:latest
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi.tb:latest
    replicas: 1
    configmaps:
      - questdb
@@ -26,7 +26,7 @@ apps:
 
 # Trainer
  - name: trainer
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/sklearn.talib:latest
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi.tb:latest
    replicas: 1
    volumes:
      - name: cache
@@ -43,7 +43,7 @@ apps:
 
 # Trader
  - name: trader
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/binance.sklearn:latest
+   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi.tb:latest
    replicas: 1
    volumes:
      - name: cache
