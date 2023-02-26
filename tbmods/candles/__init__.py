@@ -36,14 +36,14 @@ class Candles:
         self.candles = df
 
     def from_questdb(self,period,start,end):
-        qdbq = """select first(open),max(high),min(low),last(close),sum(volume),timestamp 
-              from candles_minute where timestamp between '{}' and '{}' sample by {}""".format(start,end,period)
+        qdbq = """select open,high,low,close,volume,open_time 
+              from historical_BTCUSDT where open_time between '{}' and '{}'""".format(start,end)
         qdbr = questdb.query(qdbq)
         if 'error' in qdbr: return qdbr
         elif len(qdbr['result']) == 0: qdbr['error'] = '0 candle in this period'
         else:
-            df = pd.DataFrame(qdbr['result'],columns=['open','high','low','close','volume','timestamp'])
-            df = df.set_index('timestamp').sort_index()
+            df = pd.DataFrame(qdbr['result'],columns=['open','high','low','close','volume','open_time'])
+            df = df.set_index('open_time').sort_index()
             df.index = pd.to_datetime(df.index)
             self.candles = df
         # we return qdbr to know if there is error
