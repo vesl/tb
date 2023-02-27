@@ -23,7 +23,7 @@ def prepare_data(period,start,end):
     dataset = DatasetTech(period,start,end,config['tech_features_selected'].split(','))
     scaler = MinMaxScaler()
     scaler.fit_transform(dataset.features.values)
-    price = dataset.candles.candles.close
+    price = dataset.klines.df.close
     events = Filters(price).cusum_events(config['cusum_pct_threshold'])
     return dataset,scaler,price,events
 
@@ -77,7 +77,7 @@ def get_paper():
     dataset,scaler,price,events = prepare_data(period,start,end)
     if next_time in dataset.full_features.index:
         market_paper.set_time(next_time)
-        market_paper.set_price(dataset.candles.candles.close[next_time])
+        market_paper.set_price(dataset.klines.df.close[next_time])
         print(events.tail())
         log.info("Last time {}".format(last_time))
         log.info("Current time {}".format(current_time))
