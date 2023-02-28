@@ -91,7 +91,7 @@ function plotterLabels(){
 
 function plotterPlotDatasetTechFeatures(dpValues,container){
     var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
-    $.get('/api/plotter/dataset/tech/features/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
+    $.get('/api/plotter/dataset/tech/features/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
         contentRemoveLoading(container)
         featuresList.forEach((feature)=>{
             let props = plotterDatasetTechFeaturesMap[feature]
@@ -106,7 +106,7 @@ function plotterPlotDatasetTechFeatures(dpValues,container){
 
 function plotterPlotTrades(dpValues,wallet_stable,open_trades,close_trades,container){
     var featureList = ['open','high','low','close']
-    $.get('/api/plotter/dataset/tech/ohlc/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
+    $.get('/api/plotter/dataset/tech/ohlc/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
         contentRemoveLoading(container)
         // Plot trades
         let ohlcContainer = $('<div id="plot-trades-ohlc">')
@@ -203,7 +203,7 @@ function plotterPlotTrades(dpValues,wallet_stable,open_trades,close_trades,conta
 
 function plotterPlotDatasetTechCorrelation(dpValues,container){
     var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
-    $.get('/api/plotter/dataset/tech/correlation/'+featuresList.toString()+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
+    $.get('/api/plotter/dataset/tech/correlation/'+featuresList.toString()+'/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
         contentRemoveLoading(container)
         container.append('<h6><b>Features correlation</b></h6>')
         container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
@@ -211,7 +211,7 @@ function plotterPlotDatasetTechCorrelation(dpValues,container){
 }
 
 function plotterPlotLabelsCusum(dpValues,container){
-    $.get('/api/plotter/labels/cusum/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
+    $.get('/api/plotter/labels/cusum/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
         contentRemoveLoading(container)
         container.append('<h6><b>Cusum events</b> count <b>'+data.count_cusum+'</b> <b>threshold</b> '+data.threshold+'</h6>')
         container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
@@ -219,7 +219,7 @@ function plotterPlotLabelsCusum(dpValues,container){
 }
 
 function plotterPlotLabelsTbm(dpValues,container){
-    $.get('/api/plotter/labels/tbm/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
+    $.get('/api/plotter/labels/tbm/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
         contentRemoveLoading(container)
         container.append('<h6><b>Tbm samples</b> count <b>'+data.count_tbm+'</b></h6>')
         container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
@@ -227,7 +227,7 @@ function plotterPlotLabelsTbm(dpValues,container){
 }
 
 function plotterPlotLabelsBalance(dpValues,container){
-    $.get('/api/plotter/labels/balance/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
+    $.get('/api/plotter/labels/balance/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
         contentRemoveLoading(container)
         container.append('<h6><b>Balance</b></h6>')
         container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
@@ -303,6 +303,7 @@ function plotterPlotMarketResults(prefix,results){
     let pnl = Math.round(results.wallet[results.stable] - results.stable_start)
     let pnl_pct = Math.round(results.wallet[results.stable] * 100 / results.stable_start)
     let dpValues = {
+        'symbol':'BTCUSDT',
         'period':'1h',
         'start': new Date(Object.keys(results.close_trades)[0]).toLocaleDateString("en-US",{year:"numeric",month:"2-digit",day:"2-digit"}).replace(/\//g,'-'),
         'end': new Date().toLocaleDateString("en-US",{year:"numeric",month:"2-digit",day:"2-digit"}).replace(/\//g,'-')
