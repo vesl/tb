@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from tbmods.dataset.tech import DatasetTech
 from tbmods.models.tech import ModelTech
-from tbmods.candles import Candles
+from tbmods.klines import Klines
 from tbmods.config import Config
 import matplotlib.pyplot as plt
 from tbmods.log import Log
@@ -32,10 +32,11 @@ async def tech_features(period,start,end):
 @router.get('/tech/ohlc/{period}/{start}/{end}')
 async def ohlc_features(period,start,end):
     start = pd.to_datetime(start)
-    candles = Candles()
-    candles.from_questdb(period,pd.to_datetime(start),pd.to_datetime(end))
-    candles.candles["time"] = candles.candles.index.astype(int)/1000000000 #format data to LC
-    return candles.candles.to_json(orient="records")
+    end = pd.to_datetime(end)
+    klines = Klines('BTCUSDT')
+    klines.load_df('historical',start,end)
+    klines.df["time"] = klines.df.index.astype(int)/1000000000 #format data to LC
+    return klines.df.to_json(orient="records")
 
 @router.get('/tech/correlation/{features}/{period}/{start}/{end}')
 def graph_correlation(features,period,start,end):
@@ -48,7 +49,7 @@ def graph_correlation(features,period,start,end):
     sns.heatmap(chi2_test,ax=ax,annot=True,annot_kws={"fontsize":7},fmt=".0f")
     ax.set_ylabel("Correlation")
     ax.set_xlabel("Features")
-    ax.set_xticklabels(tech_model.features_list,fontsize=8)
+    ax.set_xticks(list(range(len(tech_model.features_list))),labels=tech_model.features_list,fontsize=3)
     fig.savefig(image, format='png')
     image_base64 = base64.b64encode(image.getvalue())
     return {"image_base64": image_base64}
