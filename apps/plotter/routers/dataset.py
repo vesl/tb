@@ -49,7 +49,7 @@ def graph_correlation(features,period,start,end):
     sns.heatmap(chi2_test,ax=ax,annot=True,annot_kws={"fontsize":7},fmt=".0f")
     ax.set_ylabel("Correlation")
     ax.set_xlabel("Features")
-    ax.set_xticklabels(tech_model.features_list,fontsize=8)
+    ax.set_xticks(list(range(len(tech_model.features_list))),labels=tech_model.features_list,fontsize=3)
     fig.savefig(image, format='png')
     image_base64 = base64.b64encode(image.getvalue())
     return {"image_base64": image_base64}
