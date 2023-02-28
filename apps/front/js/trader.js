@@ -12,7 +12,7 @@ function traderBacktestCheckRun(next){
 
 function traderTradeBacktest(){
     var dpValues = getDpValues()
-    if (dpValues) $.get('/api/trader/market/backtest/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end)
+    if (dpValues) $.get('/api/trader/market/backtest/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end)
     setTimeout(()=>{traderBacktest()},2000)
 }
 
