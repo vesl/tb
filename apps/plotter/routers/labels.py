@@ -19,7 +19,7 @@ log = Log(config['app'])
 @router.get('/cusum/{period}/{start}/{end}')
 def graph_cusum(period,start,end):
     dataset = DatasetTech(period,start,end,['close-0'])
-    close = dataset.klines.df
+    close = dataset.klines.df.close
     cusum = dataset.cusum
     image = BytesIO()
     fig, ax = plt.subplots()
