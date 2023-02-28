@@ -18,10 +18,10 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-@router.get('/tech/train/{period}/{start}/{end}')
-def tech_train(period,start,end):
+@router.get('/tech/train/{symbol}/{period}/{start}/{end}')
+def tech_train(symbol,period,start,end):
     features_list = config['tech_features_selected'].split(',')
-    tech_model = ModelTech(period,start,end,features_list)
+    tech_model = ModelTech(symbol,period,start,end,features_list)
     tech_model.update_status(False)
     tech_model.update_status({"Load dataset":"..."})
     tech_model.load_dataset()
