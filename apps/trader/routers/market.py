@@ -19,16 +19,16 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-def prepare_data(period,start,end):
-    dataset = DatasetTech(period,start,end,config['tech_features_selected'].split(','))
+def prepare_data(symbol,period,start,end):
+    dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
     scaler = MinMaxScaler()
     scaler.fit_transform(dataset.features.values)
     price = dataset.klines.df.close
     events = Filters(price).cusum_events(config['cusum_pct_threshold'])
     return dataset,scaler,price,events
 
-@router.get('/backtest/{period}/{start}/{end}')
-def get_backtest(period,start,end):
+@router.get('/backtest/{symbol}/{period}/{start}/{end}')
+def get_backtest(symbol,period,start,end):
     # init market
     market_backtest = MarketBacktest("BUSD",1000,"BTC",0)
     market_backtest.update_status(False)
@@ -37,7 +37,7 @@ def get_backtest(period,start,end):
     end_time = pd.to_datetime(end,utc=True)
     # prepare data
     market_backtest.update_status({"Prepare data":"{...}"})
-    dataset,scaler,price,events = prepare_data(period,start,end)
+    dataset,scaler,price,events = prepare_data(symbol,period,start,end)
     # process
     while current_time <= end_time:
         try:

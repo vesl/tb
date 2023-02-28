@@ -56,10 +56,11 @@
         let start = $('#dp-start').val().replace('/','-')
         let end = $('#dp-end').val().replace('/','-')
         let period = $('#dp-period option:selected').text()
+        let symbol = $('#dp-symbol option:selected').text()
         if (period == 'Period' || start == '' || end == '') {
             alert('Fill the form')
             return false
         }
-        else return {'start':start,'end':end,'period':period}
+        else return {'start':start,'end':end,'period':period,'symbol':symbol}
     }
 </script>

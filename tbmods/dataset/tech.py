@@ -13,8 +13,8 @@ log = Log(config['app'])
 
 class DatasetTech:
 
-    def __init__(self,period,start,end,features_list):
-        self.symbol = 'BTCUSDT'
+    def __init__(self,symbol,period,start,end,features_list):
+        self.symbol = symbol
         self.period = 'historical'
         self.start = pd.to_datetime(start)
         self.end = pd.to_datetime(end)
@@ -22,8 +22,8 @@ class DatasetTech:
         self.features_list = features_list
         self.features_map = self.create_features_map()
         # klines
-        self.klines = Klines(self.symbol)
-        self.klines.load_df(self.period,self.start,self.end)
+        self.klines = Klines(self.symbol,self.period)
+        self.klines.load_df(self.start,self.end)
         # klines
         self.financial = Financial(self.klines.df)
         self.sources_map = {'ohlc': self.load_ohlc,'indicators': self.load_indicators}

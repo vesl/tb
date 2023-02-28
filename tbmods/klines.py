@@ -8,10 +8,11 @@ log = Log(config['app'])
 
 class Klines:
     
-    def __init__(self,symbol):
+    def __init__(self,symbol,period):
         self.symbol = symbol
+        self.period = period
         self.questdb = QuestDB()
-        self.table = "live_{}".format(self.symbol)
+        self.table = "{}_{}".format(self.period,self.symbol)
         self.columns = ['open_time','open','high','low','close','volume','close_time','quote_asset_volume','number_of_trades','taker_buy_base_asset_volume','taker_buy_quote_asset_volume','ignore']
 
     def qdb_to_df(self,result):
@@ -52,6 +53,6 @@ class Klines:
         ) for row in self.df.itertuples()]
         return self.questdb.ingest(rows)
         
-    def load_df(self,period,start,end):
-        qdbr = self.questdb.query("SELECT * FROM {}_{} where open_time between '{}' and '{}'".format(period,self.symbol,start,end))
+    def load_df(self,start,end):
+        qdbr = self.questdb.query("SELECT * FROM {} where open_time between '{}' and '{}'".format(self.table,start,end))
         self.df = self.qdb_to_df(qdbr['result'])

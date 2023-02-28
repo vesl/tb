@@ -6,7 +6,6 @@ config = Config()
 class TripleBarrier:
     
     def __init__(self,close,events):
-        events = events[:-1] # remove last event because it cause some troubles when live / paper trading
         self.close = close
         self.vol = self.get_vol(self.close)
         # init barriers

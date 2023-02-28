@@ -23,24 +23,24 @@ log = Log(config['app'])
 async def tech_features_map():
     return config['tech_features']
     
-@router.get('/tech/features/{period}/{start}/{end}')
-async def tech_features(period,start,end):
-    dataset = DatasetTech(period,start,end,config['tech_features_selected'].split(','))
+@router.get('/tech/features/{symbol}/{period}/{start}/{end}')
+async def tech_features(symbol,period,start,end):
+    dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
     dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
 
-@router.get('/tech/ohlc/{period}/{start}/{end}')
-async def ohlc_features(period,start,end):
+@router.get('/tech/ohlc/{symbol}/{period}/{start}/{end}')
+async def ohlc_features(symbol,period,start,end):
     start = pd.to_datetime(start)
     end = pd.to_datetime(end)
-    klines = Klines('BTCUSDT')
-    klines.load_df('historical',start,end)
+    klines = Klines(symbol,'historical')
+    klines.load_df(start,end)
     klines.df["time"] = klines.df.index.astype(int)/1000000000 #format data to LC
     return klines.df.to_json(orient="records")
 
-@router.get('/tech/correlation/{features}/{period}/{start}/{end}')
-def graph_correlation(features,period,start,end):
-    tech_model = ModelTech(period,start,end,config['tech_features_selected'].split(','))
+@router.get('/tech/correlation/{features}/{symbol}/{period}/{start}/{end}')
+def graph_correlation(features,symbol,period,start,end):
+    tech_model = ModelTech(symbol,period,start,end,config['tech_features_selected'].split(','))
     tech_model.load_dataset()
     chi2_test = tech_model.chi2_test()
     image = BytesIO()
