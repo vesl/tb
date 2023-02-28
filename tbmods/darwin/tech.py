@@ -10,7 +10,8 @@ log = Log(config['app'])
 
 class DarwinTech:
     
-    def __init__(self,period,start,end):
+    def __init__(self,symbol,period,start,end):
+        self.symbol = symbol
         self.period = period
         self.start = start
         self.end = end
@@ -53,7 +54,7 @@ class DarwinTech:
         }
         
     def new_id(self,genotype):
-        tech_model = ModelTech(self.period,self.start,self.end,genotype['features'])
+        tech_model = ModelTech(self.symbol,self.period,self.start,self.end,genotype['features'])
         tech_model.clf_init(genotype['config'])
         return tech_model
         
