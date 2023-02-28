@@ -15,7 +15,7 @@ class DatasetTech:
 
     def __init__(self,symbol,period,start,end,features_list):
         self.symbol = symbol
-        self.period = 'historical'
+        self.period = period
         self.start = pd.to_datetime(start)
         self.end = pd.to_datetime(end)
         self.features = pd.DataFrame(index=pd.date_range(start=self.start,end=self.end,freq='H',tz='UTC'))
