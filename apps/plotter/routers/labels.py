@@ -19,6 +19,7 @@ log = Log(config['app'])
 @router.get('/cusum/{symbol}/{period}/{start}/{end}')
 def graph_cusum(symbol,period,start,end):
     dataset = DatasetTech(symbol,period,start,end,['close-0'])
+    dataset.load_features()
     close = dataset.klines.df.close
     cusum = dataset.cusum
     image = BytesIO()
@@ -33,6 +34,8 @@ def graph_cusum(symbol,period,start,end):
 @router.get('/tbm/{symbol}/{period}/{start}/{end}')
 def graph_tbm(symbol,period,start,end):
     dataset = DatasetTech(symbol,period,start,end,['close-0'])
+    dataset.load_features()
+    dataset.load_labels()
     close = dataset.klines.df.close
     tbm = dataset.tbm
     image = BytesIO()
@@ -52,6 +55,8 @@ def graph_tbm(symbol,period,start,end):
 @router.get('/balance/{symbol}/{period}/{start}/{end}')
 def graph_balance(symbol,period,start,end):
     dataset = DatasetTech(symbol,period,start,end,['close-0'])
+    dataset.load_features()
+    dataset.load_labels()
     tbm = dataset.tbm
     image = BytesIO()
     fig, ax = plt.subplots()

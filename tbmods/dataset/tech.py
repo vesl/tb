@@ -21,15 +21,11 @@ class DatasetTech:
         self.features = pd.DataFrame(index=pd.date_range(start=self.start,end=self.end,freq='H',tz='UTC'))
         self.features_list = features_list
         self.features_map = self.create_features_map()
-        # klines
         self.klines = Klines(self.symbol,self.period)
         self.klines.load_df(self.start,self.end)
-        # klines
         self.financial = Financial(self.klines.df)
         self.sources_map = {'ohlc': self.load_ohlc,'indicators': self.load_indicators}
-        [self.load_features(name,props) for name,props in self.features_map.items()]
-        self.load_labels()
-        self.merge_indexes()
+        self.cusum = Filters(self.klines.df.close).cusum_events(config['cusum_pct_threshold'])
     
     def create_features_map(self):
         features_map = {}
@@ -55,19 +51,20 @@ class DatasetTech:
         self.tbm = self.tbm.loc[self.index]
         self.cusum = self.cusum.loc[self.index]
 
-    def load_features(self,name,props):
-        #log.info("Load feature {}".format(name))
-        feature = self.sources_map[props['source']](props)
-        if int(props['lag']) > 0: feature = feature.shift(int(props['lag']))
-        if not eval(props['scaled']): feature = feature.pct_change()
-        self.features = self.features.join(feature.rename(name))
-        self.features.dropna(inplace=True)
-        self.features = self.features[np.isfinite(self.features).all(1)]
+    def load_features(self):
+        for name,props in self.features_map.items():
+            log.info("Load feature {}".format(name))
+            feature = self.sources_map[props['source']](props)
+            if int(props['lag']) > 0: feature = feature.shift(int(props['lag']))
+            if not eval(props['scaled']): feature = feature.pct_change()
+            self.features = self.features.join(feature.rename(name))
+            self.features.dropna(inplace=True)
+            self.features = self.features[np.isfinite(self.features).all(1)]
         
     def load_labels(self):
-        self.cusum = Filters(self.klines.df.close).cusum_events(config['cusum_pct_threshold'])
         self.tbm = TripleBarrier(self.klines.df.close,self.cusum).barriers
         self.labels = self.tbm.side
+        self.merge_indexes()
         
     def load_ohlc(self,props):
         return self.klines.df[props['name']]

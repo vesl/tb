@@ -26,6 +26,7 @@ async def tech_features_map():
 @router.get('/tech/features/{symbol}/{period}/{start}/{end}')
 async def tech_features(symbol,period,start,end):
     dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
+    dataset.load_features()
     dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
 
@@ -37,19 +38,3 @@ async def ohlc_features(symbol,period,start,end):
     klines.load_df(start,end)
     klines.df["time"] = klines.df.index.astype(int)/1000000000 #format data to LC
     return klines.df.to_json(orient="records")
-
-@router.get('/tech/correlation/{features}/{symbol}/{period}/{start}/{end}')
-def graph_correlation(features,symbol,period,start,end):
-    tech_model = ModelTech(symbol,period,start,end,config['tech_features_selected'].split(','))
-    tech_model.load_dataset()
-    chi2_test = tech_model.chi2_test()
-    image = BytesIO()
-    fig,ax = plt.subplots()
-    fig.set_size_inches(15,10)
-    sns.heatmap(chi2_test,ax=ax,annot=True,annot_kws={"fontsize":7},fmt=".0f")
-    ax.set_ylabel("Correlation")
-    ax.set_xlabel("Features")
-    ax.set_xticks(list(range(len(tech_model.features_list))),labels=tech_model.features_list,fontsize=3)
-    fig.savefig(image, format='png')
-    image_base64 = base64.b64encode(image.getvalue())
-    return {"image_base64": image_base64}
