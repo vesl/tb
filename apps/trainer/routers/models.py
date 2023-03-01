@@ -32,8 +32,9 @@ def tech_train(symbol,period,start,end):
     tech_model.save_meta()
     tech_model.update_status({"Fit":"OK"})
     tech_model.save_model()
+    tech_model.save_scaler()
     tech_model.update_status(False)
-    
+
 @router.get('/tech/check_run')
 def tech_run():
     cache = Cache(config['app'])
