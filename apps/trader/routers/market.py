@@ -4,7 +4,6 @@ from tbmods.dataset.tech import DatasetTech
 from tbmods.market.paper import MarketPaper
 from tbmods.market.live import MarketLive
 from datetime import datetime, timedelta
-from tbmods.filters import Filters
 from tbmods.config import Config
 from tbmods.cache import Cache
 from fastapi import APIRouter
@@ -21,10 +20,11 @@ log = Log(config['app'])
 
 def prepare_data(symbol,period,start,end):
     dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
+    dataset.load_features()
+    events = dataset.cusum
     scaler = RobustScaler()
     scaler.fit_transform(dataset.features.values)
     price = dataset.klines.df.close
-    events = Filters(price).cusum_events(config['cusum_pct_threshold'])
     return dataset,scaler,price,events
 
 @router.get('/backtest/{symbol}/{period}/{start}/{end}')
