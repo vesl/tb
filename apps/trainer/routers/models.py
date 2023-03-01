@@ -25,8 +25,6 @@ def tech_train(symbol,period,start,end):
     tech_model.update_status(False)
     tech_model.update_status({"Load dataset":"..."})
     tech_model.load_dataset()
-    tech_model.dataset.load_features()
-    tech_model.dataset.load_label()
     tech_model.update_status({"Load dataset":"OK"})
     tech_model.clf_init(json.loads(config['tech_clf_config']))
     tech_model.update_status({"Fit":"..."})

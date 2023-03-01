@@ -38,6 +38,8 @@ class ModelTech:
 
     def load_dataset(self):
         self.dataset = DatasetTech(self.symbol,self.period,self.start,self.end,self.features_list)
+        self.load_features()
+        self.load_labels()
         self.meta.update({
             "symbol":self.symbol,
             "period":self.period,
