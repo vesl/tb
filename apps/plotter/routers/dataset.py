@@ -26,6 +26,7 @@ async def tech_features_map():
 @router.get('/tech/features/{symbol}/{period}/{start}/{end}')
 async def tech_features(symbol,period,start,end):
     dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
+    dataset.load_features()
     dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
 
