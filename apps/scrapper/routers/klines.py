@@ -48,6 +48,7 @@ def klines(symbol):
     bc = Spot()
     next_time = int((last_time + pd.Timedelta(hours=1)).timestamp()*1000)
     last_klines = bc.klines(symbol=symbol,interval='1h',startTime=next_time)
+    if len(last_klines) == 0: return 0
     klines.ingest(last_klines[0])
     klines.get_last_stored()
     log.info("{} Ingested kline {}".format(pd.Timestamp.utcnow(),klines.last_stored.index[0]))
