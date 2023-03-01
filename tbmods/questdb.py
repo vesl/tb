@@ -1,8 +1,11 @@
+from questdb.ingress import Sender, IngressError, TimestampNanos, TimestampMicros
 from tbmods.config import Config
+from tbmods.log import Log
 import requests
 import socket
 
 config = Config()
+log = Log(config["app"])
 
 class QuestDB:
     """
@@ -31,20 +34,5 @@ class QuestDB:
             if 'dataset' in response: query_response['result'] = response['dataset']
         except requests.exceptions.RequestException as e:
             query_response['error'] = e
-        return query_response
-        
-    def ingest(self,data):
-        """
-        Ingest using influxdb protocol
-        """
-        query_response = {}
-        data = "\n".join(data)+"\n"
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            sock.connect((self.host, 9009))
-            sock.sendall(data.encode())
-        except socket.error as e:
-            query_response['error'] = e
-        sock.close()
         return query_response
             
