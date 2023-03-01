@@ -49,7 +49,7 @@ class ModelTech:
 
     def scale(self):
         self.scaler = RobustScaler()
-        self.X = self.scaler.fit_transform(self.dataset.features)
+        self.X = self.scaler.fit_transform(self.dataset.features.values)
         self.y = self.dataset.labels
 
     def clf_init(self,config):
@@ -97,3 +97,6 @@ class ModelTech:
 
     def save_model(self):
         joblib.dump(self.clf,'/var/cache/models/{}'.format(self.name))
+    
+    def save_scaler(self):
+        joblib.dump(self.scaler,'/var/cache/models/{}.scaler'.format(self.name))

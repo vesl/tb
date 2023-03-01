@@ -18,26 +18,20 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-def prepare_data(symbol,period,start,end):
-    dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
-    dataset.load_features()
-    events = dataset.cusum
-    scaler = RobustScaler()
-    scaler.fit_transform(dataset.features.values)
-    price = dataset.klines.df.close
-    return dataset,scaler,price,events
-
 @router.get('/backtest/{symbol}/{period}/{start}/{end}')
 def get_backtest(symbol,period,start,end):
     # init market
-    market_backtest = MarketBacktest("BUSD",1000,"BTC",0)
+    market_backtest = MarketBacktest("USDT",1000,"BTC",0)
     market_backtest.update_status(False)
+    # prepare data
+    market_backtest.update_status({"Prepare data":"{...}"})
+    dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
+    dataset.load_features()
+    price = dataset.klines.df.close
+    events = dataset.cusum
     # prepare time
     current_time = pd.to_datetime(start,utc=True)
     end_time = pd.to_datetime(end,utc=True)
-    # prepare data
-    market_backtest.update_status({"Prepare data":"{...}"})
-    dataset,scaler,price,events = prepare_data(symbol,period,start,end)
     # process
     while current_time <= end_time:
         try:
@@ -45,7 +39,7 @@ def get_backtest(symbol,period,start,end):
             market_backtest.set_price(price.loc[current_time])
             market_backtest.update_status({"Process":str(current_time)})
             if current_time in events.index:
-                X = scaler.transform([dataset.features.loc[current_time].values])
+                X = market_backtest.scaler.transform([dataset.features.loc[current_time]])
                 market_backtest.trigger(X)
             else: market_backtest.trigger()
         except KeyError: log.warning("Missing price for : {}".format(current_time))
@@ -61,7 +55,7 @@ def get_paper():
 
 @router.get('/live')
 def get_live():
-    market_live = MarketLive('BUSD','BTC')
+    market_live = MarketLive('USDT','BTC')
     print(market_live.wallet)
     
 @router.get('/{prefix}/check_run')

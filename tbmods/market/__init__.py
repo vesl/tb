@@ -20,6 +20,7 @@ class Market:
         self.close_trades = {}
         self.name = "{}-{}".format(prefix,datetime.now().strftime("%Y%m%d-%H%M%S"))
         self.tech_model = joblib.load('/var/cache/models/{}'.format(config['tech_selected_model']))
+        self.scaler = joblib.load('/var/cache/models/{}.scaler'.format(config['tech_selected_model']))
         
     def predict(self,event):
         prediction = self.tech_model.predict_proba(event)[0]
