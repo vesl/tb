@@ -2,13 +2,15 @@ FROM python:3.9
 
 WORKDIR /code
 
-RUN pip install uvicorn fastapi
-RUN pip install requests
-RUN pip install pandas
-RUN pip install binance-connector
-RUN pip install seaborn
-RUN pip install scikit-learn
-RUN pip install pymongo
+RUN pip install uvicorn==0.20.0
+RUN pip install fastapi==0.91.0
+RUN pip install requests==2.28.2
+RUN pip install pandas==1.5.3
+RUN pip install binance-connector==2.0.0
+RUN pip install seaborn==0.12.2
+RUN pip install scikit-learn==1.2.1
+RUN pip install pymongo==4.3.3
+RUN pip install questdb==1.1.0
 RUN wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz -O /tmp/ta-lib-0.4.0-src.tar.gz
 RUN cd /tmp/ && tar -xzvf ta-lib-0.4.0-src.tar.gz
 RUN cd /tmp/ta-lib/ && ./configure --prefix=/usr && make && make install
