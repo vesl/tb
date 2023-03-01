@@ -77,7 +77,6 @@ function plotterDatasetTech(){
         contentCollapse('Features list',JSON.stringify(featuresMap,null,2))
         contentDatePicker()
         contentButton('Plot features',()=>{plotterPlotToggle('features',plotterPlotDatasetTechFeatures)})
-        contentButton('Plot correlation',()=>{plotterPlotToggle('correlation',plotterPlotDatasetTechCorrelation)})
     })
 }
 
@@ -198,15 +197,6 @@ function plotterPlotTrades(dpValues,wallet_stable,open_trades,close_trades,conta
             </tr>
             `)
         }
-    })
-}
-
-function plotterPlotDatasetTechCorrelation(dpValues,container){
-    var featuresList = Object.getOwnPropertyNames(plotterDatasetTechFeaturesMap)
-    $.get('/api/plotter/dataset/tech/correlation/'+featuresList.toString()+'/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(data)=>{
-        contentRemoveLoading(container)
-        container.append('<h6><b>Features correlation</b></h6>')
-        container.append('<img src="data:image/png;base64, '+data.image_base64+'">')
     })
 }
 

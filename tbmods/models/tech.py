@@ -90,10 +90,6 @@ class ModelTech:
     def feature_importances(self):
         return pd.Series(self.clf.feature_importances_,index=self.features_list)
 
-    def chi2_test(self):
-        self.scale()
-        return pd.DataFrame([chi2(self.X,self.y)[0]],columns=self.features_list)
-
     def save_meta(self):
         mongodb = MongoDB()
         mongodb.insert('models','tech',self.meta)
