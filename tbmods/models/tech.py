@@ -1,7 +1,7 @@
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import RobustScaler
 from sklearn.metrics import confusion_matrix
 from tbmods.dataset.tech import DatasetTech
 from sklearn.feature_selection import chi2
@@ -38,6 +38,7 @@ class ModelTech:
 
     def load_dataset(self):
         self.dataset = DatasetTech(self.symbol,self.period,self.start,self.end,self.features_list)
+        self.dataset.load_labels()
         self.meta.update({
             "symbol":self.symbol,
             "period":self.period,
@@ -47,7 +48,7 @@ class ModelTech:
         })
 
     def scale(self):
-        self.scaler = MinMaxScaler()
+        self.scaler = RobustScaler()
         self.X = self.scaler.fit_transform(self.dataset.features)
         self.y = self.dataset.labels
 

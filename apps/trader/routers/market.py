@@ -1,5 +1,5 @@
 from tbmods.market.backtest import MarketBacktest
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import RobustScaler
 from tbmods.dataset.tech import DatasetTech
 from tbmods.market.paper import MarketPaper
 from tbmods.market.live import MarketLive
@@ -21,7 +21,7 @@ log = Log(config['app'])
 
 def prepare_data(symbol,period,start,end):
     dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
-    scaler = MinMaxScaler()
+    scaler = RobustScaler()
     scaler.fit_transform(dataset.features.values)
     price = dataset.klines.df.close
     events = Filters(price).cusum_events(config['cusum_pct_threshold'])
