@@ -40,8 +40,8 @@ def tech_run():
     cache = Cache(config['app'])
     return cache.data["models/tech/status"]
     
-@router.get('/tech/darwin/{period}/{start}/{end}')
-def tech_darwin(period,start,end):
-    tech_darwin = DarwinTech(period,start,end)
+@router.get('/tech/darwin/{symbol}/{period}/{start}/{end}')
+def tech_darwin(symbol,period,start,end):
+    tech_darwin = DarwinTech(symbol,period,start,end)
     tech_darwin.evolve()
     return "ok"
