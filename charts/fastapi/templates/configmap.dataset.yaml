@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   name: dataset
 data:
-  TB_TECH_DATA_START: '08-18-2017'
   TB_TECH_DATA_PERIOD: '1h'
   TB_CUSUM_PCT_THRESHOLD: "0.5"
   TB_PERIOD_VOL_SPAN: "26"
