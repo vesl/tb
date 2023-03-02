@@ -18,16 +18,6 @@ function plotterLineLcChart(node,data){
 function plotterOhlcLcChart(node,data,close_trades){
     var plot = LightweightCharts.createChart(document.getElementById(node[0].id),{height:300})
     let series = plot.addCandlestickSeries()
-    let volumeSeries = plot.addHistogramSeries({
-        priceFormat: {type: 'volume',},
-        priceScaleId: '',
-        scaleMargins: {top: 0.7,bottom: 0,},
-        color: '#939393'
-    });
-    let volumeData = []
-    data.forEach((record)=>{
-        volumeData.push({'time':record.time,'value':record.volume})
-    })
     let markers = []
     for (const [time,trade] of Object.entries(close_trades)){
 		markers.push({
@@ -45,7 +35,6 @@ function plotterOhlcLcChart(node,data,close_trades){
 			text: 'Sell @ ' + trade.buy_time,
 		});
     }
-    volumeSeries.setData(volumeData)
     series.setData(data)
     series.setMarkers(markers);
 }
