@@ -38,7 +38,7 @@ class MarketBacktest(Market):
         if bid > 50 and self.wallet[self.stable] - bid >= 0:
             self.wallet[self.stable] -= bid
             self.wallet[self.coin] += qty
-            self.open_trades[self.time] = { "qty": qty, "bid": bid, "buy_price": self.price, "buy_time": self.time, "jumps":0, "stop_loss": self.get_sl(), "take_profit": self.get_tp() }
+            self.open_trades[self.time] = { "qty": qty, "bid": bid, "buy_price": self.price, "buy_time": self.time, "jumps":0, "stop_loss": self.price*0.9 }
             log.info("Buy {} for {} price {} {} : {} {} : {}".format(qty,bid,self.price,self.stable,self.wallet[self.stable],self.coin,self.wallet[self.coin]))
             return True
         else: log.info("Unable to buy {} wallet {}".format(bid,self.wallet[self.stable]))
