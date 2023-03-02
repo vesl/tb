@@ -76,6 +76,7 @@ class Market:
     def load_meta(self):
         mongodb = MongoDB()
         meta = mongodb.find_one('market','paper')
+        mongodb.close()
         if meta is None: meta = {}
         if 'name' in meta: self.name = meta['name']
         if 'stable' in meta: self.stable = meta['stable']
