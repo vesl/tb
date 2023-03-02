@@ -139,6 +139,10 @@ data:
             "source": "indicators",
             "nb_args": "1"
         },
+        "number_of_trades": {
+            "scaled": "False",
+            "source": "ohlc"
+        },
         "open": {
             "scaled": "False",
             "source": "ohlc"
@@ -157,6 +161,10 @@ data:
             "scaled": "True",
             "source": "indicators",
             "nb_args": "2"
+        },
+        "quote_asset_volume": {
+            "scaled": "False",
+            "source": "ohlc"
         },
         "roc": {
             "scaled": "True",
@@ -197,6 +205,14 @@ data:
             "scaled": "True",
             "source": "indicators",
             "nb_args": "2"
+        },
+        "taker_buy_base_asset_volume": {
+            "scaled": "False",
+            "source": "ohlc"
+        },
+        "taker_buy_quote_asset_volume": {
+            "scaled": "False",
+            "source": "ohlc"
         },
         "tenkan": {
             "scaled": "False",
