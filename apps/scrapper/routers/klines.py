@@ -35,20 +35,17 @@ CREATE TABLE live_BTCUSDT(
 
 @router.get('/update/{symbol}')
 def klines(symbol):
-    # get last kline
+    # compute previous kline time and next kline time
     klines = Klines(symbol,'live')
     klines.get_last_stored()
-    # compute last time, set it to prev 2 hours if table is empty
-    if len(klines.last_stored) == 1: last_time = klines.last_stored.index[0]
-    else: last_time = pd.Timestamp.utcnow().round('H')-pd.Timedelta(hours=2)
-    # if last kline younger than 1h we are up to date
-    now = pd.Timestamp.utcnow()
-    if (now - klines.last_stored.index) < pd.Timedelta(hours=1): return 0
-    # get next klines
+    current_hour = pd.Timestamp.utcnow().replace(minute=0, second=0)
+    if len(klines.last_stored) == 1: previous_kline = klines.last_stored.index[0]
+    else: previous_kline = current_hour-pd.Timedelta(hours=2)
+    if (current_hour-previous_kline) < pd.Timedelta(hours=2): return 0
+    # pull new kline from binance
     bc = Spot()
-    next_time = int((last_time + pd.Timedelta(hours=1)).timestamp()*1000)
-    last_klines = bc.klines(symbol=symbol,interval='1h',startTime=next_time)
-    if len(last_klines) == 0: return 0
-    klines.ingest(last_klines[0])
+    new_klines = bc.klines(symbol=symbol,interval='1h',limit=2)
+    # store new kline
+    klines.ingest(new_klines[0])
     klines.get_last_stored()
     log.info("{} Ingested kline {}".format(pd.Timestamp.utcnow(),klines.last_stored.index[0]))
