@@ -6,6 +6,7 @@ from fastapi import APIRouter
 from datetime import datetime
 from tbmods.log import Log
 import pandas as pd
+import time
 
 router = APIRouter(
     prefix="/klines",
@@ -47,5 +48,7 @@ def klines(symbol):
     new_klines = bc.klines(symbol=symbol,interval='1h',limit=2)
     # store new kline
     klines.ingest(new_klines[0])
+    # sleep waiting for storage
+    time.sleep(2)
     klines.get_last_stored()
     log.info("{} Ingested kline {}".format(pd.Timestamp.utcnow(),klines.last_stored.index[0]))
