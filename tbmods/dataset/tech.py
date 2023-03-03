@@ -53,7 +53,7 @@ class DatasetTech:
 
     def load_features(self):
         for name,props in self.features_map.items():
-            log.info("Load feature {}".format(name))
+            #log.info("Load feature {}".format(name))
             feature = self.sources_map[props['source']](props)
             if int(props['lag']) > 0: feature = feature.shift(int(props['lag']))
             if not eval(props['scaled']): feature = feature.pct_change()
