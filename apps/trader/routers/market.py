@@ -43,7 +43,7 @@ def get_backtest(symbol,period,start,end):
             current_time += pd.Timedelta(hours=1)
             continue
 
-        if current_time in events.index:
+        if market_backtest.check_event()
             try:
                 X = market_backtest.scaler.transform([dataset.features.loc[current_time]])
             except KeyError:

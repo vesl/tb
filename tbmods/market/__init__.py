@@ -1,3 +1,4 @@
+from tbmods.filters import Filters
 from tbmods.mongodb import MongoDB
 from tbmods.config import Config
 from tbmods.klines import Klines
@@ -50,6 +51,10 @@ class Market:
         except KeyError:
             log.info("{} - Unable to get klines".format(self.time))
             return False
+
+    def get_event(self):
+        self.events = Filters(self.klines.df.close).cusum_events()
+        return True if self.time in self.events else False
         
     def predict(self,event):
         prediction = self.tech_model.predict_proba(event)[0]
