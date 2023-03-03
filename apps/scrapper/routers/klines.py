@@ -45,9 +45,11 @@ def klines(symbol):
     if (current_hour-previous_kline) < pd.Timedelta(hours=2): return 0
     # pull new kline from binance
     bc = Spot()
-    new_klines = bc.klines(symbol=symbol,interval='1h',limit=2)
+    new_kline = bc.klines(symbol=symbol,interval='1h',limit=2)[0]
+    # check if binance is ready
+    if pd.Timestamp(new_kline[0],unit='ms',tz='utc') - previous_kline < pd.Timedelta(minutes=59): return 1
     # store new kline
-    klines.ingest(new_klines[0])
+    klines.ingest(new_kline)
     # sleep waiting for storage
     klines.get_last_stored()
     log.info("{} Ingested kline {}".format(pd.Timestamp.utcnow(),klines.last_stored.index[0]))
