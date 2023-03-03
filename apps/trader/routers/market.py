@@ -20,13 +20,16 @@ log = Log(config['app'])
 
 @router.get('/backtest/{symbol}/{period}/{start}/{end}')
 def get_backtest(symbol,period,start,end):
+    # init
+    current_time = pd.to_datetime(start,utc=True)
+    end_time = pd.to_datetime(end,utc=True)
     market_backtest = MarketBacktest("USDT",1000,"BTC",0)
+    
     dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
     dataset.load_features()
     price = dataset.klines.df.close
     events = dataset.cusum
-    current_time = pd.to_datetime(start,utc=True)
-    end_time = pd.to_datetime(end,utc=True)
+
     while current_time <= end_time:
         try:
             market_backtest.set_time(current_time)
