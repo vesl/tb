@@ -23,7 +23,8 @@ class Klines:
         return df
         
     def get_last_stored(self):
-        qdbr = self.questdb.query("SELECT * FROM {} ORDER BY open_time DESC LIMIT 1".format(self.table))
+        avoid_cache = str(int(pd.Timestamp.utcnow().timestamp()*1000000))
+        qdbr = self.questdb.query("SELECT * AS {} FROM {} ORDER BY open_time DESC LIMIT 1".format(avoid_cache,self.table))
         self.last_stored = self.qdb_to_df(qdbr['result'])
         
     def ingest(self,kline):

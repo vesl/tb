@@ -49,6 +49,5 @@ def klines(symbol):
     # store new kline
     klines.ingest(new_klines[0])
     # sleep waiting for storage
-    time.sleep(2)
     klines.get_last_stored()
     log.info("{} Ingested kline {}".format(pd.Timestamp.utcnow(),klines.last_stored.index[0]))
