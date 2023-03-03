@@ -7,8 +7,8 @@ log = Log(config['app'])
 
 class MarketBacktest(Market):
     
-    def __init__(self,stable,stable_start,coin,coin_start):
-        super().__init__('backtest',stable,coin)
+    def __init__(self,symbol,period,stable,stable_start,coin,coin_start):
+        super().__init__('backtest',symbol,period,stable,coin)
         self.coin_start = coin_start
         self.stable_start = stable_start
         self.wallet[self.coin] = coin_start

@@ -20,10 +20,11 @@ log = Log(config['app'])
 
 @router.get('/backtest/{symbol}/{period}/{start}/{end}')
 def get_backtest(symbol,period,start,end):
+
     # init
     current_time = pd.to_datetime(start,utc=True)
     end_time = pd.to_datetime(end,utc=True)
-    market_backtest = MarketBacktest("USDT",1000,"BTC",0)
+    market_backtest = MarketBacktest(symbol,period,"USDT",1000,"BTC",0)
     
     dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
     dataset.load_features()
@@ -31,14 +32,27 @@ def get_backtest(symbol,period,start,end):
     events = dataset.cusum
 
     while current_time <= end_time:
-        try:
-            market_backtest.set_time(current_time)
-            market_backtest.set_price(price.loc[current_time])
-            if current_time in events.index:
+
+        market_backtest.set_time(current_time)
+
+        if not market_backtest.get_klines():
+            current_time += pd.Timedelta(hours=1)
+            continue
+
+        if not market_backtest.get_price():
+            current_time += pd.Timedelta(hours=1)
+            continue
+
+        if current_time in events.index:
+            try:
                 X = market_backtest.scaler.transform([dataset.features.loc[current_time]])
-                market_backtest.trigger(X)
-            else: market_backtest.trigger()
-        except KeyError: log.warning("Missing price for : {}".format(current_time))
+            except KeyError:
+                current_time += pd.Timedelta(hours=1)
+                continue
+
+            market_backtest.trigger(X)
+        else: market_backtest.trigger()
+
         current_time += pd.Timedelta(hours=1)
     market_backtest.exit()
 

@@ -1,8 +1,10 @@
 from tbmods.mongodb import MongoDB
 from tbmods.config import Config
+from tbmods.klines import Klines
 from tbmods.cache import Cache
 from datetime import datetime
 from tbmods.log import Log
+import pandas as pd
 import joblib
 
 config = Config()
@@ -10,14 +12,17 @@ log = Log(config['app'])
 
 class Market:
     
-    def __init__(self,prefix,stable,coin):
+    def __init__(self,prefix,symbol,period,stable,coin):
         self.wallet = {}
         self.status = {}
         self.coin = coin
         self.stable = stable
         self.prefix = prefix
+        self.symbol = symbol
+        self.period = period
         self.open_trades = {}
         self.close_trades = {}
+        self.klines = Klines(symbol,period)
         self.name = "{}-{}".format(prefix.upper(),datetime.now().strftime("%Y%m%d-%H%M%S"))
         self.tech_model = joblib.load('/var/cache/models/{}'.format(config['tech_selected_model']))
         self.scaler = joblib.load('/var/cache/models/{}.scaler'.format(config['tech_selected_model']))
@@ -25,10 +30,26 @@ class Market:
     def set_time(self,time):
         self.time = time
 
-    def set_price(self,price):
-        self.price = price
+    def get_price(self):
+        try:
+            self.price = self.klines.df.loc[self.time].close
+            log.info("{} - Price is {}".format(self.time,self.price))
+            return True
+        except KeyError:
+            log.info("{} - Unable to get price".format(self.time))
+            return False
 
-    def get_recent_klines(self,event):
+    def get_klines(self):
+        try:
+            start = self.time - pd.Timedelta(hours=2)
+            end = self.time + pd.Timedelta(hours=2)
+            print(start)
+            print(end)
+            self.klines.load_df(start,end)
+            return True
+        except KeyError:
+            log.info("{} - Unable to get klines".format(self.time))
+            return False
         
     def predict(self,event):
         prediction = self.tech_model.predict_proba(event)[0]
