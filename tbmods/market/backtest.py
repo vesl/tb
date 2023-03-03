@@ -13,12 +13,6 @@ class MarketBacktest(Market):
         self.stable_start = stable_start
         self.wallet[self.coin] = coin_start
         self.wallet[self.stable] = stable_start
-        
-    def set_time(self,time):
-        self.time = time
-        
-    def set_price(self,price):
-        self.price = price
 
     def sell(self,time):
         qty = self.open_trades[time]['qty']

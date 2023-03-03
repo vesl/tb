@@ -21,6 +21,14 @@ class Market:
         self.name = "{}-{}".format(prefix.upper(),datetime.now().strftime("%Y%m%d-%H%M%S"))
         self.tech_model = joblib.load('/var/cache/models/{}'.format(config['tech_selected_model']))
         self.scaler = joblib.load('/var/cache/models/{}.scaler'.format(config['tech_selected_model']))
+
+    def set_time(self,time):
+        self.time = time
+
+    def set_price(self,price):
+        self.price = price
+
+    def get_recent_klines(self,event):
         
     def predict(self,event):
         prediction = self.tech_model.predict_proba(event)[0]
