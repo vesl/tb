@@ -6,7 +6,7 @@ data:
   TB_TECH_SELECTED_MODEL: "TECH-BTCUSDT-20230301-155802"
   TB_TECH_CLF_CONFIG: |
     {
-        "n_estimators":"419",
+        "n_estimators":"147",
         "oob_score":"True",
         "n_jobs":"-1",
         "verbose":"0",
