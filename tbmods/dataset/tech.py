@@ -46,7 +46,6 @@ class DatasetTech:
     def merge_indexes(self):
         self.index = self.features.index.intersection(self.labels.index)
         self.labels = self.labels.loc[self.index]
-        self.full_features = self.features.copy()
         self.features = self.features.loc[self.index]
         self.tbm = self.tbm.loc[self.index]
         self.cusum = self.cusum.loc[self.index]
@@ -58,8 +57,8 @@ class DatasetTech:
             if int(props['lag']) > 0: feature = feature.shift(int(props['lag']))
             if not eval(props['scaled']): feature = feature.pct_change()
             self.features = self.features.join(feature.rename(name))
-            self.features.dropna(inplace=True)
-            self.features = self.features[np.isfinite(self.features).all(1)]
+        self.features.dropna(inplace=True)
+        self.features = self.features[np.isfinite(self.features).all(1)]
         
     def load_labels(self):
         self.tbm = TripleBarrier(self.klines.df.close,self.cusum).barriers
