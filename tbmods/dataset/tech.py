@@ -57,8 +57,8 @@ class DatasetTech:
             if int(props['lag']) > 0: feature = feature.shift(int(props['lag']))
             if not eval(props['scaled']): feature = feature.pct_change()
             self.features = self.features.join(feature.rename(name))
-            self.features.dropna(inplace=True)
-            self.features = self.features[np.isfinite(self.features).all(1)]
+        self.features.dropna(inplace=True)
+        self.features = self.features[np.isfinite(self.features).all(1)]
         
     def load_labels(self):
         self.tbm = TripleBarrier(self.klines.df.close,self.cusum).barriers

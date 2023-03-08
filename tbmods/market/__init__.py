@@ -57,7 +57,7 @@ class Market:
         
     def get_features(self):
             start = self.time - pd.Timedelta(hours=200)
-            end = self.time + pd.Timedelta(hours=1)
+            end = self.time
             dataset = DatasetTech(self.symbol,self.period,start,end,config['tech_features_selected'].split(','))
             try:
                 dataset.load_features()
