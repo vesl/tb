@@ -1,6 +1,7 @@
 from tbmods.market import Market
 from tbmods.config import Config
 from tbmods.log import Log
+import numpy as np
 
 config = Config()
 log = Log(config['app'])
@@ -13,6 +14,12 @@ class MarketBacktest(Market):
         self.stable_start = stable_start
         self.wallet[self.coin] = coin_start
         self.wallet[self.stable] = stable_start
+
+    def check_features_trained_mismatch(self):
+        trained_features = self.scaler.transform([self.trained_dataset.loc[self.time]])
+        if not np.array_equal(self.features[0],trained_features[0]):
+            log.info(self.dataset.features.loc[self.time].compare(self.trained_dataset.loc[self.time]))
+            log.error("Features and trained features mismatch")
 
     def sell(self,time):
         qty = self.open_trades[time]['qty']
