@@ -55,11 +55,6 @@ data:
             "scaled": "False",
             "source": "ohlc"
         },
-        "cmo": {
-            "scaled": "True",
-            "source": "indicators",
-            "nb_args": "1"
-        },
         "dx": {
             "scaled": "True",
             "source": "indicators",
@@ -102,21 +97,6 @@ data:
             "scaled": "False",
             "source": "indicators",
             "nb_args": "1"
-        },
-        "macd": {
-            "scaled": "False",
-            "source": "indicators",
-            "nb_args": "2"
-        },
-        "macdhist": {
-            "scaled": "False",
-            "source": "indicators",
-            "nb_args": "2"
-        },
-        "macdsignal": {
-            "scaled": "False",
-            "source": "indicators",
-            "nb_args": "2"
         },
         "mfi": {
             "scaled": "True",
