@@ -4,7 +4,9 @@ import talib
 class Financial:
 
     def __init__(self,klines):
-        self.klines=klines 
+        self.klines=klines
+        self.matype = talib.MA_Type.SMA
+        # 20/08 23h SMA
     
     def compute(self,feature,args):
         return {
@@ -120,21 +122,21 @@ class Financial:
         
     def compute_macd(self,args):
         fastperiod = int(args[0])
-        slowperiod = int(fastperiod*int(args[1]))
-        signalperiod = int(int(fastperiod)/int(args[1])+1)
-        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[0]
+        slowperiod = int(args[1])
+        signalperiod = int(args[0])
+        return talib.MACDEXT(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[0]
 
     def compute_macdhist(self,args):
         fastperiod = int(args[0])
-        slowperiod = int(fastperiod*int(args[1]))
-        signalperiod = int(int(fastperiod)/int(args[1])+1)
-        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[2]
+        slowperiod = int(args[1])
+        signalperiod = int(args[0])
+        return talib.MACDEXT(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[2]
         
     def compute_macdsignal(self,args):
         fastperiod = int(args[0])
-        slowperiod = int(fastperiod*int(args[1]))
-        signalperiod = int(int(fastperiod)/int(args[1])+1)
-        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[1]
+        slowperiod = int(args[1])
+        signalperiod = int(args[0])
+        return talib.MACDEXT(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[1]
         
     def compute_mfi(self,args):
         timeperiod = int(args[0])

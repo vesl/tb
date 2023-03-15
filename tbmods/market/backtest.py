@@ -19,7 +19,7 @@ class MarketBacktest(Market):
         trained_features = self.scaler.transform([self.trained_dataset.loc[self.time]])
         if not np.array_equal(self.features[0],trained_features[0]):
             log.info(self.dataset.features.loc[self.time].compare(self.trained_dataset.loc[self.time]))
-            log.error("Features and trained features mismatch")
+            log.warning("Features and trained features mismatch")
 
     def sell(self,time):
         qty = self.open_trades[time]['qty']
