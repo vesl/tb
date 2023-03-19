@@ -58,7 +58,6 @@ class DatasetTech:
             if not eval(props['scaled']): feature = feature.pct_change()
             self.features = self.features.join(feature.rename(name))
         self.features.dropna(inplace=True)
-        self.features = self.features.round(2)
         self.features = self.features[np.isfinite(self.features).all(1)]
         
     def load_labels(self):
