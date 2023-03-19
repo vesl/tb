@@ -15,13 +15,14 @@ class DarwinTech:
         self.period = period
         self.start = start
         self.end = end
-        self.pop_size = 20
-        self.lag_factor = 18
+        self.pop_size = 10
+        self.lag_factor = 9
+        self.arg_factor = 18
         self.current_gen = 0
         self.max_gen = 50
-        self.n_estimators_factor = 500
+        self.n_estimators_factor = 200
         self.keep_best_features = 0.33
-        self.max_features = 200
+        self.max_features = 300
         self.pop = []
         
     def new_features(self):
@@ -31,7 +32,7 @@ class DarwinTech:
         features_list = []
         for feature in features:
             args = False
-            if 'nb_args' in features_map[feature]: args = '.'.join([str(int((randint(2,18)/(i+1))+1)) for i in range(int(features_map[feature]['nb_args']))])
+            if 'nb_args' in features_map[feature]: args = '.'.join([str(int((randint(2,self.arg_factor)/(i+1))+1)) for i in range(int(features_map[feature]['nb_args']))])
             for ilag in range(lag+1):
                 if args: features_list.append('{}-{}-{}'.format(feature,ilag,args))
                 else: features_list.append('{}-{}'.format(feature,ilag))
@@ -69,6 +70,7 @@ class DarwinTech:
             i.load_dataset()
             i.fit()
             i.meta['score']['f1_score_mean'] = sum(i.meta['score']['f1_score'])/len(i.meta['score']['f1_score'])
+            print("F1 SCORE: {} ".format(i.meta['score']['f1_score']))
             del i.dataset
     
     def rank_pop(self):
