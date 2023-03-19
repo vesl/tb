@@ -7,6 +7,7 @@ from tbmods.cache import Cache
 from datetime import datetime
 from tbmods.log import Log
 import pandas as pd
+import numpy as np
 import joblib
 
 config = Config()
@@ -51,21 +52,21 @@ class Market:
             log.info("{} - Unable to get klines".format(self.time))
             return False
 
-    def check_event(self):
-        events = Filters(self.klines.df.close).cusum_events(config['cusum_pct_threshold'])
-        self.event = True if self.time in events.index else False
-        
     def get_features(self):
-            start = self.time - pd.Timedelta(hours=200)
+            start = self.time - pd.Timedelta(hours=300)
             end = self.time
-            dataset = DatasetTech(self.symbol,self.period,start,end,config['tech_features_selected'].split(','))
+            self.dataset = DatasetTech(self.symbol,self.period,start,end,config['tech_features_selected'].split(','))
             try:
-                dataset.load_features()
-                self.features = self.scaler.transform([dataset.features.loc[self.time]])
-                return len(self.features[0]) == len(dataset.features.columns)
+                self.dataset.load_features()
+                self.features = self.scaler.transform([self.dataset.features.loc[self.time]])
+                return len(self.features[0]) == len(self.dataset.features.columns)
             except Exception as e:
                 log.warning("{} - Unable to get features {}".format(self.time,e))
                 return False
+
+    def check_event(self):
+        events = Filters(self.klines.df.close).cusum_events(config['cusum_pct_threshold'])
+        self.event = True if self.time in events.index else False
 
     def predict(self):
         prediction = self.tech_model.predict_proba(self.features)[0]
@@ -86,7 +87,10 @@ class Market:
             }
             log.info("{} - Got event seems {} confidence {}".format(self.time,state[0],state[1]))
             switch[state[0]](state[1])
-        else: self.cut_stop_loss()
+            return True
+        else:
+            self.cut_stop_loss()
+            return False
 
     def up_stop_loss(self,confidence):
         for time in self.open_trades:

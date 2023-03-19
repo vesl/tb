@@ -20,33 +20,25 @@ log = Log(config['app'])
 
 @router.get('/backtest/{symbol}/{period}/{start}/{end}')
 def get_backtest(symbol,period,start,end):
-
     # init
     current_time = pd.to_datetime(start,utc=True)
     end_time = pd.to_datetime(end,utc=True)
     market_backtest = MarketBacktest(symbol,period,"USDT",1000,"BTC",0)
-    
-    dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
+    # getting trained features to check that feature are correct
+    dataset = DatasetTech(symbol,period,current_time,end_time,config['tech_features_selected'].split(','))
     dataset.load_features()
-    price = dataset.klines.df.close
-    events = dataset.cusum
-
+    market_backtest.trained_dataset = dataset.features
+    # process
     while current_time <= end_time:
-
         market_backtest.set_time(current_time)
-
         if not market_backtest.get_klines():
             current_time += pd.Timedelta(hours=1)
             continue
-
         if not market_backtest.get_price():
             current_time += pd.Timedelta(hours=1)
             continue
-
-
         market_backtest.check_event()
-        market_backtest.trigger()
-
+        if market_backtest.trigger(): market_backtest.check_features_trained_mismatch()
         current_time += pd.Timedelta(hours=1)
     market_backtest.exit()
 
