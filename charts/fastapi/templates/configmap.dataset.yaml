@@ -3,13 +3,31 @@ kind: ConfigMap
 metadata:
   name: dataset
 data:
-  TB_TECH_DATA_PERIOD: '1h'
+  # LABELS
   TB_CUSUM_PCT_THRESHOLD: "0.5"
   TB_PERIOD_VOL_SPAN: "26"
   TB_TBM_UP_THRESH: "0.9"
   TB_TBM_DOWN_THRESH: "0.8"
-  TB_TECH_GRID_SEARCH_LAG: "20"
-  TB_TECH_FEATURES_SELECTED: 'cdl2crows-0,cdl3blackcrows-0,cdl3inside-0,cdl3linestrike-0,cdl3outside-0,cdl3starinsouth-0,cdl3whitesoldiers-0,cdlabandonedbaby-0,cdladvanceblock-0,cdlbelthold-0,cdlbreakaway-0,cdlclosingmarubozu-0,cdlconcealbabywall-0,cdldarkcloudcover-0,cdldoji-0,cdldojistar-0,cdldragonflydoji-0,cdlengulfing-0,cdleveningdojistar-0,cdleveningstar-0,cdlgapsidesidewhite-0,cdlgravestonedoji-0,cdlhammer-0,cdlhangingman-0,cdlharami-0,cdlharamicross-0,cdlhighwave-0,cdlhikkake-0,cdlhikkakemod-0,cdlhomingpigeon-0,cdlidentical3crows-0,cdlinneck-0,cdlinvertedhammer-0,cdlkicking-0,cdlkickingbylength-0,cdlladderbottom-0,cdllongleggeddoji-0,cdllongline-0,cdlmarubozu-0,cdlmatchinglow-0,cdlmathold-0,cdlmorningstardojistar-0,cdlmorningstar-0,cdlonneck-0,cdlpiercing-0,cdlrickshawman-0,cdlrisefall3methods-0,cdlseparatinglines-0,cdlshootingstar-0,cdlshortline-0,cdlspinningtop-0,cdlstalledpattern-0,cdlsticksandwich-0,cdltakuri-0,cdltasukigap-0,cdlthrusting-0,cdltristar-0,cdlunique3river-0,cdlupsidegap2crows-0,cdlxsidegap3methods-0,cdlcounterattack-0'
+  # TECH
+  TB_OHLC_FEATURES: |
+    {
+        "open": {
+            "scaled": "False",
+            "source": "ohlc"
+        },
+        "high": {
+            "scaled": "False",
+            "source": "ohlc"
+        },
+        "low": {
+            "scaled": "False",
+            "source": "ohlc"
+        },
+        "close": {
+            "scaled": "False",
+            "source": "ohlc"
+        }
+    }
   TB_TECH_FEATURES: |
     {
         "ad": {
@@ -313,10 +331,6 @@ data:
             "scaled": "True",
             "source": "indicators"
         },
-        "close": {
-            "scaled": "False",
-            "source": "ohlc"
-        },
         "cmo": {
             "scaled": "True",
             "source": "indicators",
@@ -375,19 +389,6 @@ data:
             "scaled": "True",
             "source": "indicators"
         },
-        "high": {
-            "scaled": "False",
-            "source": "ohlc"
-        },
-        "kijun": {
-            "scaled": "False",
-            "source": "indicators",
-            "nb_args": "1"
-        },
-        "low": {
-            "scaled": "False",
-            "source": "ohlc"
-        },
         "ma": {
             "scaled": "False",
             "source": "indicators",
@@ -441,10 +442,6 @@ data:
             "scaled": "False",
             "source": "ohlc"
         },
-        "open": {
-            "scaled": "False",
-            "source": "ohlc"
-        },
         "obv": {
             "scaled": "False",
             "source": "indicators"
@@ -488,16 +485,6 @@ data:
             "source": "indicators",
             "nb_args": "1"
         },
-        "ssa": {
-            "scaled": "False",
-            "source": "indicators",
-            "nb_args": "1"
-        },
-        "ssb": {
-            "scaled": "False",
-            "source": "indicators",
-            "nb_args": "1"
-        },
         "slowk": {
             "scaled": "True",
             "source": "indicators",
@@ -515,11 +502,6 @@ data:
         "taker_buy_quote_asset_volume": {
             "scaled": "False",
             "source": "ohlc"
-        },
-        "tenkan": {
-            "scaled": "False",
-            "source": "indicators",
-            "nb_args": "1"
         },
         "trange": {
             "scaled": "True",
@@ -553,3 +535,33 @@ data:
             "nb_args": "1"
         }
     }
+  TB_TECH_FEATURES_SELECTED: 'ad-0,adosc-0-2.4'
+  TB_ICHIMOKU_FEATURES: |
+    {
+        "tenkan": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "kijun": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "ssa": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "2"
+        },
+        "ssb": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "laggingspan": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        }
+    }
+  TB_ICHIMOKU_FEATURES_SELECTED: 'tenkan-0-9,kijun-0-26,ssa-0-9.26,ssb-0-52.26,laggingspan-0-26'
