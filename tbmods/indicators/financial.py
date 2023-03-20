@@ -97,6 +97,7 @@ class Financial:
           "htsinelead": self.compute_sinelead,
           "httrendmode": self.compute_httrendmode,
           "kijun": self.compute_kijun,
+          "laggingspan": self.compute_laggingspan,
           "ma": self.compute_ma,
           "macd": self.compute_macd,
           "macdhist": self.compute_macdhist,
@@ -412,6 +413,10 @@ class Financial:
     def compute_kijun(self,args):
         rolling = int(args[0])
         return (self.klines.high.rolling(rolling).max()+self.klines.low.rolling(rolling).min())/2
+
+    def compute_laggingspan(self,args):
+        lag = int(args[0])
+        return self.klines.close.shift(lag)
 
     def compute_ma(self,args):
         rolling = int(args[0])
