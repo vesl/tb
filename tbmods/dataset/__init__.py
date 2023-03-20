@@ -30,7 +30,7 @@ class Dataset:
             'ohlc': self.load_ohlc,
             'indicators': self.load_indicators
         }
-    
+
     def create_features_map(self):
         features_map = {}
         config_features = json.loads(config['ohlc_features'])

@@ -1,6 +1,7 @@
 from tbmods.dataset import Dataset
 from tbmods.config import Config
 from tbmods.log import Log
+import numpy as np
 
 config = Config()
 log = Log(config['app'])
