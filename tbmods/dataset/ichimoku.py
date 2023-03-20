@@ -5,11 +5,11 @@ from tbmods.log import Log
 config = Config()
 log = Log(config['app'])
 
-class DatasetTech(Dataset):
+class DatasetIchimoku(Dataset):
 
     def __init__(self,symbol,period,start,end,features_list):
         super().__init__('tech',symbol,period,start,end,features_list)
-        
+
     def load_features(self):
         for name,props in self.features_map.items():
             feature = self.sources_map[props['source']](props)
