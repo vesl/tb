@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from tbmods.dataset.tech import DatasetTech
-from tbmods.darwin.tech import DarwinTech
+from tbmods.models.ichimoku import ModelIchimoku
 from tbmods.models.tech import ModelTech
+from tbmods.darwin.tech import DarwinTech
 from tbmods.config import Config
 from tbmods.cache import Cache
 from tbmods.log import Log
@@ -44,4 +44,30 @@ def tech_run():
 def tech_darwin(symbol,period,start,end):
     tech_darwin = DarwinTech(symbol,period,start,end)
     tech_darwin.evolve()
-    return "ok"
+    
+@router.get('/ichimoku/train/{symbol}/{period}/{start}/{end}')
+def ichimoku_train(symbol,period,start,end):
+    features_list = config['ichimoku_features_selected'].split(',')
+    ichimoku_model = ModelIchimoku(symbol,period,start,end,features_list)
+    ichimoku_model.update_status(False)
+    ichimoku_model.update_status({"Load dataset":"..."})
+    ichimoku_model.load_dataset()
+    ichimoku_model.update_status({"Load dataset":"OK"})
+    ichimoku_model.clf_init(json.loads(config['tech_clf_config']))
+    ichimoku_model.update_status({"Fit":"..."})
+    ichimoku_model.fit(True)
+    ichimoku_model.save_meta()
+    ichimoku_model.update_status({"Fit":"OK"})
+    ichimoku_model.save_model()
+    ichimoku_model.save_scaler()
+    ichimoku_model.update_status(False)
+
+@router.get('/ichimoku/check_run')
+def ichimoku_run():
+    cache = Cache(config['app'])
+    return cache.data["models/ichimoku/status"]
+    
+@router.get('/ichimoku/darwin/{symbol}/{period}/{start}/{end}')
+def ichimoku_darwin(symbol,period,start,end):
+    ichimoku_darwin = DarwinIchimoku(symbol,period,start,end)
+    ichimoku_darwin.evolve()

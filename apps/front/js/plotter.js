@@ -1,6 +1,7 @@
 var plotterDatasetTechFeaturesMap = "";
 var plotterDatasetIchimokuFeaturesMap = "";
 var plotterModelTechMap = [];
+var plotterModelIchimokuMap = [];
 var plotterBacktestMap = [];
 
 function plotterGetDatasetTechFeaturesMap(then){
@@ -262,6 +263,13 @@ function plotterGetModelTechMap(next){
     })
 }
 
+function plotterGetModelIchimokuMap(next){
+    $.get('/api/plotter/models/ichimoku/results/list',(list)=>{
+        plotterModelIchimokuMap = list
+        next()
+    })
+}
+
 function plotterPlotConfusionMatrix(labels,confusion_matrix){
     contentHTML('<th scope="col">#</th>')
     labels.forEach((label)=>{contentHTML('<th scope="col" class="bg-success p-2">'+label+'</th>')})
@@ -296,6 +304,19 @@ function plotterPlotModelTechResults(results){
     PlotterPlotFeatureImportances(JSON.parse(results.score.feature_importances))
 }
 
+function plotterPlotModelIchimokuResults(results){
+    contentTitle('Model - Ichimoku - Results - '+results.name)
+    let labels = [-1,0,1]
+    contentClearContent()
+    contentHTML('<h3>F1 score mean: '+results.score.f1_score_mean+'</h3>')
+    contentCollapse('Classifier configuration',JSON.stringify(results.clf_config,null,2))
+    contentCollapse('Features',JSON.stringify(Object.keys(JSON.parse(results.score.feature_importances))))
+    plotterPlotConfusionMatrix(labels,results.score.confusion_matrix)
+    contentBarChart('f1-score',labels,results.score.f1_score)
+    contentLineChart('cross-val-score',[1,2,3,4,5],results.score.cross_val_score)
+    PlotterPlotFeatureImportances(JSON.parse(results.score.feature_importances))
+}
+
 function plotterModelTechResults(){
     contentTitle('Model - Tech - Results')
     plotterGetModelTechMap(()=>{
@@ -303,6 +324,17 @@ function plotterModelTechResults(){
             results = results[1]
             results.score.f1_score_mean = (results.score.f1_score.reduce((a, b) => a + b, 0) / results.score.f1_score.length).toFixed(3)
             contentButton('<b>'+results.name+'</b> f1 score mean: <b>'+results.score.f1_score_mean+'</b>',()=>{plotterPlotModelTechResults(results)})
+        })
+    })
+}
+
+function plotterModelIchimokuResults(){
+    contentTitle('Model - Ichimoku - Results')
+    plotterGetModelIchimokuMap(()=>{
+        Object.entries(plotterModelIchimokuMap).forEach((results)=>{
+            results = results[1]
+            results.score.f1_score_mean = (results.score.f1_score.reduce((a, b) => a + b, 0) / results.score.f1_score.length).toFixed(3)
+            contentButton('<b>'+results.name+'</b> f1 score mean: <b>'+results.score.f1_score_mean+'</b>',()=>{plotterPlotModelIchimokuResults(results)})
         })
     })
 }

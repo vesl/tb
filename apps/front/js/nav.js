@@ -5,11 +5,13 @@ const navMap = {
         'Dataset - Ichimoku': ()=>{plotterDatasetIchimoku()},
         'Labels': ()=>{plotterLabels()},
         'Model - Tech - Results': ()=>{plotterModelTechResults()},
+        'Model - Ichimoku - Results': ()=>{plotterModelIchimokuResults()},
         'Backtest - Results': ()=>{plotterBacktestResults()},
         'Paper - Results': ()=>{plotterPaperResults()}
     },
     'Trainer': {
-        'Model - Tech': ()=>{trainerModelTech()},  
+        'Model - Tech': ()=>{trainerModelTech()},
+        'Model - Ichimoku': ()=>{trainerModelIchimoku()}, 
     },
     'Trader': {
         'Backtest': ()=>{traderBacktest()},
