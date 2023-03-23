@@ -1,7 +1,6 @@
-from tbmods.models.tech import ModelTech
-from tbmods.log import Log
-from tbmods.config import Config
 from random import random,randint,choices
+from tbmods.config import Config
+from tbmods.log import Log
 import pandas as pd
 import json
 
@@ -17,22 +16,7 @@ class Darwin:
         self.start = start
         self.end = end
         self.pop = []
-        
-    def new_features(self):
-        features_map = json.loads(config['ohlc_features'])
-        features_map = json.loads(config['tech_features'])
-        features = list(features_map.keys())
-        lag = round(random()*self.lag_factor)+1
-        features_list = []
-        for feature in features:
-            args = False
-            if 'nb_args' in features_map[feature]: args = '.'.join([str(int((randint(2,self.arg_factor)/(i+1))+1)) for i in range(int(features_map[feature]['nb_args']))])
-            for ilag in range(lag+1):
-                if args: features_list.append('{}-{}-{}'.format(feature,ilag,args))
-                else: features_list.append('{}-{}'.format(feature,ilag))
-        features_list.sort()
-        return features_list.copy()
-        
+    
     def new_random_genotype(self):
         n_estimators = round(random()*self.n_estimators_factor)+1
         features = self.new_features()
@@ -47,12 +31,7 @@ class Darwin:
                 "random_state":42
             }
         }
-        
-    def new_id(self,genotype):
-        tech_model = ModelTech(self.symbol,self.period,self.start,self.end,genotype['features'])
-        tech_model.clf_init(genotype['config'])
-        return tech_model
-        
+    
     def fill_pop(self):
         while len(self.pop)<self.pop_size:
             genotype = self.new_random_genotype()
@@ -64,9 +43,8 @@ class Darwin:
             i.load_dataset()
             i.fit()
             i.meta['score']['f1_score_mean'] = sum(i.meta['score']['f1_score'])/len(i.meta['score']['f1_score'])
-            print("F1 SCORE: {} ".format(i.meta['score']['f1_score']))
             del i.dataset
-    
+
     def rank_pop(self):
         self.pop = sorted(self.pop.copy(),key=lambda i: i.meta['score']['f1_score_mean'],reverse=True)
         
@@ -102,7 +80,7 @@ class Darwin:
             }
         }
         return self.new_id(genotype)
-        
+
     def evolve(self):
         while self.current_gen < self.max_gen:
             log.info('Generation {}'.format(self.current_gen))
