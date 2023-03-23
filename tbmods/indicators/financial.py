@@ -1,8 +1,10 @@
 import pandas as pd
 import talib
 
-class Financial:
+# https://ta-lib.github.io/ta-lib-python/func_groups/momentum_indicators.html
 
+class Financial:
+    
     def __init__(self,klines):
         self.klines=klines
         self.matype = talib.MA_Type.SMA
