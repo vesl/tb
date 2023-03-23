@@ -20,3 +20,12 @@ def get_tech_results_list():
         tech_results_list[tech_result["name"]] = tech_result
     mongodb.close()
     return tech_results_list
+    
+@router.get('/ichimoku/results/list')
+def get_tech_results_list():
+    mongodb = MongoDB()
+    ichimoku_results_list = {}
+    for ichimoku_result in mongodb.find('models','ichimoku'):
+        ichimoku_results_list[ichimoku_result["name"]] = ichimoku_result
+    mongodb.close()
+    return ichimoku_results_list

@@ -1,8 +1,10 @@
 import pandas as pd
 import talib
 
-class Financial:
+# https://ta-lib.github.io/ta-lib-python/func_groups/momentum_indicators.html
 
+class Financial:
+    
     def __init__(self,klines):
         self.klines=klines
         self.matype = talib.MA_Type.SMA
@@ -97,6 +99,7 @@ class Financial:
           "htsinelead": self.compute_sinelead,
           "httrendmode": self.compute_httrendmode,
           "kijun": self.compute_kijun,
+          "laggingspan": self.compute_laggingspan,
           "ma": self.compute_ma,
           "macd": self.compute_macd,
           "macdhist": self.compute_macdhist,
@@ -413,27 +416,31 @@ class Financial:
         rolling = int(args[0])
         return (self.klines.high.rolling(rolling).max()+self.klines.low.rolling(rolling).min())/2
 
+    def compute_laggingspan(self,args):
+        lag = int(args[0])
+        return self.klines.close.shift(lag)
+
     def compute_ma(self,args):
         rolling = int(args[0])
         return self.klines.close.rolling(rolling).mean()
         
     def compute_macd(self,args):
         fastperiod = int(args[0])
-        slowperiod = int(args[0])*int(args[1])
-        signalperiod = int(args[0])
-        return talib.MACDEXT(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[0]
+        slowperiod = int(fastperiod*int(args[1]))
+        signalperiod = int(int(fastperiod)/int(args[1])+1)
+        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[0] #, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[0]
 
     def compute_macdhist(self,args):
         fastperiod = int(args[0])
-        slowperiod = int(args[0])*int(args[1])
-        signalperiod = int(args[0])
-        return talib.MACDEXT(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[2]
+        slowperiod = int(fastperiod*int(args[1]))
+        signalperiod = int(int(fastperiod)/int(args[1])+1)
+        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[2] #, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[2]
         
     def compute_macdsignal(self,args):
         fastperiod = int(args[0])
-        slowperiod = int(args[0])*int(args[1])
-        signalperiod = int(args[0])
-        return talib.MACDEXT(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[1]
+        slowperiod = int(fastperiod*int(args[1]))
+        signalperiod = int(int(fastperiod)/int(args[1])+1)
+        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[1] #, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[1]
 
     def compute_medprice(self,args):
         return talib.MEDPRICE(self.klines.high,self.klines.low)
