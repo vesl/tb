@@ -96,8 +96,6 @@ class Financial:
           "htsinesine": self.compute_htsinesine,
           "htsinelead": self.compute_sinelead,
           "httrendmode": self.compute_httrendmode,
-          "kijun": self.compute_kijun,
-          "laggingspan": self.compute_laggingspan,
           "ma": self.compute_ma,
           "macd": self.compute_macd,
           "macdhist": self.compute_macdhist,
@@ -116,11 +114,8 @@ class Financial:
           "rocp": self.compute_rocp,
           "rocr": self.compute_rocr,
           "rsi": self.compute_rsi,
-          "ssa": self.compute_ssa,
-          "ssb": self.compute_ssb,
           "slowk": self.compute_slowk,
           "slowd": self.compute_slowd,
-          "tenkan": self.compute_tenkan,
           "trange": self.compute_trange,
           "trix": self.compute_trix,
           "typprice": self.compute_typprice,
@@ -410,14 +405,6 @@ class Financial:
     def compute_httrendmode(self,args):
         return talib.HT_TRENDMODE(self.klines.close)
 
-    def compute_kijun(self,args):
-        rolling = int(args[0])
-        return (self.klines.high.rolling(rolling).max()+self.klines.low.rolling(rolling).min())/2
-
-    def compute_laggingspan(self,args):
-        lag = int(args[0])
-        return self.klines.close.shift(lag)
-
     def compute_ma(self,args):
         rolling = int(args[0])
         return self.klines.close.rolling(rolling).mean()
@@ -495,16 +482,6 @@ class Financial:
         timeperiod = int(args[0])
         return talib.RSI(self.klines.close, timeperiod=timeperiod)
 
-    def compute_ssa(self,args):
-        shift = int(args[0])
-        arg_tenkan = [int(shift/3)+1]
-        arg_kijun = [shift]
-        return ((self.compute_tenkan(arg_tenkan)+self.compute_kijun(arg_kijun)/2).shift(shift))
-
-    def compute_ssb(self,args):
-        rolling = int(args[0])
-        return ((self.klines.high.rolling(rolling).max()+self.klines.low.rolling(rolling).min())/2).shift(int(rolling/2))
-
     def compute_slowk(self,args):
         fastk_period=int(args[0])
         slowk_period=int(fastk_period*int(args[1]))
@@ -516,10 +493,6 @@ class Financial:
         slowk_period=int(fastk_period*int(args[1]))
         slowd_period=int(fastk_period*int(args[1]))
         return talib.STOCH(self.klines.high, self.klines.low, self.klines.close, fastk_period=fastk_period, slowk_period=slowk_period, slowk_matype=0, slowd_period=slowd_period, slowd_matype=0)[1]
-
-    def compute_tenkan(self,args):
-        rolling = int(args[0])
-        return (self.klines.high.rolling(rolling).max()+self.klines.low.rolling(rolling).min())/2
 
     def compute_trange(self,args):
         return talib.TRANGE(self.klines.high, self.klines.low, self.klines.close)
