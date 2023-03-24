@@ -1,4 +1,5 @@
 from tbmods.dataset.ichimoku import DatasetIchimoku
+from tbmods.dataset.chartist import DatasetChartist
 from fastapi import APIRouter, HTTPException
 from tbmods.dataset.tech import DatasetTech
 from tbmods.models.tech import ModelTech
@@ -28,6 +29,10 @@ async def tech_features_map():
 async def ichimoku_features_map():
     return config['ichimoku_features']
     
+@router.get('/chartist/features/map')
+async def chartist_features_map():
+    return config['chartist_features']
+    
 @router.get('/tech/features/{symbol}/{period}/{start}/{end}')
 async def tech_features(symbol,period,start,end):
     dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
@@ -36,8 +41,15 @@ async def tech_features(symbol,period,start,end):
     return dataset.features.to_json(orient="records")
 
 @router.get('/ichimoku/features/{symbol}/{period}/{start}/{end}')
-async def tech_features(symbol,period,start,end):
+async def ichimoku_features(symbol,period,start,end):
     dataset = DatasetIchimoku(symbol,period,start,end,config['ichimoku_features_selected'].split(','))
+    dataset.load_features()
+    dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
+    return dataset.features.to_json(orient="records")
+
+@router.get('/chartist/features/{symbol}/{period}/{start}/{end}')
+async def chartist_features(symbol,period,start,end):
+    dataset = DatasetChartist(symbol,period,start,end,config['chartist_features_selected'].split(','))
     dataset.load_features()
     dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
