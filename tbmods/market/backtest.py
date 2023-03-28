@@ -18,7 +18,10 @@ class MarketBacktest(Market):
     def check_features_trained_mismatch(self):
         trained_features = self.scaler.transform([self.trained_dataset.loc[self.time]])
         if not np.array_equal(self.features[0],trained_features[0]):
-            log.info(self.dataset.features.loc[self.time].compare(self.trained_dataset.loc[self.time]))
+            compare = self.dataset.features.loc[self.time].compare(self.trained_dataset.loc[self.time])
+            diff = compare['self']-compare['other']
+            log.info('Features mismatch')
+            log.info(diff.loc[diff > 1])
             log.warning("Features and trained features mismatch")
 
     def sell(self,time):
