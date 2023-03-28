@@ -16,20 +16,21 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-@router.get('/cusum/{symbol}/{period}/{start}/{end}')
+@router.get('/events/{symbol}/{period}/{start}/{end}')
 def graph_cusum(symbol,period,start,end):
     dataset = DatasetTech(symbol,period,start,end,['close-0'])
     dataset.load_features()
+    dataset.load_labels()
     close = dataset.klines.df.close
-    cusum = dataset.cusum
+    events = dataset.events.df
     image = BytesIO()
     fig, ax = plt.subplots()
     sns.lineplot(x=close.index,y=close.values,color='green',label='price',alpha=0.3,ax=ax)
-    sns.scatterplot(x=cusum.index,y=close.loc[cusum.index],hue='event',data=cusum,ax=ax)
+    sns.scatterplot(x=events.index,y=close.loc[events.index],ax=ax)
     fig.set_size_inches(15,6)
     fig.savefig(image, format='png')
     image_base64 = base64.b64encode(image.getvalue())
-    return {"image_base64": image_base64,"count_cusum":len(cusum),"threshold":config['cusum_pct_threshold']}
+    return {"image_base64": image_base64,"count":len(events),"threshold":config['cusum_pct_threshold']}
 
 @router.get('/tbm/{symbol}/{period}/{start}/{end}')
 def graph_tbm(symbol,period,start,end):
