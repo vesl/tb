@@ -1,5 +1,5 @@
 from tbmods.dataset.tech import DatasetTech
-from tbmods.filters import Filters
+from tbmods.events import Events
 from tbmods.mongodb import MongoDB
 from tbmods.config import Config
 from tbmods.klines import Klines
@@ -44,7 +44,7 @@ class Market:
 
     def get_klines(self):
         try:
-            start = self.time - pd.Timedelta(hours=2)
+            start = self.time - pd.Timedelta(hours=100)
             end = self.time + pd.Timedelta(hours=2)
             self.klines.load_df(start,end)
             return True
@@ -53,7 +53,7 @@ class Market:
             return False
 
     def get_features(self):
-            start = self.time - pd.Timedelta(hours=300)
+            start = self.time - pd.Timedelta(hours=999)
             end = self.time
             self.dataset = DatasetTech(self.symbol,self.period,start,end,config['tech_features_selected'].split(','))
             try:
@@ -65,15 +65,15 @@ class Market:
                 return False
 
     def check_event(self):
-        events = Filters(self.klines.df.close).cusum_events(config['cusum_pct_threshold'])
-        self.event = True if self.time in events.index else False
+        events = Events(self.klines.df)
+        events.get_chartist_events(config['chartist_features'].split(','))
+        self.event = True if self.time in events.df.index else False
 
     def predict(self):
         prediction = self.tech_model.predict_proba(self.features)[0]
         switch = {
             0: "bearish",
-            1: "rangish",
-            2: "bullish"
+            1: "bullish"
         }
         return switch[list(prediction).index(max(prediction))],max(prediction)
 
@@ -82,7 +82,6 @@ class Market:
             state = self.predict()
             switch = {
                 "bearish": self.trigger_bearish,
-                "rangish": self.trigger_rangish,
                 "bullish": self.trigger_bullish
             }
             log.info("{} - Got event seems {} confidence {}".format(self.time,state[0],state[1]))
