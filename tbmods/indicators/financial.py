@@ -7,8 +7,6 @@ class Financial:
     
     def __init__(self,klines):
         self.klines=klines
-        self.matype = talib.MA_Type.SMA
-        # 20/08 23h SMA
     
     def compute(self,feature,args=None):
         return {
@@ -426,21 +424,21 @@ class Financial:
         
     def compute_macd(self,args):
         fastperiod = int(args[0])
-        slowperiod = int(fastperiod*int(args[1]))
-        signalperiod = int(int(fastperiod)/int(args[1])+1)
-        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[0] #, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[0]
+        slowperiod = int(fastperiod*2)
+        signalperiod = int(float(fastperiod)*0.75)
+        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[0]
 
     def compute_macdhist(self,args):
         fastperiod = int(args[0])
-        slowperiod = int(fastperiod*int(args[1]))
-        signalperiod = int(int(fastperiod)/int(args[1])+1)
-        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[2] #, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[2]
+        slowperiod = int(fastperiod*2)
+        signalperiod = int(float(fastperiod)*0.75)
+        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[2]
         
     def compute_macdsignal(self,args):
         fastperiod = int(args[0])
-        slowperiod = int(fastperiod*int(args[1]))
-        signalperiod = int(int(fastperiod)/int(args[1])+1)
-        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[1] #, fastmatype=self.matype, slowmatype=self.matype, signalmatype=self.matype)[1]
+        slowperiod = int(fastperiod*2)
+        signalperiod = int(float(fastperiod)*0.75)
+        return talib.MACD(self.klines.close, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)[1]
 
     def compute_medprice(self,args):
         return talib.MEDPRICE(self.klines.high,self.klines.low)

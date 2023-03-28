@@ -157,17 +157,17 @@ data:
         "macd": {
             "scaled": "False",
             "source": "indicators",
-            "nb_args": "2"
+            "nb_args": "1"
         },
         "macdhist": {
             "scaled": "False",
             "source": "indicators",
-            "nb_args": "2"
+            "nb_args": "1"
         },
         "macdsignal": {
             "scaled": "False",
             "source": "indicators",
-            "nb_args": "2"
+            "nb_args": "1"
         },
         "mfi": {
             "scaled": "True",
