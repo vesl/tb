@@ -42,7 +42,7 @@ def graph_tbm(symbol,period,start,end):
     image = BytesIO()
     fig, ax = plt.subplots()
     sns.lineplot(x=close.index,y=close.values,color='green',label='price',alpha=0.3,ax=ax)
-    sns.scatterplot(x='first_touch',y='close_touch',data=tbm,hue='side',palette=['r','k','g'][:len(tbm.side.value_counts())],ax=ax)
+    sns.scatterplot(x='first_touch',y='close_touch',data=tbm,hue='side',palette=['r','g'][:len(tbm.side.value_counts())],ax=ax)
     sns.scatterplot(x=tbm.index,y='close',data=tbm,color='grey',marker="_",ax=ax)
     for i,b in tbm.iterrows():
         ax.fill([i,b.vertical,b.vertical,i],[b.bot,b.bot,b.top,b.top],color='grey',alpha=0.2)
