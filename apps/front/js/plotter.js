@@ -137,7 +137,7 @@ function plotterPlotDatasetIchimokuFeatures(dpValues,container){
 
 function plotterPlotTrades(dpValues,wallet_stable,open_trades,close_trades,container){
     var featureList = ['open','high','low','close']
-    $.get('/api/plotter/dataset/tech/ohlc/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
+    $.get('/api/plotter/dataset/ohlc/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
         contentRemoveLoading(container)
         // Plot trades
         let ohlcContainer = $('<div id="plot-trades-ohlc">')

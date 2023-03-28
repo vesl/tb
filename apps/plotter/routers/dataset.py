@@ -32,7 +32,7 @@ async def get_features(prefix,symbol,period,start,end):
     dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
 
-@router.get('/ohlc/features/{symbol}/{period}/{start}/{end}')
+@router.get('/ohlc/{symbol}/{period}/{start}/{end}')
 async def get_ohlc_features(symbol,period,start,end):
     start = pd.to_datetime(start)
     end = pd.to_datetime(end)
