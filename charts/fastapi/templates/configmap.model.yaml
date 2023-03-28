@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: model
 data:
-  TB_TECH_SELECTED_MODEL: "TECH-BTCUSDT-20230306-115319"
+  TB_TECH_SELECTED_MODEL: "TECH-BTCUSDT-20230328-143052"
   TB_TECH_CLF_CONFIG: |
     {
         "n_estimators":"420",
