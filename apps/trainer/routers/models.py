@@ -19,56 +19,31 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-@router.get('/tech/train/{symbol}/{period}/{start}/{end}')
-def tech_train(symbol,period,start,end):
-    features_list = config['tech_features_selected'].split(',')
-    tech_model = ModelTech(symbol,period,start,end,features_list)
-    tech_model.update_status(False)
-    tech_model.update_status({"Load dataset":"..."})
-    tech_model.load_dataset()
-    tech_model.update_status({"Load dataset":"OK"})
-    tech_model.clf_init(json.loads(config['tech_clf_config']))
-    tech_model.update_status({"Fit":"..."})
-    tech_model.fit(True)
-    tech_model.save_meta()
-    tech_model.update_status({"Fit":"OK"})
-    tech_model.save_model()
-    tech_model.save_scaler()
-    tech_model.update_status(False)
+@router.get('/{prefix}/train/{symbol}/{period}/{start}/{end}')
+def train(prefix,symbol,period,start,end):
+    features_list = config['{}_features_selected'.format(prefix)].split(',')
+    if prefix == 'tech': model = ModelTech(symbol,period,start,end,features_list)
+    if prefix == 'ichimoku': model = ModelIchimoku(symbol,period,start,end,features_list)
+    model.update_status(False)
+    model.update_status({"Load dataset":"..."})
+    model.load_dataset()
+    model.update_status({"Load dataset":"OK"})
+    model.clf_init(json.loads(config['tech_clf_config']))
+    model.update_status({"Fit":"..."})
+    model.fit(True)
+    model.save_meta()
+    model.update_status({"Fit":"OK"})
+    model.save_model()
+    model.save_scaler()
+    model.update_status(False)
 
-@router.get('/tech/check_run')
-def tech_run():
+@router.get('/{prefix}/check_run')
+def check_run(prefix):
     cache = Cache(config['app'])
-    return cache.data["models/tech/status"]
+    return cache.data["models/{}/status".format(prefix)]
     
-@router.get('/tech/darwin/{symbol}/{period}/{start}/{end}')
-def tech_darwin(symbol,period,start,end):
-    tech_darwin = DarwinTech(symbol,period,start,end)
-    tech_darwin.evolve()
-    
-@router.get('/ichimoku/train/{symbol}/{period}/{start}/{end}')
-def ichimoku_train(symbol,period,start,end):
-    features_list = config['ichimoku_features_selected'].split(',')
-    ichimoku_model = ModelIchimoku(symbol,period,start,end,features_list)
-    ichimoku_model.update_status(False)
-    ichimoku_model.update_status({"Load dataset":"..."})
-    ichimoku_model.load_dataset()
-    ichimoku_model.update_status({"Load dataset":"OK"})
-    ichimoku_model.clf_init(json.loads(config['tech_clf_config']))
-    ichimoku_model.update_status({"Fit":"..."})
-    ichimoku_model.fit(True)
-    ichimoku_model.save_meta()
-    ichimoku_model.update_status({"Fit":"OK"})
-    ichimoku_model.save_model()
-    ichimoku_model.save_scaler()
-    ichimoku_model.update_status(False)
-
-@router.get('/ichimoku/check_run')
-def ichimoku_run():
-    cache = Cache(config['app'])
-    return cache.data["models/ichimoku/status"]
-    
-@router.get('/ichimoku/darwin/{symbol}/{period}/{start}/{end}')
-def ichimoku_darwin(symbol,period,start,end):
-    ichimoku_darwin = DarwinIchimoku(symbol,period,start,end)
-    ichimoku_darwin.evolve()
+@router.get('/{prefix}/darwin/{symbol}/{period}/{start}/{end}')
+def get_darwin(prefix,symbol,period,start,end):
+    if prefix == 'tech': darwin = DarwinTech(symbol,period,start,end)
+    if prefix == 'ichimoku': darwin = DarwinIchimoku(symbol,period,start,end)
+    darwin.evolve()

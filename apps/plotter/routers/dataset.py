@@ -20,30 +20,20 @@ config = Config()
 log = Log(config['app'])
 
 # Routes
-@router.get('/tech/features/map')
-async def tech_features_map():
-    return config['tech_features']
+@router.get('/{prefix}/features/map')
+async def get_features_map(prefix):
+    return config['{}_features'.format(prefix)]
     
-@router.get('/ichimoku/features/map')
-async def ichimoku_features_map():
-    return config['ichimoku_features']
-    
-@router.get('/tech/features/{symbol}/{period}/{start}/{end}')
-async def tech_features(symbol,period,start,end):
-    dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
-    dataset.load_features()
-    dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
-    return dataset.features.to_json(orient="records")
-
-@router.get('/ichimoku/features/{symbol}/{period}/{start}/{end}')
-async def ichimoku_features(symbol,period,start,end):
-    dataset = DatasetIchimoku(symbol,period,start,end,config['ichimoku_features_selected'].split(','))
+@router.get('/{prefix}/features/{symbol}/{period}/{start}/{end}')
+async def get_features(prefix,symbol,period,start,end):
+    if prefix == 'tech': dataset = DatasetTech(symbol,period,start,end,config['tech_features_selected'].split(','))
+    if prefix == 'ichimoku': dataset = DatasetIchimoku(symbol,period,start,end,config['ichimoku_features_selected'].split(','))
     dataset.load_features()
     dataset.features["time"] = dataset.features.index.astype(int)/1000000000 #format data to LC
     return dataset.features.to_json(orient="records")
 
 @router.get('/ohlc/features/{symbol}/{period}/{start}/{end}')
-async def ohlc_features(symbol,period,start,end):
+async def get_ohlc_features(symbol,period,start,end):
     start = pd.to_datetime(start)
     end = pd.to_datetime(end)
     klines = Klines(symbol,'historical')
