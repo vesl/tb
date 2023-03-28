@@ -3,7 +3,6 @@ const navMap = {
     'Plotter': {
         'Dataset - Tech': ()=>{plotterDatasetTech()},
         'Dataset - Ichimoku': ()=>{plotterDatasetIchimoku()},
-        'Dataset - Chartist': ()=>{plotterDatasetChartist()},
         'Labels': ()=>{plotterLabels()},
         'Model - Tech - Results': ()=>{plotterModelTechResults()},
         'Model - Ichimoku - Results': ()=>{plotterModelIchimokuResults()},

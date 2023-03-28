@@ -1,6 +1,5 @@
 var plotterDatasetTechFeaturesMap = "";
 var plotterDatasetIchimokuFeaturesMap = "";
-var plotterDatasetChartistFeaturesMap = "";
 var plotterModelTechMap = [];
 var plotterModelIchimokuMap = [];
 var plotterBacktestMap = [];
@@ -16,13 +15,6 @@ function plotterGetDatasetIchimokuFeaturesMap(then){
     $.get('/api/plotter/dataset/ichimoku/features/map',(featuresMapJson)=>{
         plotterDatasetIchimokuFeaturesMap = JSON.parse(featuresMapJson)
         then(plotterDatasetIchimokuFeaturesMap)
-    })
-}
-
-function plotterGetDatasetChartistFeaturesMap(then){
-    $.get('/api/plotter/dataset/chartist/features/map',(featuresMapJson)=>{
-        plotterDatasetChartistFeaturesMap = JSON.parse(featuresMapJson)
-        then(plotterDatasetChartistFeaturesMap)
     })
 }
 
@@ -76,16 +68,6 @@ function plotterGetDatasetIchimokuFeatureData(dataset,feature){
     return featureData
 }
 
-function plotterGetDatasetChartistFeatureData(dataset,feature){
-    let featureData = []
-    regex_feature_name = new RegExp('^'+feature+'\-')
-    feature_fmt_name = Object.keys(dataset[0]).find(value => regex_feature_name.test(value))
-    for (const i in dataset) {
-        featureData.push({'time':dataset[i]['time'],'value':dataset[i][feature_fmt_name]})
-    }
-    return featureData
-}
-
 function plotterPlotToggle(name,next){
     var dpValues = getDpValues()
     var container = $('<div id="plot-'+name+'">')
@@ -112,15 +94,6 @@ function plotterDatasetIchimoku(){
         contentCollapse('Features list',JSON.stringify(featuresMap,null,2))
         contentDatePicker()
         contentButton('Plot features',()=>{plotterPlotToggle('features',plotterPlotDatasetIchimokuFeatures)})
-    })
-}
-
-function plotterDatasetChartist(){
-    contentTitle('Dataset - Chartist')
-    plotterGetDatasetChartistFeaturesMap((featuresMap)=>{
-        contentCollapse('Features list',JSON.stringify(featuresMap,null,2))
-        contentDatePicker()
-        contentButton('Plot features',()=>{plotterPlotToggle('features',plotterPlotDatasetChartistFeatures)})
     })
 }
 
@@ -155,21 +128,6 @@ function plotterPlotDatasetIchimokuFeatures(dpValues,container){
             let props = plotterDatasetIchimokuFeaturesMap[feature]
             let featureContainer = $('<div id="plot-'+feature+'">')
             let featureData = plotterGetDatasetIchimokuFeatureData(JSON.parse(dataset),feature)
-            container.append('<h6><b>'+feature.toUpperCase()+'</b> source: <b>'+props['source']+'</b> scaled: <b>'+props['scaled']+'</b></h6>')
-            container.append(featureContainer)
-            plotterLineLcChart(featureContainer,featureData)
-        })
-    })
-}
-
-function plotterPlotDatasetChartistFeatures(dpValues,container){
-    var featuresList = Object.getOwnPropertyNames(plotterDatasetChartistFeaturesMap)
-    $.get('/api/plotter/dataset/chartist/features/'+dpValues.symbol+'/'+dpValues.period+'/'+dpValues.start+'/'+dpValues.end,(dataset)=>{
-        contentRemoveLoading(container)
-        featuresList.forEach((feature)=>{
-            let props = plotterDatasetChartistFeaturesMap[feature]
-            let featureContainer = $('<div id="plot-'+feature+'">')
-            let featureData = plotterGetDatasetChartistFeatureData(JSON.parse(dataset),feature)
             container.append('<h6><b>'+feature.toUpperCase()+'</b> source: <b>'+props['source']+'</b> scaled: <b>'+props['scaled']+'</b></h6>')
             container.append(featureContainer)
             plotterLineLcChart(featureContainer,featureData)
