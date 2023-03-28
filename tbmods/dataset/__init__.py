@@ -1,6 +1,6 @@
 from tbmods.indicators.financial import Financial
 from tbmods.triple_barrier import TripleBarrier
-from tbmods.filters import Filters
+from tbmods.events import Events
 from tbmods.klines import Klines
 from tbmods.config import Config
 from tbmods.log import Log
@@ -24,7 +24,7 @@ class Dataset:
         self.klines = Klines(self.symbol,self.period)
         self.klines.load_df(self.start,self.end)
         self.financial = Financial(self.klines.df)
-        self.cusum = Filters(self.klines.df.close).cusum_events(config['cusum_pct_threshold'])
+        self.events = Events(self.klines.df)
         self.features_map = self.create_features_map()
         self.sources_map = {
             'ohlc': self.load_ohlc,
@@ -53,10 +53,10 @@ class Dataset:
         self.labels = self.labels.loc[self.index]
         self.features = self.features.loc[self.index]
         self.tbm = self.tbm.loc[self.index]
-        self.cusum = self.cusum.loc[self.index]
         
     def load_labels(self):
-        self.tbm = TripleBarrier(self.klines.df.close,self.cusum).barriers
+        self.events.get_chartist_events(config['chartist_features'].split(','))
+        self.tbm = TripleBarrier(self.klines.df.close,self.events.df).barriers
         self.labels = self.tbm.side
         self.merge_indexes()
         
