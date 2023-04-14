@@ -306,7 +306,7 @@ function plotterPlotModelTechResults(results){
 
 function plotterPlotModelIchimokuResults(results){
     contentTitle('Model - Ichimoku - Results - '+results.name)
-    let labels = [-1,0,1]
+    let labels = [-1,1]
     contentClearContent()
     contentHTML('<h3>F1 score mean: '+results.score.f1_score_mean+'</h3>')
     contentCollapse('Classifier configuration',JSON.stringify(results.clf_config,null,2))

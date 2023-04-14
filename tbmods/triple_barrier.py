@@ -26,10 +26,10 @@ class TripleBarrier:
         self.barriers.dropna(inplace=True)
         
     def get_vertical_barrier(self):
-        vertical = self.barriers.index[1:]
+        vertical = self.barriers.index + pd.Timedelta(hours=3)
         # drop last row because cant guess future event time
-        self.barriers.drop(self.barriers.tail(1).index,inplace=True)
         self.barriers['vertical'] = vertical
+        self.barriers.drop(self.barriers.tail(3).index,inplace=True)
         
     def get_first_touch(self):
         first_touchs = []

@@ -317,8 +317,128 @@ data:
             "scaled": "False",
             "source": "indicators",
             "nb_args": "1"
+        },
+        "closetenkan": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "closekijun": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "closessa": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "closessb": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "closelaggingspan": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "tenkankijun": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "tenkanssa": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "tenkanssb": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "tenkanlaggingspan": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "kijunssa": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "kijunssb": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "kijunlaggingspan":{
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"    
+        },
+        "ssassb": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "ssalaggingspan": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "ssblaggingspan": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "closeoverkumo": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "closeunderkumo": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "closeinkumo": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "kijunoverkumo": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "kijununderkumo": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "kijuninkumo": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "tenkanoverkumo": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "tenkanunderkumo": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
+        },
+        "tenkaninkumo": {
+            "scaled": "False",
+            "source": "indicators",
+            "nb_args": "1"
         }
     }
-  TB_ICHIMOKU_FEATURES_SELECTED: 'tenkan-0-9,kijun-0-26,ssa-0-9.26,ssb-0-52.26,laggingspan-0-26'
+  TB_ICHIMOKU_FEATURES_SELECTED: 'open-0-9,high-0-9,low-0-9,close-0-9,tenkan-0-9,kijun-0-9,ssa-0-9,ssb-0-9,laggingspan-0-9,closetenkan-0-9,closekijun-0-9,closessa-0-9,closessb-0-9,closelaggingspan-0-9,tenkankijun-0-9,tenkanssa-0-9,tenkanssb-0-9,tenkanlaggingspan-0-9,kijunssa-0-9,kijunssb-0-9,kijunlaggingspan-0-9,ssassb-0-9,ssalaggingspan-0-9,ssblaggingspan-0-9,closeoverkumo-0-9,closeunderkumo-0-9,closeinkumo-0-9,kijunoverkumo-0-9,kijununderkumo-0-9,kijuninkumo-0-9,tenkanoverkumo-0-9,tenkanunderkumo-0-9,tenkaninkumo-0-9,open-1-9,high-1-9,low-1-9,close-1-9,tenkan-1-9,kijun-1-9,ssa-1-9,ssb-1-9,laggingspan-1-9,closetenkan-1-9,closekijun-1-9,closessa-1-9,closessb-1-9,closelaggingspan-1-9,tenkankijun-1-9,tenkanssa-1-9,tenkanssb-1-9,tenkanlaggingspan-1-9,kijunssa-1-9,kijunssb-1-9,kijunlaggingspan-1-9,ssassb-1-9,ssalaggingspan-1-9,ssblaggingspan-1-9,closeoverkumo-1-9,closeunderkumo-1-9,closeinkumo-1-9,kijunoverkumo-1-9,kijununderkumo-1-9,kijuninkumo-1-9,tenkanoverkumo-1-9,tenkanunderkumo-1-9,tenkaninkumo-1-9'
   TB_TECH_FEATURES_SELECTED: 'fastdrsi-0-8.9.6,fastd-4-8.5,adx-2-8,dx-2-16,aroonup-2-19,taker_buy_quote_asset_volume-1,fastkrsi-0-5.8.3,high-4,httrendmode-3,ma-2-8,close-0,macd-3-18.10,dx-0-14,apo-2-18.2,roc-0-17,hcdcphase-3,adx-0-17,quote_asset_volume-1,aroonosc-0-14,atr-4-9,macd-4-18.10,htphasorin-4,ma-1-8,macd-0-18.10,dx-1-14,macd-2-18.10,ad-0,rsi-0-14,slowk-1-18.2,bop-4,close-4,fastdrsi-0-8.5.2,rocp-0-16,adosc-0-11.2,fastkrsi-0-19.6.2,macdhist-2-17.2,avgprice-0,mom-1-19,cci-2-18,aroonup-0-19,cmo-4-5,macdsignal-1-3.5,macdsignal-1-5.6,dx-4-16,cmo-0-14,adx-0-8,macd-1-18.10,quote_asset_volume-0,htphasorin-3,bop-3,adxr-3-7,volume-0,fastdrsi-4-15.6.4,fastd-3-8.5,httrendmode-0,mfi-1-13,htphasorin-2,macdhist-0-8.9,fastd-0-8.5,apo-0-3.2,macdsignal-3-18.5,ppo-1-4.9,trange-0,fastk-3-15.6,ad-2,htphasorqua-1,macdhist-0-3.9,adosc-2-11.2,aroondown-3-8,high-2,adosc-4-11.2,low-4,htsinelead-2,plusdi-1-15,macd-1-9.4,medprice-3,macdhist-1-4.6,taker_buy_base_asset_volume-0,ad-4,rsi-1-11,macdhist-0-6.9,medprice-1,apo-4-18.2,aroonosc-3-14,dx-0-16,ma-4-8,fastk-0-15.6,hcdcphase-4,cci-1-10,httrendmode-4,cci-0-10,ad-1,macdsignal-1-18.5,ppo-0-4.9,cmo-1-5,obv-1,fastkrsi-3-11.10.6,open-0,bop-1,adx-1-8,rocr-0-9,macdhist-1-7.8,adxr-1-19,atr-0-9,ultosc-0-15.8,avgprice-2,close-2,fastdrsi-0-15.6.4,htsinesine-3,trange-1,apo-3-18.2,low-2,typprice-1,fastkrsi-0-16.6.3,cmo-0-18,hcdcperiod-3,htsinesine-4,macdsignal-1-3.8,medprice-2,cmo-0-10,high-1,minusdi-0-13,httrendmode-2,adxr-2-7,cmo-0-17,fastkrsi-0-16.5.6,macdsignal-2-18.5,adx-3-8,aroondown-1-8,aroonosc-1-14,aroonup-1-19,adxr-0-19,cmo-0-11,low-3,htsinesine-2,fastkrsi-2-11.10.6,low-0,macdhist-1-6.9,macdsignal-1-3.9,open-1,rsi-0-17,apo-1-18.2,close-3,apo-0-18.2,close-1,htsinelead-0,high-3,aroondown-4-8,macdhist-3-17.2,rsi-0-15,aroonosc-2-14,fastdrsi-1-15.6.4,hcdcperiod-0,macdsignal-1-6.10,slowd-0-12.9,htphasorin-0,avgprice-1,hcdcperiod-2,rocr-1-9,avgprice-3,rsi-0-11,macdhist-1-8.9,number_of_trades-1,adxr-4-7,medprice-0,adx-1-17,cmo-2-5,mom-0-19,fastk-1-15.6,adx-4-8,slowd-1-12.9,plusdi-0-15,ultosc-1-15.8,htphasorqua-4,apo-1-3.2,hcdcperiod-1,adosc-1-11.2,high-0,htphasorin-1,macdsignal-0-18.5,willr-1-5,cmo-1-11,ad-3,cmo-1-6,htphasorqua-3,fastkrsi-1-11.10.6,fastk-0-5.2,minusdi-1-13,dx-1-16,wclprice-0,macdhist-1-3.9,fastk-1-5.2,hcdcphase-1,fastdrsi-0-13.5.2,atr-1-9,macdsignal-1-6.9,macd-0-9.4,fastdrsi-2-15.6.4,cmo-0-5,htsinelead-3,mfi-0-13,macdsignal-0-12.9,fastkrsi-0-11.10.6,cci-4-18,hcdcphase-2,rsi-1-14,fastd-1-8.5,ma-0-8,fastd-2-8.5,dx-3-16,macdsignal-4-18.5,bop-2,typprice-0,macdhist-4-17.2,adosc-3-11.2,cmo-0-6,adxr-1-7,aroonup-3-19,fastk-2-15.6,adosc-1-10.5,macdhist-1-3.6,macdhist-0-4.6,htphasorqua-0,willr-0-5,obv-0,fastkrsi-1-10.5.3,aroondown-2-8,fastkrsi-0-18.10.2,aroonosc-4-14,fastkrsi-4-11.10.6,htsinelead-4,httrendmode-1,macdhist-0-3.6,cmo-0-15,macdsignal-0-6.9,macdsignal-0-5.6,avgprice-4,cci-1-18,aroondown-0-8,fastd-1-9.10,cci-3-18,adxr-0-7,fastdrsi-3-15.6.4,macdhist-0-7.8,htsinesine-0,atr-2-9,fastdrsi-1-8.9.6,fastkrsi-0-10.5.3,cci-0-18,fastk-4-15.6,adosc-0-10.5,low-1,aroonup-4-19,hcdcphase-0,macdsignal-1-12.9,fastkrsi-0-17.4.6,macdhist-0-17.2,number_of_trades-0,taker_buy_quote_asset_volume-0,ma-3-8,macdhist-1-17.2,bop-0,htsinesine-1,wclprice-1,cmo-3-5,rsi-1-17,htphasorqua-2,atr-3-9,fastkrsi-0-17.9.5,hcdcperiod-4,htsinelead-1,slowk-0-18.2,fastd-0-9.10,ma-0-15'
   TB_CHARTIST_FEATURES: 'cdl2crows,cdl3blackcrows,cdl3inside,cdl3linestrike,cdl3outside,cdl3starinsouth,cdl3whitesoldiers,cdlabandonedbaby,cdladvanceblock,cdlbelthold,cdlbreakaway,cdlclosingmarubozu,cdlconcealbabywall,cdlcounterattack,cdldarkcloudcover,cdldoji,cdldojistar,cdldragonflydoji,cdlengulfing,cdleveningdojistar,cdleveningstar,cdlgapsidesidewhite,cdlgravestonedoji,cdlhammer,cdlhangingman,cdlharami,cdlharamicross,cdlhighwave,cdlhikkake,cdlhikkakemod,cdlhomingpigeon,cdlidentical3crows,cdlinneck,cdlinvertedhammer,cdlkicking,cdlkickingbylength,cdlladderbottom,cdllongleggeddoji,cdllongline,cdlmarubozu,cdlmatchinglow,cdlmathold,cdlmorningstardojistar,cdlmorningstar,cdlonneck,cdlpiercing,cdlrickshawman,cdlrisefall3methods,cdlseparatinglines,cdlshootingstar,cdlshortline,cdlspinningtop,cdlstalledpattern,cdlsticksandwich,cdltakuri,cdltasukigap,cdlthrusting,cdltristar,cdlunique3river,cdlupsidegap2crows,cdlxsidegap3methods'

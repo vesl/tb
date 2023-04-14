@@ -1,7 +1,9 @@
+from tbmods.indicators.ichimoku import Ichimoku
 from tbmods.dataset import Dataset
 from tbmods.config import Config
 from tbmods.log import Log
 import numpy as np
+import itertools
 import json
 
 config = Config()
@@ -13,20 +15,15 @@ class DatasetIchimoku(Dataset):
         super().__init__('ichimoku',symbol,period,start,end,features_list)
 
     def load_features(self):
+        lag_args = []
         for name,props in self.features_map.items():
-            if name in self.features.columns: continue
-            feature = self.sources_map[props['source']](props)
-            if int(props['lag']) > 0: 
-                feature = feature.shift(int(props['lag']))
-                price = self.klines.df.close.shift(int(props['lag']))
-            else: price = self.klines.df.close
-            if props['source'] == 'indicators':
-                price_state =  price / feature
-                self.features = self.features.join(price_state.rename('price_state-{}'.format(name)))
-            if not eval(props['scaled']): feature = feature.pct_change()
-            self.features = self.features.join(feature.rename(name))
+            if props['args'] is None: continue
+            lag_arg = [int(props['lag'][0]),int(props['args'][0])]
+            if not lag_arg in lag_args: lag_args.append(lag_arg)
+        for lag_arg in lag_args:
+            features = Ichimoku(self.klines,lag_arg[0],lag_arg[1]).df
+            self.features = self.features.join(features)
         self.features.dropna(inplace=True)
-        self.features = self.features[np.isfinite(self.features).all(1)]
 
     def create_features_map(self):
         features_map = {}
