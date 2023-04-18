@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Values.app_name }}
+  labels:
+    name: {{ $.Values.app_name }}
+spec:
+  replicas: {{ $.Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ $.Values.app_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Values.app_name }}
+    spec:
+      containers:
+        - name: {{ $.Values.app_name }}
+          env:
+            - name: HOME
+              value: /tmp
+          workingDir: {{ $.Values.app_dir }}
+          securityContext:
+            runAsUser: 911
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          image: {{ $.Values.image }}
+          command: {{ $.Values.command }}
+          args: {{ $.Values.args }}
+          volumeMounts:
+          - name: app
+            mountPath: {{ $.Values.app_dir }}
+      volumes:
+      - name: app
+        hostPath:
+          path: /var/code/tb/apps/{{ $.Values.app_name }}

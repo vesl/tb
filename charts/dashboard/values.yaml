@@ -1,0 +1,7 @@
+app_name: dashboard
+app_dir: /app
+image: node
+replicas: 1
+volumes: []
+command: ["sleep"]
+args: ["365d"]
