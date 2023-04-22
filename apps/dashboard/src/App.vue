@@ -1,26 +1,36 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="row">
+    <div class="tb-dark col-3">
+      <NavPanel />
+    </div>
+    <div class="tb-light col-9">
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import NavPanel from './components/organisms/NavPanel.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    NavPanel,
+  },
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body {
+    font-family: 'SF Pro Display', sans-serif;
+  }
+  .tb-dark {
+    background-color: #1c3c5d;
+    color: #fff;
+  }
+  .tb-light {
+    background-color: #e9eff4;
+  }
+  .tb-transition {
+    transition: all 0.2s ease-in-out;
+  }
 </style>
