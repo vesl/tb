@@ -1,5 +1,5 @@
 <template>
-    <i :class="[icon, 'p-1']"></i>
+    <i :class="[icon, 'p-1', 'bi']"></i>
 </template>
 
 <script>
