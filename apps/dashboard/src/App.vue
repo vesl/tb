@@ -1,21 +1,27 @@
 <template>
   <div class="row">
-    <div class="tb-primary col-3">
-      <NavPanel />
+    <div class="tb-primary col-2">
+      <Nav :appName="appName" />
     </div>
-    <div class="tb-light col-9">
+    <div class="tb-light col-10">
+      <router-view />
     </div>
   </div>
 </template>
 
 <script>
-import NavPanel from './components/organisms/NavPanel.vue'
+import Nav from './components/organisms/Nav.vue'
 
 export default {
   name: 'App',
   components: {
-    NavPanel,
+    Nav
   },
+  data(){
+    return {
+      appName: 'TB Dashboard'
+    }
+  }
 }
 </script>
 
@@ -42,7 +48,7 @@ export default {
   .tb-flash {
     background-color: var(--flash);
   }
-  .tb-transition {
+  .tb-fade {
     transition: all 0.2s ease-in-out;
   }
   :root {
