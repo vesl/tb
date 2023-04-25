@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'BootstrapIcon',
+  name: 'icon-bootstrap',
   props: {
     icon: {
       type: String,
