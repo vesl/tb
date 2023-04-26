@@ -2,16 +2,16 @@
   <div class="row">
     <Title :title="appName" />
   </div>
-  <div class="row" v-for="(menu,index) in menus" :key="index" :menu="menu">
-    <div class="menu-header shadow-sm">
+  <div class="row" v-for="(app,index) in apps" :key="index">
+    <div class="nav-header shadow-sm">
         <div class="ml-3 p-2">
-            <Icon :icon="menu.icon" />
-            <span>{{ $stringFunctions.firstLetterUpper(menu.name) }}</span>
+            <Icon :icon="app.icon" />
+            <span>{{ $stringFunctions.firstLetterUpper(app.name) }}</span>
         </div>
     </div>
-    <div v-for="(child, index) in menu.children" :key="index">
-      <div :class="{'selected' : selectedMenu == menu.name && selectedChild == child.name }" class="menu-item p-3 tb-fade" @click="select(menu.name,child.name)">
-        <span class="p-2">{{ $stringFunctions.firstLetterUpper(child.name) }}</span>
+    <div v-for="(view, index) in app.views" :key="index">
+      <div :class="{'nav-item-selected' : selectedApp == app.name && selectedView == view.name }" class="nav-item p-3 tb-fade" @click="select(app.name,view.name)">
+        <span class="p-2">{{ $stringFunctions.firstLetterUpper(view.name) }}</span>
       </div>
     </div>
   </div>
@@ -35,13 +35,13 @@ export default {
   },
   data() {
     return {
-      selectedMenu: 0,
-      selectedChild: 0,
-      menus: [
+      selectedApp: 0,
+      selectedView: 0,
+      apps: [
         {
           name: 'scrapper',
           icon: 'bi-box-arrow-in-left',
-          children: [
+          views: [
             {
               name: 'klines',
             }
@@ -50,7 +50,7 @@ export default {
         {
           name: 'plotter',
           icon: 'bi-bar-chart',
-          children: [
+          views: [
             {
               name: 'datasets',
             }
@@ -59,7 +59,7 @@ export default {
         {
           name: 'trainer',
           icon: 'bi-train-freight-front',
-          children: [
+          views: [
             {
               name: 'models',
             },
@@ -71,7 +71,7 @@ export default {
         {
           name: 'trader',
           icon: 'bi-currency-dollar',
-          children: [
+          views: [
             {
               name: 'live',
             },
@@ -87,29 +87,29 @@ export default {
     }
   },
   methods: {
-    select(menu,child) {
-      this.selectedMenu = menu
-      this.selectedChild = child
-      this.$router.push('/'+menu+'/'+child)
+    select(app,view) {
+      this.selectedApp = app
+      this.selectedView = view
+      this.$router.push('/'+app+'/'+view)
     }
   }
 }
 </script>
 
 <style scoped>
-.menu-header {
+.nav-header {
   color: var(--middle-light);
   font-size: 0.8em;
 }
-.menu-item:hover {
+.nav-item:hover {
   background-color: var(--middle-dark);
   border-left: 8px solid var(--flash);
 }
-.selected {
+.nav-item-selected {
   background-color: var(--middle-dark);
   border-left: 8px solid green;
 }
-.selected:hover {
+.nav-item-selected:hover {
   background-color: var(--middle-dark);
   border-left: 8px solid green;
 }
