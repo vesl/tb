@@ -1,23 +1,14 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import test from '@/views/test.vue'
-import test2 from '@/views/test2.vue'
+import Content from '@/components/organisms/Content.vue'
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes: [
         {
-            path: '/',
-            component: test
+            path: '/:app/:view',
+            component: Content
         },
-        {
-            path: '/scrapper/klines',
-            component: test2
-        },
-        {
-            path: '/plotter/datasets',
-            component: test
-        }
     ]
 })
 

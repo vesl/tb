@@ -1,10 +1,12 @@
 <template>
-  <div class="row">
-    <div class="tb-primary col-2">
-      <Nav :appName="appName" />
-    </div>
-    <div class="tb-light col-10">
-      <router-view />
+  <div class="container-fluid">
+    <div class="row">
+      <div class="tb-primary col-2 p-0">
+        <Nav :appName="appName" />
+      </div>
+      <div class="tb-light col-10 p-0">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
@@ -35,6 +37,7 @@ export default {
   }
   .tb-light {
     background-color: var(--light);
+    color: var(--grey);
   }
   .tb-middle-light {
     background-color: var(--middle-light);
@@ -58,5 +61,6 @@ export default {
     --middle-dark: #1a334d;
     --dark: #18303f;
     --flash: #007efb;
+    --grey: #505050;
   }
 </style>

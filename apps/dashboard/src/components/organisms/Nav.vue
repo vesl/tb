@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row shadow">
     <Title :title="appName" />
   </div>
   <div class="row" v-for="(app,index) in apps" :key="index">
@@ -11,7 +11,7 @@
     </div>
     <div v-for="(view, index) in app.views" :key="index">
       <div :class="{'nav-item-selected' : selectedApp == app.name && selectedView == view.name }" class="nav-item p-3 tb-fade" @click="select(app.name,view.name)">
-        <span class="p-2">{{ $stringFunctions.firstLetterUpper(view.name) }}</span>
+        <span>{{ $stringFunctions.firstLetterUpper(view.name) }}</span>
       </div>
     </div>
   </div>
@@ -35,8 +35,6 @@ export default {
   },
   data() {
     return {
-      selectedApp: 0,
-      selectedView: 0,
       apps: [
         {
           name: 'scrapper',
@@ -91,6 +89,14 @@ export default {
       this.selectedApp = app
       this.selectedView = view
       this.$router.push('/'+app+'/'+view)
+    }
+  },
+  computed: {
+    selectedApp(){
+      return 'app' in this.$route.params ? this.$route.params.app:0
+    },
+    selectedView(){
+      return 'view' in this.$route.params ? this.$route.params.view:0
     }
   }
 }

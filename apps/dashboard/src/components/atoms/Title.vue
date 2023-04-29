@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow p-3 text-center">
+  <div class="p-4">
     <h3>{{ title }}</h3>
   </div>
 </template>
