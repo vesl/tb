@@ -86,8 +86,6 @@ export default {
   },
   methods: {
     select(app,view) {
-      this.selectedApp = app
-      this.selectedView = view
       this.$router.push('/'+app+'/'+view)
     }
   },

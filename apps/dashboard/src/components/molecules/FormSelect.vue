@@ -1,8 +1,8 @@
 <template>
     <div class="input-group">
         <label class="input-group-text" for=""><Icon :icon="labelIcon" /></label>
-        <select class="form-select" @change="select">
-            <option v-for="item in items" :value="item.value">{{ item.name }}</option>
+        <select class="form-select" @change="action">
+            <option v-for="item in items" :key="item.value" :value="item.value">{{ item.name }}</option>
         </select>
     </div>
 </template>
@@ -18,7 +18,6 @@ export default {
     data (){
       return {
           icon: "bi-box-arrow-in-left",
-          selected: this.items[0].value
       }  
     },
     props: {
@@ -35,12 +34,6 @@ export default {
             required: true
         }
     },
-    methods: {
-        select(event) {
-            this.action(event)
-            this.selected = event.target.value
-        }
-    }
 }
 </script>
 
