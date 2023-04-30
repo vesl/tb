@@ -1,6 +1,6 @@
 <template>
     <div class="pt-3">
-        <FormSelect :items="symbols" :action="switchSymbol" :labelIcon="labelIcon" />
+        <FormSelect :items="symbols" :action="switchSymbol" :labelIcon="'bi-currency-exchange'" :selected="$route.params.symbol" />
     </div>
 </template>
 
@@ -14,7 +14,6 @@ export default {
     },
     data (){
         return {
-            labelIcon: 'bi-currency-exchange',
             symbols: [
                 {name:'BTCUSDT',value:'BTCUSDT'},
                 {name:'BTCBUSD',value:'BTCBUSD'},
@@ -24,8 +23,7 @@ export default {
     },
     methods: {
         switchSymbol(event){
-            console.log(event.target.value)
-            this.$store.commit('switchSymbol',event.target.value)
+            this.$router.push('/'+this.$route.params.app+'/'+this.$route.params.view+'/'+event.target.value)
         }
     }
 }

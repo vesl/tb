@@ -3,7 +3,7 @@
         <Header :title="$stringFunctions.firstLetterUpper(app) +' '+$stringFunctions.firstLetterUpper(view)" />
     </div>
     <div class="row p-4">
-        <component :is="currentComponent" :app="app" :view="view"/>
+        <component :is="currentComponent" :app="app" :view="view" :symbol="symbol" />
     </div>
 </template>
 
@@ -23,6 +23,9 @@ export default {
         },
         view() {
             return this.$route.params.view  
+        },
+        symbol() {
+            return this.$route.params.symbol
         },
         currentComponent(){
             return this.$stringFunctions.firstLetterUpper(this.app)+this.$stringFunctions.firstLetterUpper(this.view)

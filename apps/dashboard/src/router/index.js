@@ -6,7 +6,7 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes: [
         {
-            path: '/:app/:view',
+            path: '/:app/:view/:symbol',
             component: Content
         },
     ]

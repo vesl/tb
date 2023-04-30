@@ -10,12 +10,7 @@ import 'bootstrap'
 const store = createStore({
   state () {
     return {
-      symbol: 'BTCUSDT'
-    }
-  },
-  mutations: {
-    switchSymbol(state,symbol) {
-      state.symbol = symbol
+      apis_domain: '.tb.svc.k8s.slav.rocks'
     }
   }
 })
