@@ -6,8 +6,11 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes: [
         {
-            path: '/:app/:view/:symbol',
-            component: Content
+            path: '/:app/:view/:symbol?',
+            component: Content,
+            default: {
+                symbol: 'BTCUSDT'
+            }
         },
     ]
 })

@@ -12,14 +12,14 @@ export default {
     components: {
         FormSelect
     },
-    data (){
-        return {
-            symbols: [
-                {name:'BTCUSDT',value:'BTCUSDT'},
-                {name:'BTCBUSD',value:'BTCBUSD'},
-                {name:'ETHUSDT',value:'ETHUSDT'},
-            ]
-        }
+    computed: {
+      symbols(){
+          let symbols=[]
+          this.$store.state.symbols.forEach((item)=>{
+            symbols.push({name:item,value:item})  
+          })
+          return symbols
+      }  
     },
     methods: {
         switchSymbol(event){

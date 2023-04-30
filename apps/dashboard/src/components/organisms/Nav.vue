@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     select(app,view) {
-      this.$router.push('/'+app+'/'+view+'/'+this.$store.state.symbol)
+      this.$router.push('/'+app+'/'+view+'/'+(this.$route.params.symbol ? this.$route.params.symbol:this.$store.state.symbols[0]))
     }
   },
   computed: {
