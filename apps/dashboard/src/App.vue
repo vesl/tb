@@ -41,12 +41,15 @@ export default {
   }
   .tb-middle-light {
     background-color: var(--middle-light);
+    color: var(--grey);
   }
   .tb-middle-dark {
     background-color: var(--middle-dark);
+    color: white;
   }
   .tb-dark {
     background-color: var(--dark);
+    color: white;
   }
   .tb-flash {
     background-color: var(--flash);
