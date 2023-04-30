@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     select(app,view) {
-      this.$router.push('/'+app+'/'+view)
+      this.$router.push('/'+app+'/'+view+'/'+this.$store.state.symbol)
     }
   },
   computed: {

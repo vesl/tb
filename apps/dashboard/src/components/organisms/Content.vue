@@ -17,18 +17,21 @@ export default {
         Header,
         ScrapperKlines
     },
+    data(){
+      return {
+          app: this.$route.params.app,
+          view: this.$route.params.view,
+          symbol: this.$route.params.symbol
+      }  
+    },
     computed: {
-        app() {
-            return this.$route.params.app
-        },
-        view() {
-            return this.$route.params.view  
-        },
-        symbol() {
-            return this.$route.params.symbol
-        },
         currentComponent(){
             return this.$stringFunctions.firstLetterUpper(this.app)+this.$stringFunctions.firstLetterUpper(this.view)
+        }
+    },
+    watch: {
+        $route(to) {
+            this.symbol = to.params.symbol
         }
     }
 }
