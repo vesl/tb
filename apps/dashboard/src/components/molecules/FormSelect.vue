@@ -2,7 +2,7 @@
     <div class="input-group">
         <label class="input-group-text" for=""><Icon :icon="labelIcon" /></label>
         <select class="form-select" @change="action">
-            <option v-for="item in items" :key="item.value" :value="item.value">{{ item.name }}</option>
+            <option v-for="item in items" :key="item.value" :value="item.value" :selected="selected == item.value">{{ item.name }}</option>
         </select>
     </div>
 </template>
@@ -14,11 +14,6 @@ export default {
     name: 'form-select',
     components: {
         Icon
-    },
-    data (){
-      return {
-          icon: "bi-box-arrow-in-left",
-      }  
     },
     props: {
         items: {
@@ -32,8 +27,12 @@ export default {
         labelIcon: {
             type: String,
             required: true
+        },
+        selected: {
+            type: String,
+            required: false
         }
-    },
+    }
 }
 </script>
 
