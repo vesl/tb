@@ -2,6 +2,7 @@ apps:
 
 # Scrapper
  - name: scrapper
+   dev: True
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi.tb:latest
    replicas: 1
    volumes:
@@ -16,6 +17,7 @@ apps:
 
 # Plotter
  - name: plotter
+   dev: True
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi.tb:latest
    replicas: 1
    configmaps:
@@ -26,6 +28,7 @@ apps:
 
 # Trainer
  - name: trainer
+   dev: True
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi.tb:latest
    replicas: 1
    volumes:
@@ -43,6 +46,7 @@ apps:
 
 # Trader
  - name: trader
+   dev: True
    image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi.tb:latest
    replicas: 1
    volumes:
