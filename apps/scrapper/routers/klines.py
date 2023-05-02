@@ -38,7 +38,8 @@ CREATE TABLE live_BTCUSDT(
 def get_last_kline_live(mode,symbol):
     klines = Klines(symbol,mode)
     klines.get_last_stored()
-    return klines.last_stored.to_json(orient='records')
+    klines.last_stored['open_time'] = klines.last_stored.index
+    return klines.last_stored[['open_time','open','high','low','close','close_time']].to_json(orient='records')
 
 @router.get('/update/{symbol}')
 def klines(symbol):
