@@ -1,9 +1,9 @@
 <template>
     <div class="row">
-        <ContentInfo :class="'col-5'" :title="'Last Live Kline'">
+        <ContentInfo :title="'Last Live Kline'">
             <KlineInfo :kline="lastLiveKline" />
         </ContentInfo>
-        <ContentInfo :class="'col-5'" :title="'Last Historical Kline'">
+        <ContentInfo :title="'Last Historical Kline'">
             <KlineInfo :kline="lastHistoricalKline" />
         </ContentInfo>
     </div>
