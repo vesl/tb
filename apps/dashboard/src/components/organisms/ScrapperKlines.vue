@@ -1,24 +1,32 @@
 <template>
     <div class="row">
-        <ContentInfo :title="'Last Live Kline'">
-            <KlineInfo :kline="lastLiveKline" />
-        </ContentInfo>
-        <ContentInfo :title="'Last Historical Kline'">
-            <KlineInfo :kline="lastHistoricalKline" />
-        </ContentInfo>
+        <ContentText :title="'Last Live Kline'">
+            <KlineDetail :kline="lastLiveKline" />
+        </ContentText>
+        <ContentText :title="'Last Historical Kline'">
+            <KlineDetail :kline="lastHistoricalKline" />
+        </ContentText>
+        <ContentChart :title="'Live Klines'">
+            a
+        </ContentChart>
+        <ContentChart :title="'Historical Klines'">
+            a
+        </ContentChart>
     </div>
 </template>
 
 <script>
-import ContentInfo from '../molecules/ContentInfo.vue'
-import KlineInfo from '../molecules/KlineInfo.vue'
+import ContentChart from '../molecules/ContentChart.vue'
+import ContentText from '../molecules/ContentText.vue'
+import KlineDetail from '../molecules/KlineDetail.vue'
 import axios from 'axios';
 
 export default {
     name: 'scrapper-klines',
     components: {
-      ContentInfo,
-      KlineInfo
+      ContentChart,
+      ContentText,
+      KlineDetail
     },
     props: {
         app: {
