@@ -1,6 +1,7 @@
 <template>
-    <div :class="'spinner-border text-center p-6 text-'+ color ? color : 'light'" role="status">
-        <span class="sr-only">Loading...</span>
+    <div class="text-center opacity-75">
+        <div :class="[color ? 'text-'+color : 'text-light','spinner-grow']" role="status"></div>
+        <div class="loading-text">Loading data</div>
     </div>
 </template>
 
@@ -15,3 +16,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.loading-text {
+    font-size: 0.8em;
+}
+</style>
