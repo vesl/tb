@@ -15,17 +15,6 @@ apps:
      - binance
      - questdb
 
-# Plotter
- - name: plotter
-   dev: True
-   image: registry.devops.svc.k8s.slav.rocks:5000/tb/fastapi.tb:latest
-   replicas: 1
-   configmaps:
-     - questdb
-     - dataset
-     - mongodb
-     - model
-
 # Trainer
  - name: trainer
    dev: True
