@@ -4,22 +4,22 @@
             <KlineDetail :kline="firstLiveKline" v-if="Object.keys(firstLiveKline).length > 0" />
             <Loading v-else />
         </ContentText>
-        <ContentText :title="'First Historical Kline'">
-            <KlineDetail :kline="firstHistoricalKline" v-if="Object.keys(firstHistoricalKline).length > 0" />
-            <Loading v-else />
-        </ContentText>
         <ContentText :title="'Last Live Kline'">
             <KlineDetail :kline="lastLiveKline" v-if="Object.keys(lastLiveKline).length > 0" />
-            <Loading v-else />
-        </ContentText>
-        <ContentText :title="'Last Historical Kline'">
-            <KlineDetail :kline="lastHistoricalKline" v-if="Object.keys(lastHistoricalKline).length > 0" />
             <Loading v-else />
         </ContentText>
         <ContentChart :title="'Live Klines'">
             <LWChart :type="'candlestick'" :data="liveKlines" v-if="liveKlines.length > 0 && 'time' in liveKlines[0]" />
             <Loading v-else />
         </ContentChart>
+        <ContentText :title="'First Historical Kline'">
+            <KlineDetail :kline="firstHistoricalKline" v-if="Object.keys(firstHistoricalKline).length > 0" />
+            <Loading v-else />
+        </ContentText>
+        <ContentText :title="'Last Historical Kline'">
+            <KlineDetail :kline="lastHistoricalKline" v-if="Object.keys(lastHistoricalKline).length > 0" />
+            <Loading v-else />
+        </ContentText>
         <ContentChart :title="'Historical Klines'">
             <LWChart :type="'candlestick'" :data="historicalKlines" v-if="historicalKlines.length > 0 && 'time' in historicalKlines[0]" />
             <Loading v-else />

@@ -46,20 +46,14 @@ export default {
           ]
         },
         {
-          name: 'plotter',
-          icon: 'bi-bar-chart',
-          views: [
-            {
-              name: 'datasets',
-            }
-          ]
-        },
-        {
           name: 'trainer',
           icon: 'bi-train-freight-front',
           views: [
             {
-              name: 'models',
+              name: 'datasets'
+            },
+            {
+              name: 'model',
             },
             {
               name: 'darwin',
