@@ -1,5 +1,5 @@
 <template>
-    <div class="tb-middle-light rounded m-2 shadow pb-3">
+    <div class="tb-middle-light m-2 shadow pb-3">
         <ContentHeader :title="title" :icon="'bi-text-left'"/>
         <slot></slot>
     </div>

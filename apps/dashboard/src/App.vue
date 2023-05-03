@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="row">
+    <div class="row h-100">
       <div class="tb-primary col-2 p-0">
         <Nav :appName="appName" />
       </div>

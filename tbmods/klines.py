@@ -27,6 +27,10 @@ class Klines:
         qdbr = self.questdb.query("SELECT * AS {} FROM {} ORDER BY open_time DESC LIMIT 1".format(avoid_cache,self.table))
         self.last_stored = self.qdb_to_df(qdbr['result'])
         
+    def get_first_stored(self):
+        qdbr = self.questdb.query("SELECT * FROM {} ORDER BY open_time ASC LIMIT 1".format(self.table))
+        self.first_stored = self.qdb_to_df(qdbr['result'])
+        
     def ingest(self,kline):
         kline[0] *= 1000
         kline[6] *= 1000

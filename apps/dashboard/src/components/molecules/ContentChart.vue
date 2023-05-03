@@ -1,5 +1,5 @@
 <template>
-    <div class="tb-middle-dark rounded m-2 shadow pb-3">
+    <div class="tb-middle-dark m-2 shadow pb-3 chart-container">
         <ContentHeader :title="title" :icon="'bi-bar-chart-fill'" />
         <slot></slot>
     </div>
@@ -21,3 +21,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.chart-container {
+	height: 380px;
+}
+</style>
