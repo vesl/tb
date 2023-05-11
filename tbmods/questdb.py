@@ -1,4 +1,3 @@
-from questdb.ingress import Sender, IngressError, TimestampNanos, TimestampMicros
 from tbmods.config import Config
 from tbmods.log import Log
 import requests
