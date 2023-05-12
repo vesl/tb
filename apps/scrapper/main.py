@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from scrapper.routers import klines
 from fastapi.middleware.cors import CORSMiddleware
+from scrapper.routers import klines, talib_features_maps
 
 ## init api
 app = FastAPI(
@@ -17,3 +17,4 @@ app.add_middleware(
 )
 ## init routers
 app.include_router(klines.router)
+app.include_router(talib_features_maps.router)
