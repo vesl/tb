@@ -42,6 +42,9 @@ export default {
           views: [
             {
               name: 'klines',
+            },
+            {
+              name: 'talib'
             }
           ]
         },
