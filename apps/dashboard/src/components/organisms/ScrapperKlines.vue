@@ -33,7 +33,7 @@ import ContentText from '../molecules/ContentText.vue'
 import KlineDetail from '../atoms/KlineDetail.vue'
 import Loading from '../atoms/Loading.vue'
 import LWChart from '../atoms/LWChart.vue'
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
     name: 'scrapper-klines',
@@ -78,22 +78,22 @@ export default {
             // get Api data
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/live/'+this.symbol)
                 .then(response => {this.liveKlines = JSON.parse(response.data)})
-                .catch(error => {this.liveKlines = error;});
+                .catch(error => {this.liveKlines = error})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/historical/'+this.symbol)
                 .then(response => {this.historicalKlines = JSON.parse(response.data)})
-                .catch(error => {this.historicalKlines = error;});
+                .catch(error => {this.historicalKlines = error})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/last/live/'+this.symbol)
                 .then(response => {this.lastLiveKline = JSON.parse(response.data)[0]})
-                .catch(error => {this.lastLiveKline = error;});
+                .catch(error => {this.lastLiveKline = error})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/last/historical/'+this.symbol)
                 .then(response => {this.lastHistoricalKline = JSON.parse(response.data)[0]})
-                .catch(error => {this.lastHistoricalKline = error;});
+                .catch(error => {this.lastHistoricalKline = error})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/first/live/'+this.symbol)
                 .then(response => {this.firstLiveKline = JSON.parse(response.data)[0]})
-                .catch(error => {this.firstLiveKline = error;});
+                .catch(error => {this.firstLiveKline = error})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/first/historical/'+this.symbol)
                 .then(response => {this.firstHistoricalKline = JSON.parse(response.data)[0]})
-                .catch(error => {this.firstHistoricalKline = error;});
+                .catch(error => {this.firstHistoricalKline = error})
         }
     },
     watch: {
