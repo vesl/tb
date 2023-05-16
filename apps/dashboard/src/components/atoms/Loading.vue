@@ -1,7 +1,6 @@
 <template>
     <div class="text-center opacity-75">
         <div :class="[color ? 'text-'+color : 'text-light','spinner-grow']" role="status"></div>
-        <div class="loading-text">Loading data</div>
     </div>
 </template>
 
