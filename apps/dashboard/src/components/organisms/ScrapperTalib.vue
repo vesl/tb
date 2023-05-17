@@ -61,9 +61,9 @@ export default {
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/talib/scrap/features_maps')
                 .then(response => {
                     this.getApiData()
-                    this.scrapping = false
+                    if (response) this.scrapping = false
                 })
-                .catch(error => {})
+                .catch(error => {if(error) this.scrapping = false})
         }
     },
     mounted(){

@@ -10,7 +10,7 @@
                             <tr>
                                 <td width="10%">Klines args</td>
                                 <td width="90%">
-                                    <button class="btn btn-primary disabled m-1" v-for="kline_arg in featureMap.kline_args" :key="kline_arg">{{ kline_arg }}</button>
+                                    <button class="btn btn-primary disabled m-1" v-for="klines_arg in featureMap.klines_args" :key="klines_arg">{{ klines_arg }}</button>
                                 </td>
                             </tr>
                             <tr>
