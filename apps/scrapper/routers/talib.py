@@ -22,7 +22,7 @@ def get_functions_groups():
 def get_features_maps():
     mongodb = MongoDB()
     features_maps = []
-    for doc in mongodb.find("TB_CONFIG","features_maps",{"name":{"$regex":r"^talib_"}}):
+    for doc in mongodb.find("TB","features_maps",{"name":{"$regex":r"^talib_"}}):
         features_maps.append(doc)
     mongodb.close()
     return features_maps
@@ -48,6 +48,6 @@ def scrap_features_maps():
                 features_map["features"][feature_name]["klines_args"] = [arg for arg in args if not "=" in arg]
                 features_map["features"][feature_name]["args"] = { arg.split('=')[0]: int(arg.split('=')[1]) for arg in args if "=" in arg }
                 if len(features_map["features"][feature_name]["args"]) == 0: del features_map["features"][feature_name]["args"]
-                mongodb.update("TB_CONFIG","features_maps",features_map,{"name":features_map_name},True)
+                mongodb.update("TB","features_maps",features_map,{"name":features_map_name},True)
     mongodb.close()
     return "done"
