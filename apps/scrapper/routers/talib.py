@@ -22,17 +22,18 @@ def get_functions_groups():
 def get_features_maps():
     mongodb = MongoDB()
     features_maps = []
-    for doc in mongodb.find("TB_CONFIG","talib_features_maps"):
+    for doc in mongodb.find("TB_CONFIG","features_maps",{"name":{"$regex":r"^talib_"}}):
         features_maps.append(doc)
     mongodb.close()
     return features_maps
     
-@router.get('/scrap')
+@router.get('/scrap/features_maps')
 def scrap_features_maps():
     mongodb = MongoDB()
     functions_groups = get_functions_groups()
     for functions_group in functions_groups:
-        feature_map = { "function_group": functions_group, "features": {} }
+        features_map_name = 'talib_{}'.format(functions_group)
+        features_map = { "name": features_map_name, "features": {} }
         url = "https://ta-lib.github.io/ta-lib-python/func_groups/{}.html".format(functions_group)
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -42,10 +43,10 @@ def scrap_features_maps():
                 function_name = re.findall(r'(\w+)\(',function.text)[0]
                 if function_name == "MAVP": continue
                 feature_name = function_name if len(rets) == 1 else "{}_{}".format(function_name,ret)
-                feature_map["features"][feature_name] = {}
+                features_map["features"][feature_name] = {}
                 args = re.findall(r'\((.*)\)',function.text)[0].replace(' ','').split(',')
-                feature_map["features"][feature_name]["kline_args"] = [arg for arg in args if not "=" in arg]
-                feature_map["features"][feature_name]["args"] = { arg.split('=')[0]: arg.split('=')[1] for arg in args if "=" in arg }
-        mongodb.update("TB_CONFIG","talib_features_maps",feature_map,{"function_group":functions_group},True)
+                features_map["features"][feature_name]["kline_args"] = [arg for arg in args if not "=" in arg]
+                features_map["features"][feature_name]["args"] = { arg.split('=')[0]: arg.split('=')[1] for arg in args if "=" in arg }
+        mongodb.update("TB_CONFIG","features_maps",features_map,{"name":features_map_name},True)
     mongodb.close()
     return "done"

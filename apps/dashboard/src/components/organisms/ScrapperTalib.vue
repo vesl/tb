@@ -1,10 +1,10 @@
 <template>
     <ContentAction :title="'Scrap talib features maps'">
         <Loading v-if="scrapping" :color="'dark'" />
-        <ButtonAction v-else :title="'Scrap'" :action="scrap" />
+        <ButtonAction v-else :title="'Scrap'" :action="scrapFeaturesMaps" />
     </ContentAction>
     <ContentText :title="'Features maps'">
-        <Collapse v-for="featuresMap in featuresMaps" :key="featuresMap.function_group" :title="featuresMap.function_group">
+        <Collapse v-for="featuresMap in featuresMaps" :key="featuresMap.name" :title="featuresMap.name">
             <FeaturesMapDetail  :featuresMap="featuresMap" />
         </Collapse>
     </ContentText>
@@ -56,9 +56,9 @@ export default {
                 .then(response => {this.featuresMaps = response.data})
                 .catch(error => {this.featuresMaps = error})
         },
-        scrap(){
+        scrapFeaturesMaps(){
             this.scrapping = true
-            axios.get('http://scrapper'+this.$store.state.apis_domain+'/talib/scrap')
+            axios.get('http://scrapper'+this.$store.state.apis_domain+'/talib/scrap/features_maps')
                 .then(response => {
                     this.getApiData()
                     this.scrapping = false
