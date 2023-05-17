@@ -47,6 +47,7 @@ def scrap_features_maps():
                 args = re.findall(r'\((.*)\)',function.text)[0].replace(' ','').split(',')
                 features_map["features"][feature_name]["kline_args"] = [arg for arg in args if not "=" in arg]
                 features_map["features"][feature_name]["args"] = { arg.split('=')[0]: arg.split('=')[1] for arg in args if "=" in arg }
-        mongodb.update("TB_CONFIG","features_maps",features_map,{"name":features_map_name},True)
+                if len(features_map["features"][feature_name]["args"]) == 0: del features_map["features"][feature_name]["args"]
+                mongodb.update("TB_CONFIG","features_maps",features_map,{"name":features_map_name},True)
     mongodb.close()
     return "done"
