@@ -1,69 +1,42 @@
 <template>
-  <div class="container-fluid">
-    <div class="row h-100">
-      <div class="tb-primary col-2 p-0">
-        <Nav :appName="appName" />
+  <div class="grid min-h-screen">
+      <Header :app="app" :view="view" :symbol="symbol" />
+      <!-- left -->
+      <div class="primary col-2 p-0">
+        <Nav />
       </div>
-      <div class="tb-light col-10 p-0">
-        <router-view />
+      <!-- right -->
+      <div class="secondary col-10 p-0">
+        <router-view :app="app" :view="view" :symbol="symbol" :currentComponent="currentComponent" />
       </div>
-    </div>
   </div>
 </template>
 
 <script>
+import Header from './components/organisms/Header.vue'
 import Nav from './components/organisms/Nav.vue'
 
 export default {
   name: 'App',
   components: {
+    Header,
     Nav
   },
   data(){
     return {
-      appName: 'TB Dashboard'
+      app: 'init',
+      view: 'init',
+      symbol: 'init',
+      currentComponent: 'init'
+    }  
+  },
+  watch: {
+    $route(to) {
+      this.app = to.params.app
+      this.view = to.params.view
+      this.symbol = to.params.symbol
+      this.currentComponent = this.$stringFunctions.firstLetterUpper(this.$route.params.app)+this.$stringFunctions.firstLetterUpper(this.$route.params.view).replace(/\s+/g, '')
     }
   }
 }
 </script>
-
-<style>
-  body {
-    font-family: 'SF Pro Display', sans-serif;
-  }
-  .tb-primary {
-    background-color: var(--primary);
-    color: white;
-  }
-  .tb-light {
-    background-color: var(--light);
-    color: var(--grey);
-  }
-  .tb-middle-light {
-    background-color: var(--middle-light);
-    color: var(--grey);
-  }
-  .tb-middle-dark {
-    background-color: var(--middle-dark);
-    color: white;
-  }
-  .tb-dark {
-    background-color: var(--dark);
-    color: white;
-  }
-  .tb-flash {
-    background-color: var(--flash);
-  }
-  .tb-fade {
-    transition: all 0.2s ease-in-out;
-  }
-  :root {
-    --primary: #1c3c5d;
-    --light: #e9eff4;
-    --middle-light: #9ea8bc;
-    --middle-dark: #1a334d;
-    --dark: #18303f;
-    --flash: #007efb;
-    --grey: #505050;
-  }
-</style>

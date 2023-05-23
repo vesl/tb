@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import FeaturesMapPicker from '../molecules/FeaturesMapPicker.vue'
-import ContentForm from '../molecules/ContentForm.vue'
+import FeaturesMapPicker from '@/components/molecules/FeaturesMapPicker.vue'
+import ContentForm from '@/components/molecules/ContentForm.vue'
 import axios from 'axios'
 
 export default {

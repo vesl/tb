@@ -1,0 +1,15 @@
+/** backgrounds **/
+body {
+    font-family: var(--font-family);
+    color: #fff;
+}
+.primary {
+    background: var(--primary-800);
+}
+.primary-dark {
+    background: var(--primary-900);
+}
+
+.secondary {
+    background: var(--bluegray-900);
+}

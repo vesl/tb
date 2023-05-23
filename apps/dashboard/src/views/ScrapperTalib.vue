@@ -11,12 +11,12 @@
 </template>
 
 <script>
-import FeaturesMapDetail from '../molecules/FeaturesMapDetail.vue'
-import ContentAction from '../molecules/ContentAction.vue'
-import ButtonAction from '../molecules/ButtonAction.vue'
-import ContentText from '../molecules/ContentText.vue'
-import Collapse from '../molecules/Collapse.vue'
-import Loading from '../atoms/Loading.vue'
+import FeaturesMapDetail from '@/components/molecules/FeaturesMapDetail.vue'
+import ContentAction from '@/components/molecules/ContentAction.vue'
+import ButtonAction from '@/components/molecules/ButtonAction.vue'
+import ContentText from '@/components/molecules/ContentText.vue'
+import Collapse from '@/components/molecules/Collapse.vue'
+import Loading from '@/components/atoms/Loading.vue'
 import axios from 'axios'
 
 export default {

@@ -28,11 +28,11 @@
 </template>
 
 <script>
-import ContentChart from '../molecules/ContentChart.vue'
-import ContentText from '../molecules/ContentText.vue'
-import KlineDetail from '../atoms/KlineDetail.vue'
-import Loading from '../atoms/Loading.vue'
-import LWChart from '../atoms/LWChart.vue'
+import ContentChart from '@/components/molecules/ContentChart.vue'
+import ContentText from '@/components/molecules/ContentText.vue'
+import KlineDetail from '@/components/atoms/KlineDetail.vue'
+import Loading from '@/components/atoms/Loading.vue'
+import LWChart from '@/components/atoms/LWChart.vue'
 import axios from 'axios'
 
 export default {
