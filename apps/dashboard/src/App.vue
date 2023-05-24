@@ -24,11 +24,11 @@ export default {
   },
   data(){
     return {
-      app: 'init',
-      view: 'init',
-      symbol: 'init',
-      currentComponent: 'init'
-    }  
+      app: null,
+      view: null,
+      symbol: null,
+      currentComponent: null
+    }
   },
   watch: {
     $route(to) {

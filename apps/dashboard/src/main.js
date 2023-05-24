@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from '@/router'
 
 import PrimeVue from 'primevue/config'
+import Dropdown from 'primevue/dropdown'
 import Divider from 'primevue/divider'
 import Button from 'primevue/button'
 
@@ -77,6 +78,7 @@ app.config.globalProperties.$stringFunctions = stringFunctions
 app.use(router)
 app.use(store)
 app.use(PrimeVue)
+app.component('PrimeDropdown',Dropdown)
 app.component('PrimeDivider',Divider)
 app.component('PrimeButton',Button)
 app.mount('#app')
