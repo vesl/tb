@@ -153,5 +153,6 @@ export default {
 <style scoped>
 .lw-chart {
 	height: 300px;
+	background: var(--primary);
 }
 </style>

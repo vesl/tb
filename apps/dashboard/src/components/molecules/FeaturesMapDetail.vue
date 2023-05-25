@@ -28,13 +28,9 @@
 </template>
 
 <script>
-import Badge from '../atoms/Badge.vue'
 
 export default {
     name: 'features-map-detail',
-    components : {
-        Badge
-    },
     props: {
         featuresMap: {
             type: Object,

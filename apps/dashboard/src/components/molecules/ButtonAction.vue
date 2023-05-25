@@ -3,12 +3,9 @@
 </template>
 
 <script>
-import Icon from '../atoms/Icon.vue'
 export default {
     name: 'button-action',
-    components: {
-        Icon
-    },
+
     props: {
         title: {
             type: String,

@@ -6,13 +6,10 @@
 </template>
 
 <script>
-import Icon from '../atoms/Icon.vue'
 
 export default {
     name: 'collapse-custom',
-    components : {
-        Icon
-    },
+
     data() {
         return {
           collapsed: true,

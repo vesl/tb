@@ -5,13 +5,9 @@
 </template>
 
 <script>
-import Icon from '../atoms/Icon.vue'
 
 export default {
     name: 'content-header',
-    components: {
-        Icon
-    },
     props: {
         title: {
             type: String,

@@ -16,7 +16,6 @@ import ContentAction from '@/components/molecules/ContentAction.vue'
 import ButtonAction from '@/components/molecules/ButtonAction.vue'
 import ContentText from '@/components/molecules/ContentText.vue'
 import Collapse from '@/components/molecules/Collapse.vue'
-import Loading from '@/components/atoms/Loading.vue'
 import axios from 'axios'
 
 export default {
@@ -27,7 +26,6 @@ export default {
       ButtonAction,
       ContentText,
       Collapse,
-      Loading
     },
     props: {
         app: {
