@@ -7,9 +7,3 @@ export const stringFunctions = {
         return words.join(" ");
     }
 }
-
-export const toastFunctions = {
-    popError(message) {
-        this.$toast.add({ severity: 'error', summary: 'Error', detail: message, life: 3000 });
-    }
-}

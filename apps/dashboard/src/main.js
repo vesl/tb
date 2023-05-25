@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import { createStore } from 'vuex'
 import { stringFunctions } from '@/globalFunctions.js'
-import { toastFunctions } from '@/globalFunctions.js'
 
 import App from './App.vue'
 import router from '@/router'
@@ -82,7 +81,6 @@ const store = createStore({
 
 const app = createApp(App)
 app.config.globalProperties.$stringFunctions = stringFunctions
-app.config.globalProperties.$toastFunctions = toastFunctions
 app.use(router)
 app.use(store)
 app.use(PrimeVue)
