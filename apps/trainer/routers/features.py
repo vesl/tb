@@ -11,11 +11,9 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-@router.get('/get/features_maps/names')
-def get_features_maps_names():
+@router.get('/get/maps')
+def get_maps():
     mongodb = MongoDB()
-    features_maps_names = []
-    for doc in mongodb.find("TB","features_maps"):
-        features_maps_names.append(doc["name"])
+    maps = [doc for doc in mongodb.find("TB","features_maps")]
     mongodb.close()
-    return features_maps_names
+    return maps
