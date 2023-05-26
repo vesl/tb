@@ -1,4 +1,7 @@
 <template>
+  
+  <PrimeToast />
+  
   <div class="grid min-h-screen">
       <Header :app="app" :view="view" :symbol="symbol" />
       <!-- left -->
