@@ -10,17 +10,17 @@
                 
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">Start date</label>
-                    <PrimeCalendar v-model="startDate" class="mr-2" :placeholder="startDate.toLocaleDateString('en-US')" showIcon />
+                    <PrimeCalendar v-model="start" class="mr-2" :placeholder="$stringFunctions.formatDate(start)" dateFormat="mm-dd-yy" showIcon />
                 </div>
                 
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">End date</label>
-                    <PrimeCalendar v-model="endDate" :placeholder="endDate.toLocaleDateString('en-US')" showIcon />
+                    <PrimeCalendar v-model="end" :placeholder="$stringFunctions.formatDate(end)" dateFormat="mm-dd-yy" showIcon />
                 </div>
                 
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">&nbsp;</label>
-                    <PrimeButton label="Plot" :loading="plotting" @click="plotFunction(startDate,endDate)" :disabled="(startDate >= endDate) || !plotCondition"></PrimeButton>
+                    <PrimeButton label="Plot" :loading="plotting" @click="plotFunction($stringFunctions.formatDate(start),$stringFunctions.formatDate(end))" :disabled="(start >= end) || !plotCondition"></PrimeButton>
                 </div>
         
             </div>
@@ -51,8 +51,8 @@ export default {
     },
     data(){
         return {
-            startDate: new Date("8/1/2017"),
-            endDate: new Date()
+            start: new Date("8/1/2017"),
+            end: new Date()
         }
     }
 }

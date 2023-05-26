@@ -5,5 +5,8 @@ export const stringFunctions = {
             words[i] = words[i][0].toUpperCase() + words[i].substr(1);
         }
         return words.join(" ");
+    },
+    formatDate: (date) => {
+        return date.toLocaleDateString('en-US').replace(/\//g,'-')  
     }
 }

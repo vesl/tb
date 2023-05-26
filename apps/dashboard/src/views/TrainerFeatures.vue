@@ -2,12 +2,20 @@
 
     <div class="p-3">
 
-        <PlotForm :plotFunction="plotFeatures" :plotting="plotting" :plotCondition="selectedFeaturesMap == null ? false:true">
+        <PlotForm :plotFunction="getplotsFeaturesApiData" :plotting="plotting" :plotCondition="selectedFeaturesMap == null ? false:true">
             <div class="flex-auto">
                 <label class="text-sm block mb-2">Features Maps</label>
                 <PrimeDropdown v-if="featuresMaps" v-model="selectedFeaturesMap" :options="featuresMaps.map(featuresMap => featuresMap.name)" placeholder="Select a features maps" class="mr-2" />
             </div>
         </PlotForm>
+        
+        <p v-for="(plotData,feature) in featuresPlots" :key="feature">
+            <PrimeCard>
+                <template #title>
+                    {{ feature }}
+                </template>
+            </PrimeCard>
+        </p>
 
     </div>
 
@@ -39,6 +47,7 @@ export default {
     data(){
       return {
           featuresMaps: null,
+          featuresPlots: null,
           selectedFeaturesMap: null,
           plotting: false
       }  
@@ -49,14 +58,28 @@ export default {
                 .then(response => {this.featuresMaps = response.data})
                 .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })})
         },
-        plotFeatures(startDate,endDate){
+        getplotsFeaturesApiData(start,end){
             this.plotting=true
-            console.log()
+            this.featuresPlots = {}
+            let features = this.featuresMaps.find(featuresMap => featuresMap.name == this.selectedFeaturesMap).features
+            Object.keys(features).forEach((feature) => {
+                axios.get('http://trainer'+this.$store.state.apis_domain+'/features/plot/'+feature+'/'+start+'/'+end+'/'+this.$store.state.symbol)
+                    .then(response => {
+                        this.featuresPlots[feature] = response.data
+                        this.plotting = false
+                    })
+                    .catch(error => {
+                        this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })
+                        this.plotting = false
+                        this.featuresPlots = null
+                    })
+            })
         }  
     },
     watch: {
-       symbol(){
-       }  
+        symbol(){
+            this.featuresPlots = null
+        }  
     },
     mounted(){
         this.getFeaturesMapsApiData()
