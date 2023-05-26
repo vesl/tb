@@ -8,8 +8,10 @@ body {
 }
 .primary-dark {
     background: var(--primary-900);
+    color: white;
 }
 
 .secondary {
     background: var(--bluegray-900);
+    color: white;
 }
