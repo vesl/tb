@@ -7,14 +7,21 @@ import router from '@/router'
 
 import PrimeVue from 'primevue/config'
 import ProgressSpinner from 'primevue/progressspinner'
+import AccordionTab from 'primevue/accordiontab'
 import ToastService from 'primevue/toastservice'
+import Accordion from 'primevue/accordion'
 import DataTable from 'primevue/datatable'
 import Dropdown from 'primevue/dropdown'
+import Calendar from 'primevue/calendar'
 import Divider from 'primevue/divider'
+import Avatar from 'primevue/avatar'
 import Column from 'primevue/column'
 import Button from 'primevue/button'
+import Badge from 'primevue/badge'
 import Toast from 'primevue/toast'
+import Chip from 'primevue/chip'
 import Card from 'primevue/card'
+import Tag from 'primevue/tag'
 
 import 'primeicons/primeicons.css'
 import "primevue/resources/primevue.min.css"
@@ -36,7 +43,7 @@ const store = createStore({
             icon: 'pi pi-sync',
             views: [
               {
-                name: 'klines',
+                name: 'klines'
               },
               {
                 name: 'talib'
@@ -48,13 +55,16 @@ const store = createStore({
             icon: 'pi pi-cog',
             views: [
               {
+                name: 'features'
+              },
+              {
                 name: 'datasets'
               },
               {
-                name: 'model',
+                name: 'model'
               },
               {
-                name: 'darwin',
+                name: 'darwin'
               }
             ]
           },
@@ -86,11 +96,18 @@ app.use(store)
 app.use(PrimeVue)
 app.use(ToastService)
 app.component('PrimeProgressSpinner',ProgressSpinner)
+app.component('PrimeAccordionTab',AccordionTab)
+app.component('PrimeAccordion', Accordion)
 app.component('PrimeDataTable', DataTable)
 app.component('PrimeDropdown', Dropdown)
+app.component('PrimeCalendar', Calendar)
 app.component('PrimeDivider', Divider)
+app.component('PrimeAvatar', Avatar)
 app.component('PrimeColumn', Column)
 app.component('PrimeButton', Button)
+app.component('PrimeBadge', Badge)
 app.component('PrimeToast', Toast)
+app.component('PrimeChip', Chip)
 app.component('PrimeCard', Card)
+app.component('PrimeTag', Tag)
 app.mount('#app')

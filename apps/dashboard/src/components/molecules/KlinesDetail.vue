@@ -1,5 +1,5 @@
 <template>
-    <PrimeDataTable :value="fmtKlines()">
+    <PrimeDataTable :value="fmtKlines()" showGridlines>
         <PrimeColumn v-for="(column, index) in columns" :key="index" :field="column.field" :header="column.header"></PrimeColumn>
     </PrimeDataTable>
 </template>

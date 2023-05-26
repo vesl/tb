@@ -1,6 +1,4 @@
 <template>
-    
-    <PrimeToast />
 
     <div class="p-3">
 
@@ -111,22 +109,22 @@ export default {
             this.lastHistoricalKline = null
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/live/'+this.symbol)
                 .then(response => {this.liveKlines = JSON.parse(response.data)})
-                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error })})
+                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/historical/'+this.symbol)
                 .then(response => {this.historicalKlines = JSON.parse(response.data)})
-                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error })})
+                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/last/live/'+this.symbol)
                 .then(response => {this.lastLiveKline = JSON.parse(response.data)})
-                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error })})
+                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/last/historical/'+this.symbol)
                 .then(response => {this.lastHistoricalKline = JSON.parse(response.data)})
-                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error })})
+                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/first/live/'+this.symbol)
                 .then(response => {this.firstLiveKline = JSON.parse(response.data)})
-                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error })})
+                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })})
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/first/historical/'+this.symbol)
                 .then(response => {this.firstHistoricalKline = JSON.parse(response.data)})
-                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error })})
+                .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })})
         }
     },
     watch: {
