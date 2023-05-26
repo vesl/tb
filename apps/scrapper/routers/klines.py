@@ -34,9 +34,9 @@ CREATE TABLE live_BTCUSDT(
 ) timestamp(open_time);
 """
 
-@router.get('/get/{mode}/{symbol}')
-def get_klines(mode,symbol):
-    klines = Klines(symbol,mode)
+@router.get('/get/{period}/{symbol}')
+def get_klines(period,symbol):
+    klines = Klines(symbol,period)
     klines.get_first_stored()
     klines.get_last_stored()
     start = klines.first_stored.index[0]
@@ -45,16 +45,16 @@ def get_klines(mode,symbol):
     klines.df["time"] = klines.df.index.astype(int)/1000000000 
     return klines.df.to_json(orient="records")
 
-@router.get('/get/first/{mode}/{symbol}')
-def get_last_kline(mode,symbol):
-    klines = Klines(symbol,mode)
+@router.get('/get/first/{period}/{symbol}')
+def get_last_kline(period,symbol):
+    klines = Klines(symbol,period)
     klines.get_first_stored()
     klines.first_stored['open_time'] = klines.first_stored.index
     return klines.first_stored[['open_time','open','high','low','close','close_time']].to_json(orient='records')
 
-@router.get('/get/last/{mode}/{symbol}')
-def get_last_kline(mode,symbol):
-    klines = Klines(symbol,mode)
+@router.get('/get/last/{period}/{symbol}')
+def get_last_kline(period,symbol):
+    klines = Klines(symbol,period)
     klines.get_last_stored()
     klines.last_stored['open_time'] = klines.last_stored.index
     return klines.last_stored[['open_time','open','high','low','close','close_time']].to_json(orient='records')
