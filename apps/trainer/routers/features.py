@@ -17,3 +17,7 @@ def get_maps():
     maps = [doc for doc in mongodb.find("TB","features_maps")]
     mongodb.close()
     return maps
+    
+@router.get('/plot/{name}/{start}/{end}/{symbol}')
+def plot_feature(name,start,end):
+    return "ok"
