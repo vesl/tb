@@ -50,4 +50,4 @@ def scrap_features_maps():
                 if len(features_map["features"][feature_name]["args"]) == 0: del features_map["features"][feature_name]["args"]
                 mongodb.update("TB","features_maps",features_map,{"name":features_map_name},True)
     mongodb.close()
-    return "done"
+    return "Scrap done"

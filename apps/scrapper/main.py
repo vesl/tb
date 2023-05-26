@@ -1,6 +1,6 @@
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from scrapper.routers import klines, talib
+from fastapi import FastAPI
 
 ## init api
 app = FastAPI(
