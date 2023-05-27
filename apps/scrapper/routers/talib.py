@@ -33,7 +33,7 @@ def scrap_features_maps():
     functions_groups = get_functions_groups()
     for functions_group in functions_groups:
         features_map_name = 'talib_{}'.format(functions_group)
-        features_map = { "name": features_map_name, "features": {} }
+        features_map = { "name": features_map_name, "features": {}, "source":"talib" }
         url = "https://ta-lib.github.io/ta-lib-python/func_groups/{}.html".format(functions_group)
         response = requests.get(url)
         soup = BeautifulSoup(response.text, 'html.parser')
