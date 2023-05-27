@@ -39,15 +39,16 @@ def scrap_features_maps():
         soup = BeautifulSoup(response.text, 'html.parser')
         for function in  soup.select('pre'):
             rets = re.findall(r'(.*) = ',function.text)[0].replace(' ','').split(',')
-            for ret in rets:
+            for i,ret in enumerate(rets):
                 function_name = re.findall(r'(\w+)\(',function.text)[0]
                 if function_name == "MAVP": continue
-                feature_name = function_name if len(rets) == 1 else "{}_{}".format(function_name,ret)
+                feature_name = function_name if len(rets) == 1 else "{}-{}".format(function_name,ret)
                 features_map["features"][feature_name] = {}
                 args = re.findall(r'\((.*)\)',function.text)[0].replace(' ','').split(',')
                 features_map["features"][feature_name]["klines_args"] = [arg for arg in args if not "=" in arg]
                 features_map["features"][feature_name]["args"] = { arg.split('=')[0]: int(arg.split('=')[1]) for arg in args if "=" in arg }
                 if len(features_map["features"][feature_name]["args"]) == 0: del features_map["features"][feature_name]["args"]
+                if len(rets) > 1: features_map["features"][feature_name]["tuple_index"] = i
                 mongodb.update("TB","features_maps",features_map,{"name":features_map_name},True)
     mongodb.close()
     return "Scrap done"
