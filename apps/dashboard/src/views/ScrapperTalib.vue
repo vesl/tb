@@ -57,7 +57,7 @@ export default {
       }
     },
     methods: {
-        getApiData(){
+        getTalibFeaturesMapsApiData(){
             this.featuresMaps = []
             axios.get('http://scrapper'+this.$store.state.apis_domain+'/talib/get/features_maps')
                 .then(response => {this.featuresMaps = response.data})
@@ -75,7 +75,7 @@ export default {
         }
     },
     mounted(){
-        this.getApiData()
+        this.getTalibFeaturesMapsApiData()
     }
 }
 </script>

@@ -1,5 +1,5 @@
 from fastapi.middleware.cors import CORSMiddleware
-from trainer.routers import features, models
+from trainer.routers import features, datasets, models
 from fastapi import FastAPI
 
 ## init api
@@ -17,4 +17,5 @@ app.add_middleware(
 )
 ## init routers
 app.include_router(features.router)
+app.include_router(datasets.router)
 app.include_router(models.router)
