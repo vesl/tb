@@ -2,10 +2,10 @@
   <div v-for="(app,index) in $store.state.nav.apps" :key="index">
     <div class="text-sm font-light p-2 shadow-2">
       <i :class="app.icon" />
-      {{ $stringFunctions.firstLetterUpper(app.name) }}
+      {{ $string.firstLetterUpper(app.name) }}
     </div>
     <div v-for="(view, index) in app.views" :key="index" class="p-3 transition-duration-100" :class="getNavBtnClass(app,view)" @click="select(app.name,view.name)">
-      {{ $stringFunctions.firstLetterUpper(view.name) }}
+      {{ $string.firstLetterUpper(view.name) }}
     </div>
   </div>
 </template>
