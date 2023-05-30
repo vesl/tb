@@ -1,4 +1,4 @@
-export const stringFunctions = {
+export const string = {
     firstLetterUpper: (string) => {
         const words = string.split(" ");
         for (let i = 0; i < words.length; i++) {

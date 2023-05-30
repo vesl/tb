@@ -10,17 +10,17 @@
                 
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">Start date</label>
-                    <PrimeCalendar v-model="start" class="mr-2" :placeholder="$stringFunctions.formatDate(start)" dateFormat="mm-dd-yy" showIcon />
+                    <PrimeCalendar v-model="start" class="mr-2" :placeholder="start" dateFormat="mm-dd-yy" showIcon />
                 </div>
                 
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">End date</label>
-                    <PrimeCalendar v-model="end" :placeholder="$stringFunctions.formatDate(end)" dateFormat="mm-dd-yy" showIcon />
+                    <PrimeCalendar v-model="end" :placeholder="end" dateFormat="mm-dd-yy" showIcon />
                 </div>
                 
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">&nbsp;</label>
-                    <PrimeButton label="Plot" :loading="plotting" @click="plotFunction($stringFunctions.formatDate(start),$stringFunctions.formatDate(end))" :disabled="(start >= end) || !plotCondition"></PrimeButton>
+                    <PrimeButton label="Plot" :loading="plotting" @click="plotFunction($string.formatDate(start),$string.formatDate(end))" :disabled="(start >= end) || !plotCondition"></PrimeButton>
                 </div>
         
             </div>
@@ -51,9 +51,17 @@ export default {
     },
     data(){
         return {
-            start: new Date("8/1/2017"),
-            end: new Date()
+            start: this.$cookies.get("start") ? this.$cookies.get("start"):this.$string.formatDate(new Date("8/1/2017")),
+            end: this.$cookies.get("end") ? this.$cookies.get("end"):this.$string.formatDate(new Date()),
         }
+    },
+    watch: {
+        start(start){
+            this.$cookies.set("start",this.$string.formatDate(start))
+        },
+        end(end){
+            this.$cookies.set("end",this.$string.formatDate(end))
+        },
     }
 }
 </script>

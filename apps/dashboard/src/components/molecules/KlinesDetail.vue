@@ -20,7 +20,7 @@ export default {
           Object.keys(this.klines[0]).forEach((col) => {
               columns.push({
                   field: col,
-                  header: this.$stringFunctions.firstLetterUpper(col)
+                  header: this.$string.firstLetterUpper(col)
               })
           })
           return columns

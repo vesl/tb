@@ -2,7 +2,7 @@
     <p v-for="dataset in datasetsMaps" :key="dataset" class="p-2">
         <PrimeCard>
             <template #title>
-                {{ $stringFunctions.firstLetterUpper(dataset.name) }}
+                {{ $string.firstLetterUpper(dataset.name) }}
             </template>
             <template #content>
                 <PrimeAccordion :multiple="true">

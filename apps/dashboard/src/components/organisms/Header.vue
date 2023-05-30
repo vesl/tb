@@ -3,7 +3,7 @@
         <span class="font-medium">TB Dashboard</span>
     </div>
     <div class="flex flex-wrap align-items-center secondary col-10 shadow-2 z-1 p-4">
-        <span class="font-medium">{{ $stringFunctions.firstLetterUpper(app+' - '+view) }}</span>
+        <span class="font-medium">{{ $string.firstLetterUpper(app+' - '+view) }}</span>
         <div class="absolute right-0">
             <PrimeDropdown v-model="selectedSymbol" :options="$store.state.symbols" :placeholder="symbol" class="mr-2" />
         </div>

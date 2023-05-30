@@ -1,10 +1,11 @@
 import { createApp } from 'vue'
 import { createStore } from 'vuex'
-import { stringFunctions } from '@/globalFunctions.js'
+import { string } from '@/globalFunctions.js'
 
 import App from './App.vue'
 import router from '@/router'
 
+import VueCookies from 'vue-cookies'
 import PrimeVue from 'primevue/config'
 import ProgressSpinner from 'primevue/progressspinner'
 import AccordionTab from 'primevue/accordiontab'
@@ -90,10 +91,11 @@ const store = createStore({
 })
 
 const app = createApp(App)
-app.config.globalProperties.$stringFunctions = stringFunctions
+app.config.globalProperties.$string = string
 app.use(router)
 app.use(store)
 app.use(PrimeVue)
+app.use(VueCookies)
 app.use(ToastService)
 app.component('PrimeProgressSpinner',ProgressSpinner)
 app.component('PrimeAccordionTab',AccordionTab)

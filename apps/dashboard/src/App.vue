@@ -38,7 +38,7 @@ export default {
       this.app = to.params.app
       this.view = to.params.view
       this.symbol = to.params.symbol
-      this.currentComponent = this.$stringFunctions.firstLetterUpper(this.$route.params.app)+this.$stringFunctions.firstLetterUpper(this.$route.params.view).replace(/\s+/g, '')
+      this.currentComponent = this.$string.firstLetterUpper(this.$route.params.app+' '+this.$route.params.view).replace(/\s+/g, '')
     }
   }
 }
