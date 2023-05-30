@@ -22,7 +22,7 @@
         </PrimeColumn>
         <PrimeColumn field="lag" header="Lag">
             <template #body="slotProps">
-                <PrimeBadge v-for="lag in slotProps.data.lag" :key="lag" :value="lag" size="large" severity="info" />
+                <PrimeBadge :value="'lag' in slotProps.data ? slotProps.data.lag:0" size="large" severity="info" />
             </template>
         </PrimeColumn>
     </PrimeDataTable>
