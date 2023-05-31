@@ -55,8 +55,8 @@ export default {
           featuresMaps: null,
           featuresData: null,
           featuresNames: null,
-          selectedFeaturesMap: null,
-          plotting: false
+          plotting: false,
+          selectedFeaturesMap: this.$cookies.get("selectedFeaturesMap") ? this.$cookies.get("selectedFeaturesMap"):null
       }  
     },
     methods: {
@@ -98,7 +98,10 @@ export default {
         symbol(){
             this.featuresData = null
             this.featuresNames = null
-        }  
+        },
+        selectedFeaturesMap(selectedFeaturesMap){
+            this.$cookies.set("selectedFeaturesMap",selectedFeaturesMap)
+        }
     },
     mounted(){
         this.getFeaturesMapsApiData()

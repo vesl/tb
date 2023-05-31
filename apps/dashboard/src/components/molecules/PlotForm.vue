@@ -10,12 +10,12 @@
                 
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">Start date</label>
-                    <PrimeCalendar v-model="start" class="mr-2" :placeholder="start" dateFormat="mm-dd-yy" showIcon />
+                    <PrimeCalendar v-model="start" class="mr-2" :placeholder="start.toString()" dateFormat="mm-dd-yy" showIcon />
                 </div>
                 
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">End date</label>
-                    <PrimeCalendar v-model="end" :placeholder="end" dateFormat="mm-dd-yy" showIcon />
+                    <PrimeCalendar v-model="end" :placeholder="end.toString()" dateFormat="mm-dd-yy" showIcon />
                 </div>
                 
                 <div class="flex-auto">
