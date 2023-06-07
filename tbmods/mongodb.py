@@ -16,7 +16,10 @@ class MongoDB:
     
     def find_one(self,db,collection,search={}):
         return self.client[db][collection].find_one(search,{"_id":0})
-    
+
+    def groupby(self,db,collection,field):
+        return self.client[db][collection].aggregate([{"$group":{"_id":"${}".format(field)}}])
+
     def update(self,db,collection,doc,match,upsert=False):
         self.client[db][collection].replace_one(match,doc,upsert)
     
