@@ -2,14 +2,14 @@
   
   <PrimeToast />
   
-  <div class="grid min-h-screen">
+  <div class="grid">
       <Header :app="app" :view="view" :symbol="symbol" />
       <!-- left -->
-      <div class="primary col-2 p-0">
+      <div class="primary col-2 p-0 min-h-screen">
         <Nav />
       </div>
       <!-- right -->
-      <div class="secondary col-10 p-0">
+      <div class="secondary col-10 p-0 min-h-screen">
         <router-view :app="app" :view="view" :symbol="symbol" :currentComponent="currentComponent" />
       </div>
   </div>
