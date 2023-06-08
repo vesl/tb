@@ -19,20 +19,7 @@ export default {
             selectedSymbol: null
         }
     },
-    props: {
-      app: {
-          type: String,
-          required: true
-      },
-      view: {
-          type: String,
-          required: true
-      },
-      symbol: {
-          type: String,
-          required: true
-      }
-    },
+    props: ['app','view','symbol'],
     watch: {
         selectedSymbol(symbol){
             this.$router.push({path: '/'+this.app+'/'+this.view+'/'+symbol})

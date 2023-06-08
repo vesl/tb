@@ -20,23 +20,6 @@ export default {
         TrainerPlotFeatures,
         TrainerDatasets
     },
-    props: {
-      app: {
-          type: String,
-          required: true
-      },
-      view: {
-          type: String,
-          required: true
-      },
-      symbol: {
-          type: String,
-          required: true
-      },
-      currentComponent: {
-          type: String,
-          required: true
-      }
-    }
+    props: ['app','view','symbol','currentComponent'],
 }
 </script>

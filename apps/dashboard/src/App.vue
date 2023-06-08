@@ -27,10 +27,10 @@ export default {
   },
   data(){
     return {
-      app: 'null',
-      view: 'null',
-      symbol: 'null',
-      currentComponent: 'null'
+      app: null,
+      view: null,
+      symbol: null,
+      currentComponent: null
     }
   },
   watch: {
