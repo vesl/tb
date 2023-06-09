@@ -56,9 +56,6 @@ const store = createStore({
             icon: 'pi pi-cog',
             views: [
               {
-                name: 'plot features'
-              },
-              {
                 name: 'datasets'
               },
               {
