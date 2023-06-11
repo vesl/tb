@@ -1,8 +1,8 @@
 <template>
 
     <div class="p-3">
-        <KlinesTable v-for="period in periods" :key="symbol" :period="period" :symbol="symbol" />
-        <PlotKlines v-for="period in periods" :key="symbol" :period="period" :symbol="symbol" />
+        <KlinesTable v-for="period in periods" :key="period" :period="period" :symbol="symbol" />
+        <PlotKlines v-for="period in periods" :key="period" :period="period" :symbol="symbol" />
     </div>
 
 </template>

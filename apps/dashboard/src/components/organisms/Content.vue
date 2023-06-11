@@ -1,5 +1,5 @@
 <template>
-    <component :is="currentComponent" :app="app" :view="view" :symbol="symbol" />
+    <component :is="currentComponent" :app="app" :view="view" :symbol="symbol" :key="symbol" />
 </template>
 
 <script>
