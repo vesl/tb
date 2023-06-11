@@ -7,6 +7,7 @@
             </PrimeDataTable>
         </template>
     </PrimeCard>
+    <PrimeDivider />
 </template>
 
 <script>
@@ -53,6 +54,5 @@ export default {
     mounted(){
         this.getFirstLastKlines()
     }
-    
 }
 </script>
