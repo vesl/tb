@@ -37,6 +37,10 @@ const store = createStore({
         'VETETH',
         'ETHUSDT'
       ],
+      periods: [
+        'live',
+        'historical'
+      ],
       nav: {
         apps: [
           {
