@@ -1,34 +1,19 @@
 <template>
-    
-    <PrimeCard>
-        
-        <template #content>
-
-            <div class="card flex flex-wrap gap-3 p-fluid">
-                
-                <slot></slot>
-                
-                <div class="flex-auto">
-                    <label class="text-sm block mb-2">Start date</label>
-                    <PrimeCalendar v-model="start" class="mr-2" :placeholder="start.toString()" dateFormat="mm-dd-yy" showIcon />
-                </div>
-                
-                <div class="flex-auto">
-                    <label class="text-sm block mb-2">End date</label>
-                    <PrimeCalendar v-model="end" :placeholder="end.toString()" dateFormat="mm-dd-yy" showIcon />
-                </div>
-                
-                <div class="flex-auto">
-                    <label class="text-sm block mb-2">&nbsp;</label>
-                    <PrimeButton label="Plot" :loading="plotting" @click="plotFunction($string.formatDate(start),$string.formatDate(end))" :disabled="(start >= end) || !plotCondition"></PrimeButton>
-                </div>
-        
-            </div>
-            
-        </template>
-
-    </PrimeCard>
-    
+    <div class="card flex flex-wrap gap-3 p-fluid">
+        <slot></slot>
+        <div class="flex-auto">
+            <label class="text-sm block mb-2">Start date</label>
+            <PrimeCalendar v-model="start" class="mr-2" :placeholder="start.toString()" dateFormat="mm-dd-yy" showIcon />
+        </div>
+        <div class="flex-auto">
+            <label class="text-sm block mb-2">End date</label>
+            <PrimeCalendar v-model="end" :placeholder="end.toString()" dateFormat="mm-dd-yy" showIcon />
+        </div>
+        <div class="flex-auto">
+            <label class="text-sm block mb-2">&nbsp;</label>
+            <PrimeButton label="Plot" :loading="plotting" @click="plotFunction($string.formatDate(start),$string.formatDate(end))" :disabled="(start >= end) || !plotCondition"></PrimeButton>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -51,8 +36,8 @@ export default {
     },
     data(){
         return {
-            start: this.$cookies.get("start") ? this.$cookies.get("start"):this.$string.formatDate(new Date("8/1/2017")),
-            end: this.$cookies.get("end") ? this.$cookies.get("end"):this.$string.formatDate(new Date()),
+            start: this.$cookies.get("start") ? new Date(this.$cookies.get("start")):new Date("08/01/2017"),
+            end: this.$cookies.get("end") ? new Date(this.$cookies.get("end")):new Date(),
         }
     },
     watch: {
