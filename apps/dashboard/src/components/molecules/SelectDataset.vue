@@ -1,6 +1,6 @@
 <template>
     <PrimeCard>
-        <template #title v-if="selectedDataset">Dataset <span class="text-green-500">{{ selectedDataset }}</span></template>
+        <template #title v-if="selectedDataset">Dataset <span class="text-success">{{ selectedDataset }}</span></template>
         <template #title v-else>Select a dataset</template>
         <template #content>
             <div class="flex flex-wrap">

@@ -15,3 +15,15 @@ body {
     background: var(--bluegray-900);
     color: white;
 }
+
+.text-success {
+    color: var(--green-200);
+}
+
+.text-warning {
+    color: var(--yellow-200);
+}
+
+.text-danger {
+    color: var(--red-200);
+}

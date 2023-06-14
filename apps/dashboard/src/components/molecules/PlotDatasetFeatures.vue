@@ -8,7 +8,7 @@
             </PlotForm>
             <PrimeProgressSpinner v-if="plotting" />
             <p v-if="Object.keys(plotData).length && !plotting" v-for="feature in Object.keys(plotData)" :key="feature">
-                <PrimeTag severity="info" class="p-2 mb-2">{{ feature }}</PrimeTag>
+                <PrimeTag severity="success" class="p-2 mb-2">{{ feature }}</PrimeTag>
                 <LWChart type="line" :data="plotData[feature]" />
             </p>
         </template>
