@@ -56,7 +56,6 @@ export default {
     mounted() {
         this.getDatasetsTypes()
         if (this.selectedDatasetsType) this.getDatasetsNames(this.selectedDatasetsType)
-        if (this.selectedDatasetsName) this.$emit('update:selectedDataset', this.selectedDatasetsName)
     }
 }
 </script>
