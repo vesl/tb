@@ -1,17 +1,23 @@
 <template>
     <div class="p-2">
-        <SelectDataset v-model:selectedDataset.sync="selectedDataset" />
-        <FeaturesMapsTable v-if="selectedDataset" :datasetName="selectedDataset" />
+        <PrimeDivider />
+        <SelectDataset v-model:dataset.sync="dataset" />
+        <PrimeDivider />
+        <FeaturesMapsTable v-if="dataset" :dataset="dataset" :key="dataset" />
+        <PrimeDivider />
+        <PlotDatasetFeatures v-if="dataset" :dataset="dataset" :key="dataset" />
     </div>
 </template>
 
 <script>
+import PlotDatasetFeatures from '@/components/molecules/PlotDatasetFeatures.vue'
 import FeaturesMapsTable from '@/components/molecules/FeaturesMapsTable.vue'
 import SelectDataset from '@/components/molecules/SelectDataset.vue'
 
 export default {
     name: 'trainer-datasets',
     components: {
+        PlotDatasetFeatures,
         FeaturesMapsTable,
         SelectDataset
     },
@@ -31,7 +37,7 @@ export default {
     },
     data() {
         return {
-            selectedDataset: null,
+            dataset: this.$cookies.get("selectedDataset") ? this.$cookies.get("selectedDataset") : null,
         }
     }
 }

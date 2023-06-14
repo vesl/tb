@@ -1,16 +1,16 @@
 <template>
     <PrimeCard>
-        <template #title v-if="selectedDatasetsName">Dataset <span class="text-green-500">{{ selectedDatasetsName }}</span></template>
+        <template #title v-if="selectedDataset">Dataset <span class="text-green-500">{{ selectedDataset }}</span></template>
         <template #title v-else>Select a dataset</template>
         <template #content>
             <div class="flex flex-wrap">
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">Type</label>
-                    <PrimeDropdown v-model="selectedDatasetsType" :options="datasetsTypes" placeholder="select a dataset type" class="mr-2" />
+                    <PrimeDropdown v-model="selectedDatasetType" :options="datasetsTypes" placeholder="select a dataset type" class="mr-2" />
                 </div>
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">Name</label>
-                    <PrimeDropdown v-model="selectedDatasetsName" :options="datasetsNames" placeholder="select a dataset name" class="mr-2" />
+                    <PrimeDropdown v-model="selectedDataset" :options="datasetsNames" placeholder="select a dataset name" class="mr-2" />
                 </div>
             </div>
         </template>
@@ -21,13 +21,13 @@
 import axios from 'axios'
 
 export default {
-    props: ['selectedDataset'],
+    props: ['dataset'],
     data(){
         return {
+            selectedDatasetType: this.$cookies.get("selectedDatasetType") ? this.$cookies.get("selectedDatasetType") : null,
+            selectedDataset: this.dataset,
             datasetsTypes: [],
             datasetsNames: [],
-            selectedDatasetsType: this.$cookies.get("selectedDatasetsType") ? this.$cookies.get("selectedDatasetsType") : null,
-            selectedDatasetsName: this.$cookies.get("selectedDatasetsName") ? this.$cookies.get("selectedDatasetsName") : null
         }
     },
     methods: {
@@ -43,19 +43,19 @@ export default {
         },
     },
     watch: {
-        selectedDatasetsType(type) {
+        selectedDatasetType(type) {
             this.selectedDatasetsName = null
             this.getDatasetsNames(type)
-            this.$cookies.set("selectedDatasetsType",type)
+            this.$cookies.set("selectedDatasetType",type)
         },
-        selectedDatasetsName(name) {
-            this.$emit('update:selectedDataset', name)
-            this.$cookies.set('selectedDatasetsName', name)
+        selectedDataset(dataset) {
+            this.$emit('update:dataset', dataset)
+            this.$cookies.set('selectedDataset', dataset)
         }
     },
     mounted() {
         this.getDatasetsTypes()
-        if (this.selectedDatasetsType) this.getDatasetsNames(this.selectedDatasetsType)
+        if (this.selectedDatasetType) this.getDatasetsNames(this.selectedDatasetType)
     }
 }
 </script>

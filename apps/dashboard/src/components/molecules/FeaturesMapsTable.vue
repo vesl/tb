@@ -42,7 +42,7 @@ import axios from "axios"
 
 export default {
     name: 'features-maps-table',
-    props: ['datasetName'],
+    props: ['dataset'],
     data() {
       return {
           featuresMaps: null
@@ -56,7 +56,7 @@ export default {
         },
         getFeaturesMaps(){
             this.featuresMaps = []
-            axios.get('http://trainer'+this.$store.state.apis_domain+'/datasets/get/features_maps/'+this.datasetName)
+            axios.get('http://trainer'+this.$store.state.apis_domain+'/datasets/get/features_maps/'+this.dataset)
                 .then(response => {this.featuresMaps = response.data})
                 .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error })})
         },
