@@ -45,6 +45,7 @@ export default {
     methods: {
         plotFunction(start,end){
             this.plotting = true
+            this.plotData = {}
             axios.post('http://trainer'+this.$store.state.apis_domain+'/features/plot/'+start+'/'+end+'/'+this.$route.params.symbol+'/'+this.period,this.featuresMap,{headers:{'Content-Type':'application/json'}})
                 .then(response => {
                     let data = JSON.parse(response.data)
