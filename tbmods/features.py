@@ -54,4 +54,15 @@ class Features:
         return klines_data.shift(lag)
     
     def load_ichimoku(self,feature,klines_args,args,lag,tuple_index):
-        pass
+        tenkan = (self.klines.df.high.rolling(args['short_period']).max()+self.klines.df.low.rolling(args['short_period']).min())/2
+        kijun = (self.klines.df.high.rolling(args['middle_period']).max()+self.klines.df.low.rolling(args['middle_period']).min())/2
+        ssa = ((tenkan + kijun)/2).shift(args['middle_period'])
+        ssb = ((self.klines.df.high.rolling(args['long_period']).max()+self.klines.df.low.rolling(args['long_period']).min())/2).shift(args['middle_period'])
+        lagging_span = self.klines.df.close.shift(args['middle_period'])
+        return {
+            "tenkan": tenkan,
+            "kijun": kijun,
+            "ssa": ssa,
+            "ssb": ssb,
+            "lagging_span": lagging_span
+        }[feature]
