@@ -8,7 +8,6 @@
 import ScrapperKlines from '@/views/ScrapperKlines.vue'
 import ScrapperTalib from '@/views/ScrapperTalib.vue'
 // trainer
-import TrainerPlotFeatures from '@/views/TrainerPlotFeatures.vue'
 import TrainerDatasets from '@/views/TrainerDatasets.vue'
 // trader
 
@@ -17,7 +16,6 @@ export default {
     components: {
         ScrapperKlines,
         ScrapperTalib,
-        TrainerPlotFeatures,
         TrainerDatasets
     },
     props: ['app','view','symbol','currentComponent'],
