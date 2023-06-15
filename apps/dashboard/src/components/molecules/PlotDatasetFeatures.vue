@@ -17,7 +17,7 @@
 
 <script>
 import SelectFeaturesMap from "@/components/molecules/SelectFeaturesMap.vue"
-import SelectPeriod from "@/components/molecules/SelectPeriod.vue"
+import SelectPeriod from "@/components/atoms/SelectPeriod.vue"
 import PlotForm from "@/components/atoms/PlotForm.vue"
 import LWChart from "@/components/atoms/LWChart.vue"
 import axios from "axios"
