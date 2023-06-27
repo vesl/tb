@@ -1,6 +1,6 @@
 from trainer.routers.features import get_features_map_by_name
 from fastapi import APIRouter, HTTPException
-#from tbmods.dataset import Dataset
+from tbmods.dataset import Dataset
 from tbmods.mongodb import MongoDB
 from tbmods.config import Config
 from tbmods.log import Log
@@ -52,3 +52,14 @@ def get_dataset_features_maps_by_name(name):
     for features_map_name in features_maps_names:
         features_maps.append(get_features_map_by_name(features_map_name))
     return features_maps
+
+@router.get('/get/stats/events/{name}/{start}/{end}/{symbol}/{period}')
+def get_dataset_labels_stats(name,start,end,symbol,period):
+    dataset = Dataset(name,start,end,symbol,period)
+    events_count = len(dataset.events)
+    events_repartition = dataset.events.ne(0).sum(axis=0)
+    return {
+        "events_count": events_count,
+        "events_repartition": events_repartition.to_json(orient='index'),
+        "events_times": list(dataset.events.index.astype(int)/1000000000)
+    }
