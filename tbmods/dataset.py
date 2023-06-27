@@ -49,8 +49,7 @@ class Dataset:
     def load_events(self):
         chartist_features_map = self.get_features_map('talib_pattern_recognition')
         chartist_features = Features(chartist_features_map,self.start,self.end,self.symbol,self.period)
-        self.events = chartist_features.df
-        self.events.index = self.events.index.intersection(self.features.index)
+        self.events = chartist_features.df.loc[chartist_features.df.index.intersection(self.features.index)]
     
     def load_labels(self):
         triple_barrier = TripleBarrier(self.features['close!lag=0'],self.events)
