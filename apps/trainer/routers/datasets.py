@@ -53,7 +53,7 @@ def get_dataset_features_maps_by_name(name):
         features_maps.append(get_features_map_by_name(features_map_name))
     return features_maps
 
-@router.get('/get/stats/events/{name}/{start}/{end}/{symbol}/{period}')
+@router.get('/get/events/{name}/{start}/{end}/{symbol}/{period}')
 def get_dataset_labels_stats(name,start,end,symbol,period):
     dataset = Dataset(name,start,end,symbol,period)
     events_count = len(dataset.events)
