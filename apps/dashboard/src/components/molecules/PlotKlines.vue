@@ -1,12 +1,6 @@
 <template>
-    <PrimeCard>
-        <template #title>Klines Plot - {{ period }}</template>
-        <template #content>
-            <LWChart v-if="klines" type="candlestick" :data="klines" :markers="markers" />
-            <PrimeProgressSpinner v-else />
-        </template>
-    </PrimeCard>
-    <PrimeDivider />
+    <LWChart v-if="klines" type="candlestick" :data="klines" :markers="markers" />
+    <PrimeProgressSpinner v-else />
 </template>
 
 <script>
