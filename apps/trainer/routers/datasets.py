@@ -56,10 +56,11 @@ def get_dataset_features_maps_by_name(name):
 @router.get('/get/events/{name}/{start}/{end}/{symbol}/{period}')
 def get_dataset_labels_stats(name,start,end,symbol,period):
     dataset = Dataset(name,start,end,symbol,period)
-    events_count = len(dataset.events)
-    events_repartition = dataset.events.ne(0).sum(axis=0)
+    count = len(dataset.events)
+    repartition = dataset.events.ne(0).sum(axis=0)
+    repartition.index = repartition.index.map(lambda x: x.split('!')[0])
     return {
-        "events_count": events_count,
-        "events_repartition": events_repartition.to_json(orient='index'),
-        "events_times": list(dataset.events.index.astype(int)/1000000000)
+        "count": count,
+        "repartition": repartition.to_json(orient='split'),
+        "times": list(dataset.events.index.astype(int)/1000000000)
     }
