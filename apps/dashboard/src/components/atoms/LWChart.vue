@@ -16,10 +16,11 @@ function getChartSeriesConstructorName(type) {
 }
 
 // Creates the chart series and sets the data.
-const addSeriesAndData = (type, seriesOptions, data) => {
+const addSeriesAndData = (type, seriesOptions, data, markers) => {
 	const seriesConstructor = getChartSeriesConstructorName(type);
 	series = chart[seriesConstructor](seriesOptions);
 	series.setData(data);
+	if (markers) series.setMarkers(markers);
 };
 
 // Auto resizes the chart when the browser window is resized.
@@ -55,11 +56,14 @@ export default {
 		priceScaleOptions: {
 			type: Object,
 		},
+		markers: {
+			type: Array,
+		},
 	},
 	mounted() {
 		// Create the Lightweight Charts Instance using the container ref.
 		chart = createChart(this.$refs.chartContainer, this.chartOptions);
-		addSeriesAndData(this.type, this.seriesOptions, this.data);
+		addSeriesAndData(this.type, this.seriesOptions, this.data, this.markers);
 
 		if (this.priceScaleOptions) {
 			chart.priceScale().applyOptions(this.priceScaleOptions);

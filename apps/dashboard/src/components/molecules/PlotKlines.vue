@@ -2,7 +2,7 @@
     <PrimeCard>
         <template #title>Klines Plot - {{ period }}</template>
         <template #content>
-            <LWChart v-if="klines" type="candlestick" :data="klines" />
+            <LWChart v-if="klines" type="candlestick" :data="klines" :markers="markers" />
             <PrimeProgressSpinner v-else />
         </template>
     </PrimeCard>
@@ -15,7 +15,7 @@ import axios from "axios"
 
 export default {
     name: 'plot-klines',
-    props: ['period','symbol'],
+    props: ['period','markers','symbol'],
     components: {
         LWChart
     },
