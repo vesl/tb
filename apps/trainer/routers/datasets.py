@@ -57,10 +57,11 @@ def get_dataset_features_maps_by_name(name):
 def get_dataset_labels_stats(name,start,end,symbol,period):
     dataset = Dataset(name,start,end,symbol,period)
     count = len(dataset.events)
-    repartition = dataset.events.ne(0).sum(axis=0)
+    repartition = dataset.events.drop(['type'],axis=1).ne(0).sum(axis=0)
     repartition.index = repartition.index.map(lambda x: x.split('!')[0])
+    dataset.events["time"] = dataset.events.index.astype(int)/1000000000
     return {
         "count": count,
         "repartition": repartition.to_json(orient='split'),
-        "times": list(dataset.events.index.astype(int)/1000000000)
+        "markers": dataset.events[["time","type"]].to_json(orient="records")
     }
