@@ -29,6 +29,7 @@ def get_features_maps():
     
 @router.get('/scrap/features_maps')
 def scrap_features_maps():
+    excluded_features = ['MAVP','ACOS','ASIN']
     mongodb = MongoDB()
     functions_groups = get_functions_groups()
     for functions_group in functions_groups:
@@ -41,7 +42,7 @@ def scrap_features_maps():
             rets = re.findall(r'(.*) = ',function.text)[0].replace(' ','').split(',')
             for i,ret in enumerate(rets):
                 function_name = re.findall(r'(\w+)\(',function.text)[0]
-                if function_name == "MAVP": continue
+                if function_name in excluded_features: continue
                 feature_name = function_name if len(rets) == 1 else "{}-{}".format(function_name,ret)
                 features_map["features"][feature_name] = {}
                 args = re.findall(r'\((.*)\)',function.text)[0].replace(' ','').split(',')
