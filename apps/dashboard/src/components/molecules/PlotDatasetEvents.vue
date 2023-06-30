@@ -9,7 +9,7 @@
             <div v-if="events">
                 <h3>Count<PrimeTag severity="success" :value="events.count" class="ml-3" /></h3>
                 <h3>Repartition</h3>
-                <PrimeChart type="bar" :data="events.repartition" :options="events.repartition_options" />
+                <PrimeChart type="bar" :data="events.repartition" :options="events.repartition_options" class="h-30rem"  />
                 <h3>Events markers</h3>
                 <PlotKlines :period="period" :symbol="$route.params.symbol" :markers="events.markers" />
             </div>
@@ -57,6 +57,7 @@ export default {
                 .catch(error => {
                     this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })
                     this.plotting = false
+                    this.events = null
                 })
         }
     }
