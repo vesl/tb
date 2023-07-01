@@ -54,7 +54,7 @@ def get_dataset_features_maps_by_name(name):
     return features_maps
 
 @router.get('/get/events/{name}/{start}/{end}/{symbol}/{period}')
-def get_dataset_labels_stats(name,start,end,symbol,period):
+def get_dataset_events(name,start,end,symbol,period):
     dataset = Dataset(name,start,end,symbol,period)
     count = len(dataset.events)
     repartition = dataset.events.drop(['type'],axis=1).ne(0).sum(axis=0)
@@ -64,4 +64,17 @@ def get_dataset_labels_stats(name,start,end,symbol,period):
         "count": count,
         "repartition": repartition.to_json(orient='split'),
         "markers": dataset.events[["time","type"]].to_json(orient="records")
+    }
+
+@router.get('/get/labels/{name}/{start}/{end}/{symbol}/{period}')
+def get_dataset_labels(name,start,end,symbol,period):
+    dataset = Dataset(name,start,end,symbol,period)
+    count = len(dataset.labels)
+    repartition = dataset.labels.value_counts()
+    dataset.triple_barrier.barriers['time'] = dataset.triple_barrier.barriers.index.astype(int)/1000000000
+    dataset.triple_barrier.barriers['first_touch'] = dataset.triple_barrier.barriers.first_touch.astype(int)/1000000000
+    return {
+        "count": count,
+        "repartition": repartition.to_json(orient='split'),
+        "markers": dataset.triple_barrier.barriers[['time','first_touch','side']].to_json(orient="records")
     }

@@ -54,5 +54,5 @@ class Dataset:
         self.events['type'] = self.events.apply(lambda row: ",".join([event_type.split("!")[0] for event_type in row.index if row[event_type] != 0]),axis=1)
 
     def load_labels(self):
-        triple_barrier = TripleBarrier(self.features['close!lag=0'],self.events)
-        self.labels = triple_barrier.barriers.side
+        self.triple_barrier = TripleBarrier(self.features['close!lag=0'],self.events)
+        self.labels = self.triple_barrier.barriers.side
