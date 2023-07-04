@@ -64,7 +64,7 @@ const store = createStore({
                 name: 'datasets'
               },
               {
-                name: 'model'
+                name: 'models'
               },
               {
                 name: 'darwin'
