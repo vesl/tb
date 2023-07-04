@@ -10,7 +10,7 @@
                 </div>
                 <div class="flex-auto">
                     <label class="text-sm block mb-2">Name</label>
-                    <PrimeDropdown v-model="selectedDataset" :options="datasetsNames" placeholder="select a dataset name" class="mr-2" />
+                    <PrimeDropdown v-model="selectedDataset" :options="datasetsNames" placeholder="select a dataset name" class="mr-2" filter />
                 </div>
             </div>
         </template>
