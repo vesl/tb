@@ -1,6 +1,5 @@
 <template>
     <div class="p-2">
-        <PrimeDivider />
         <SelectDataset v-model:dataset.sync="dataset" />
         <PrimeDivider />
         <FeaturesMapsTable v-if="dataset" :dataset="dataset" :key="dataset" />
