@@ -37,11 +37,7 @@ CREATE TABLE live_BTCUSDT(
 @router.get('/get/{period}/{symbol}')
 def get_klines(period,symbol):
     klines = Klines(symbol,period)
-    klines.get_first_stored()
-    klines.get_last_stored()
-    start = klines.first_stored.index[0]
-    end = klines.last_stored.index[0]
-    klines.load_df(start,end)
+    klines.load_df(None,None)
     klines.df["time"] = klines.df.index.astype(int)/1000000000 
     return klines.df.to_json(orient="records")
 

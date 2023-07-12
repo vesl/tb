@@ -37,5 +37,5 @@ class Klines:
         qdbr = self.questdb.query("INSERT INTO {} VALUES ({})".format(self.table,",".join([str(v) for v in kline])))
         
     def load_df(self,start,end):
-        qdbr = self.questdb.query("SELECT * FROM {} where open_time between '{}' and '{}'".format(self.table,start,end))
+        qdbr = self.questdb.query("SELECT * FROM {} where open_time between '{}' and '{}'".format(self.table,start,end)) if start and end else self.questdb.query("SELECT * FROM {}".format(self.table))
         self.df = self.qdb_to_df(qdbr['result'])
