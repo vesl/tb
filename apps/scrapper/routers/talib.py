@@ -29,7 +29,7 @@ def get_features_maps():
     
 @router.get('/scrap/features_maps')
 def scrap_features_maps():
-    excluded_features = ['MAVP','ACOS','ASIN']
+    excluded_features = ['MAVP','ACOS','ASIN','COSH','EXP','SINH']
     mongodb = MongoDB()
     functions_groups = get_functions_groups()
     for functions_group in functions_groups:
