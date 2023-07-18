@@ -3,19 +3,24 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from tbmods.dataset import Dataset
 from tbmods.mongodb import MongoDB
+from datetime import datetime
 import joblib
+import os
 
 class ModelRandomForest:
     
     def __init__(self,dataset_name,symbol,_map=None):
+        self.time_start = datetime.now()
         self.symbol = symbol
         self.dataset_name = dataset_name
+        os.environ["RANDOM_FOREST_STATUS"] = "loading dataset"
         self.dataset = Dataset(self.dataset_name,None,None,self.symbol,'historical')
         self.y = self.dataset.labels
         self.X = self.dataset.features.loc[self.y.index]
-        self.model = RandomForestClassifier(verbose=True)
+        self.model = RandomForestClassifier(verbose=True,n_jobs=-1)
     
     def train(self):
+        os.environ["RANDOM_FOREST_STATUS"] = "training"
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y)
         self.model.fit(self.X_train,self.y_train)
         self.get_perfs()
@@ -30,3 +35,4 @@ class ModelRandomForest:
         self.perfs['confusion_matrix'] = confusion_matrix(self.y_test, self.test_prediction)
         self.perfs['accuracy'] = accuracy_score(self.y_test, self.test_prediction)
         self.perfs['f1_score'] = f1_score(self.y_test,self.test_prediction)
+        self.perfs['training_time'] = datetime.now() - self.time_start

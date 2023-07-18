@@ -1,6 +1,10 @@
 from trainer.routers import features, datasets, models
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
+import os
+
+## init env vars
+os.environ["RANDOM_FOREST_STATUS"] = "available"
 
 ## init api
 app = FastAPI(
