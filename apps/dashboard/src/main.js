@@ -14,6 +14,8 @@ import Accordion from 'primevue/accordion'
 import DataTable from 'primevue/datatable'
 import Dropdown from 'primevue/dropdown'
 import Calendar from 'primevue/calendar'
+import TabPanel from 'primevue/tabpanel'
+import TabView from 'primevue/tabview'
 import Divider from 'primevue/divider'
 import Avatar from 'primevue/avatar'
 import Column from 'primevue/column'
@@ -105,6 +107,8 @@ app.component('PrimeAccordion', Accordion)
 app.component('PrimeDataTable', DataTable)
 app.component('PrimeDropdown', Dropdown)
 app.component('PrimeCalendar', Calendar)
+app.component('PrimeTabPanel', TabPanel)
+app.component('PrimeTabView', TabView)
 app.component('PrimeDivider', Divider)
 app.component('PrimeAvatar', Avatar)
 app.component('PrimeColumn', Column)
