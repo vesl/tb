@@ -16,7 +16,7 @@
 import PlotDatasetFeatures from '@/components/molecules/PlotDatasetFeatures.vue'
 import PlotDatasetLabels from '@/components/molecules/PlotDatasetLabels.vue'
 import PlotDatasetEvents from '@/components/molecules/PlotDatasetEvents.vue'
-import FeaturesMapsTable from '@/components/molecules/FeaturesMapsTable.vue'
+import FeaturesMapsTable from '@/components/atoms/FeaturesMapsTable.vue'
 import SelectDataset from '@/components/molecules/SelectDataset.vue'
 
 export default {

@@ -13,7 +13,6 @@
 
 <script>
 import SelectApi from '@/components/atoms/SelectApi.vue'
-import axios from 'axios'
 
 export default {
     props: ['dataset'],

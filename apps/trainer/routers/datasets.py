@@ -43,13 +43,16 @@ def get_dataset_types():
     mongodb.close()
     return types
     
-@router.get('/get/features_maps/{name}')
-def get_dataset_features_maps_by_name(name):
+@router.get('/get/features_maps_names/{name}')
+def get_dataset_features_maps_names_by_name(name):
     mongodb = MongoDB()
     features_maps_names = [doc['features_maps'] for doc in mongodb.find("TB","datasets_maps",{"name":name})][0]
-    mongodb.close()
+    return features_maps_names
+
+@router.get('/get/features_maps/{name}')
+def get_dataset_features_maps_by_name(name):
     features_maps = []
-    for features_map_name in features_maps_names:
+    for features_map_name in get_dataset_features_maps_names_by_name(name):
         features_maps.append(get_features_map_by_name(features_map_name))
     return features_maps
 

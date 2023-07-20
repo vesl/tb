@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import KlinesTable from '@/components/molecules/KlinesTable.vue'
 import PlotKlines from '@/components/molecules/PlotKlines.vue'
+import KlinesTable from '@/components/atoms/KlinesTable.vue'
 
 export default {
     name: 'scrapper-klines',
