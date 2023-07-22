@@ -10,6 +10,9 @@ import PrimeVue from 'primevue/config'
 import ProgressSpinner from 'primevue/progressspinner'
 import AccordionTab from 'primevue/accordiontab'
 import ToastService from 'primevue/toastservice'
+import InputNumber from 'primevue/inputnumber'
+import InputSwitch from 'primevue/inputswitch'
+import InputText from 'primevue/inputtext'
 import Accordion from 'primevue/accordion'
 import DataTable from 'primevue/datatable'
 import Dropdown from 'primevue/dropdown'
@@ -101,8 +104,11 @@ app.use(store)
 app.use(PrimeVue)
 app.use(VueCookies)
 app.use(ToastService)
-app.component('PrimeProgressSpinner',ProgressSpinner)
-app.component('PrimeAccordionTab',AccordionTab)
+app.component('PrimeProgressSpinner', ProgressSpinner)
+app.component('PrimeAccordionTab', AccordionTab)
+app.component('PrimeInputNumber', InputNumber)
+app.component('PrimeInputSwitch', InputSwitch)
+app.component('PrimeInputText', InputText)
 app.component('PrimeAccordion', Accordion)
 app.component('PrimeDataTable', DataTable)
 app.component('PrimeDropdown', Dropdown)
