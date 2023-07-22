@@ -25,6 +25,13 @@ def get_models_names_by_type(_type):
     mongodb.close()
     return maps
 
+@router.get('/get/parameters_map/{_type}')
+def get_models_parameters_map_by_type(_type):
+    mongodb = MongoDB()
+    parameters_map = [doc['parameters'] for doc in mongodb.find("TB","models_maps",{"name":_type})][0]
+    mongodb.close()
+    return parameters_map
+
 @router.get('/get/types')
 def get_models_types():
     mongodb = MongoDB()
