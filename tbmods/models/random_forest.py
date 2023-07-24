@@ -13,6 +13,7 @@ class ModelRandomForest:
         self.time_start = datetime.now()
         self.symbol = symbol
         self.dataset_name = dataset_name
+        self.name = 'random_forest_{}_{}'.format(self.dataset_name,self.symbol)
         self.dataset = Dataset(self.dataset_name,None,None,self.symbol,'historical')
         self.y = self.dataset.labels
         self.X = self.dataset.features.loc[self.y.index]
@@ -24,7 +25,10 @@ class ModelRandomForest:
         self.get_perfs()
 
     def save(self):
-        joblib.dump(self.model,'/var/cache/models/random_forest_{}_{}'.format(self.dataset_name,self.symbol))
+        mongodb = MongoDB()
+        mongodb.update("TB","models_perfs",{"name":self.name,"perfs":self.perfs},{"name":self.name},True)
+        mongodb.close()
+        joblib.dump(self.model,'/var/cache/models/{}'.format(self.name))
         
     def get_perfs(self):
         self.test_prediction = self.model.predict(self.X_test)
@@ -33,5 +37,5 @@ class ModelRandomForest:
         self.perfs['confusion_matrix'] = confusion_matrix(self.y_test, self.test_prediction).tolist()
         self.perfs['accuracy'] = accuracy_score(self.y_test, self.test_prediction)
         self.perfs['f1_score'] = f1_score(self.y_test,self.test_prediction)
-        self.perfs['training_time'] = datetime.now() - self.time_start
+        self.perfs['training_time'] = str(datetime.now() - self.time_start)
         self.perfs['cross_val_score'] = cross_val_score(self.model,self.X,self.y).tolist()
