@@ -4,7 +4,7 @@ from fastapi import FastAPI
 import os
 
 ## init env vars
-os.environ["RANDOM_FOREST_STATUS"] = "available"
+os.environ["STATUS"] = "0"
 
 ## init api
 app = FastAPI(

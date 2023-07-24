@@ -1,5 +1,6 @@
 from trainer.routers.datasets import get_dataset_features_maps_by_name
 from tbmods.models.random_forest import ModelRandomForest
+from tbmods.pydantic_models import ModelMap
 from fastapi import APIRouter, HTTPException
 from tbmods.mongodb import MongoDB
 from tbmods.config import Config
@@ -13,10 +14,6 @@ router = APIRouter(
 
 config = Config()
 log = Log(config['app'])
-
-@router.get('/status/{model}')
-def get_model_status(model):
-    return os.environ["{}_STATUS".format(model.upper())]
 
 @router.get('/get/names/{_type}')
 def get_models_names_by_type(_type):
@@ -41,14 +38,15 @@ def get_models_types():
     mongodb.close()
     return types
 
-@router.get('/train/random_forest/{dataset_name}/{symbol}/{save}')
-def train_random_forest(dataset_name,symbol,save):
-    """
-    Train random_forest model
-    save : 0 or 1
-    """
-    model = ModelRandomForest(dataset_name,symbol)
+@router.get('/train/status')
+def get_model_status():
+    return int(os.environ["STATUS"])
+
+@router.post('/train/random_forest/{symbol}')
+def train_random_forest(model_map: ModelMap, symbol):
+    os.environ["STATUS"] = "1"
+    model = ModelRandomForest(model_map.dataset_name,symbol)
     model.train()
-    if bool(int(save)): model.save()
-    os.environ["RANDOM_FOREST_STATUS"] = "available"
+    if model_map.save: model.save()
+    os.environ["STATUS"] = "0"
     return model.perfs
