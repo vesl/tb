@@ -16,7 +16,7 @@
 <script>
 import SelectDataset from '@/components/molecules/SelectDataset.vue'
 import SelectModel from '@/components/molecules/SelectModel.vue'
-import TrainModel from '@/components/atoms/TrainModel.vue'
+import TrainModel from '@/components/molecules/TrainModel.vue'
 
 export default {
     name: 'trainer-datasets',
