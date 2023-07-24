@@ -45,8 +45,15 @@ def get_model_status():
 @router.post('/train/random_forest/{symbol}')
 def train_random_forest(model_map: ModelMap, symbol):
     os.environ["STATUS"] = "1"
-    model = ModelRandomForest(model_map.dataset_name,symbol)
-    model.train()
-    if model_map.save: model.save()
-    os.environ["STATUS"] = "0"
-    return model.perfs
+    try:
+        model = ModelRandomForest(model_map.dataset_name,symbol)
+        model.train()
+        if model_map.save: model.save()
+        os.environ["STATUS"] = "0"
+    except Exception as e:
+        os.environ["STATUS"] = "0"
+        raise HTTPException(status_code=500, detail="Training failed")
+    return {
+        "perfs": model.perfs,
+        "name": model.name
+    }
