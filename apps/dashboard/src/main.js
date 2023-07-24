@@ -26,6 +26,7 @@ import Button from 'primevue/button'
 import Badge from 'primevue/badge'
 import Toast from 'primevue/toast'
 import Chart from 'primevue/chart'
+import Knob from 'primevue/knob'
 import Chip from 'primevue/chip'
 import Card from 'primevue/card'
 import Tag from 'primevue/tag'
@@ -122,6 +123,7 @@ app.component('PrimeButton', Button)
 app.component('PrimeBadge', Badge)
 app.component('PrimeToast', Toast)
 app.component('PrimeChart', Chart)
+app.component('PrimeKnob', Knob)
 app.component('PrimeChip', Chip)
 app.component('PrimeCard', Card)
 app.component('PrimeTag', Tag)
