@@ -7,7 +7,7 @@
             <PrimeTabPanel header="Train">
                 <SelectDataset v-model:dataset.sync="dataset" />
                 <PrimeDivider />
-                <TrainModel v-if="dataset" :dataset="dataset" />
+                <TrainModel v-if="dataset" :dataset="dataset" :key="dataset" />
             </PrimeTabPanel>
         </PrimeTabView>
     </div>
