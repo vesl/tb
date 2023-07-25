@@ -46,14 +46,12 @@ def get_model_status():
 def train_random_forest(model_map: ModelMap, symbol):
     os.environ["STATUS"] = "1"
     try:
-        model = ModelRandomForest(model_map.dataset_name,symbol)
+        model = ModelRandomForest(model_map.dataset_name,symbol,model_map.parameters_map)
         model.train()
         if model_map.save: model.save()
         os.environ["STATUS"] = "0"
+        return { "perfs": model.perfs, "name": model.name }
     except Exception as e:
         os.environ["STATUS"] = "0"
+        log.warning(e)
         raise HTTPException(status_code=500, detail="Training failed")
-    return {
-        "perfs": model.perfs,
-        "name": model.name
-    }
