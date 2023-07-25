@@ -3,7 +3,7 @@
         <template #title>Klines Table - {{period}}</template>
         <template #content>
             <PrimeDataTable v-if="firstLastKlines.length" :value="firstLastKlines" showGridlines>
-                <PrimeColumn v-for="column in columns" :key="column" :field="column" :header="column" />
+                <PrimeColumn v-for="column in Object.keys(firstLastKlines[0])" :key="column" :field="column" :header="column" />
             </PrimeDataTable>
         </template>
     </PrimeCard>
@@ -19,8 +19,6 @@ export default {
     data(){
         return {
             firstLastKlines: [],
-            klinesCount: 0,
-            columns: [],
         }
     },
     methods: {
@@ -41,10 +39,8 @@ export default {
 
                     axios.get('http://scrapper'+this.$store.state.apis_domain+'/klines/get/last/'+this.period+'/'+this.symbol)
                         .then(response => {
-                            
                             let lastKline = this.formatDate(JSON.parse(response.data))
                             this.firstLastKlines = this.firstLastKlines.concat(lastKline)
-                            this.columns = Object.keys(this.firstLastKlines[0])
                         })
                         .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })})
                 })
