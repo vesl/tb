@@ -4,9 +4,9 @@
             <label class="text-sm block mb-2">{{ key }}</label>
         </div>
         <div class="col-6">
-            <PrimeInputSwitch v-if="value.type == 'bool'" :inputId="key" v-model="value.default" />
-            <PrimeDropdown v-else-if="value.type == 'list'" v-model="value.default" :options="value.values" :placeholder="value.default" />
-            <PrimeInputText v-else inputId="key" v-model="value.default" />
+            <PrimeInputSwitch v-if="value.type == 'bool'" :inputId="key" v-model="value.value" />
+            <PrimeDropdown v-else-if="value.type == 'list'" v-model="value.value" :options="value.values" :placeholder="value.value" />
+            <PrimeInputText v-else inputId="key" v-model="value.value" />
         </div>
     </div>
     <PrimeDivider />
