@@ -1,14 +1,12 @@
 <template>
-    <div class="p-2">
-        <PrimeTabView>
-            <PrimeTabPanel header="Stats">
-                <ModelsTable :symbol="symbol" :key="symbol" />
-            </PrimeTabPanel>
-            <PrimeTabPanel header="Train">
-                <TrainModel />
-            </PrimeTabPanel>
-        </PrimeTabView>
-    </div>
+    <PrimeTabView>
+        <PrimeTabPanel header="Stats">
+            <ModelsTable :symbol="symbol" :key="symbol" />
+        </PrimeTabPanel>
+        <PrimeTabPanel header="Train">
+            <TrainModel />
+        </PrimeTabPanel>
+    </PrimeTabView>
 </template>
 
 <script>
