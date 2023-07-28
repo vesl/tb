@@ -15,6 +15,7 @@
 import SelectApi from '@/components/atoms/SelectApi.vue'
 
 export default {
+    name: 'select-dataset',
     props: ['dataset'],
     components: {
       SelectApi  
