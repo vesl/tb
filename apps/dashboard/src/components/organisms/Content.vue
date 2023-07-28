@@ -10,6 +10,7 @@ import ScrapperTalib from '@/views/ScrapperTalib.vue'
 // trainer
 import TrainerDatasets from '@/views/TrainerDatasets.vue'
 import TrainerModels from '@/views/TrainerModels.vue'
+import TrainerDarwin from '@/views/TrainerDarwin.vue'
 // trader
 
 export default {
@@ -18,7 +19,8 @@ export default {
         ScrapperKlines,
         ScrapperTalib,
         TrainerDatasets,
-        TrainerModels
+        TrainerModels,
+        TrainerDarwin
     },
     props: ['app','view','symbol','currentComponent'],
 }
