@@ -2,27 +2,23 @@
     <div class="p-2">
         <PrimeTabView>
             <PrimeTabPanel header="Stats">
-                <SelectModel v-model:model.sync="model" />
+                <ModelsTable :symbol="symbol" :key="symbol" />
             </PrimeTabPanel>
             <PrimeTabPanel header="Train">
-                <SelectDataset v-model:dataset.sync="dataset" />
-                <PrimeDivider />
-                <TrainModel v-if="dataset" :dataset="dataset" :key="dataset" />
+                <TrainModel />
             </PrimeTabPanel>
         </PrimeTabView>
     </div>
 </template>
 
 <script>
-import SelectDataset from '@/components/molecules/SelectDataset.vue'
-import SelectModel from '@/components/molecules/SelectModel.vue'
 import TrainModel from '@/components/molecules/TrainModel.vue'
+import ModelsTable from '@/components/atoms/ModelsTable.vue'
 
 export default {
     name: 'trainer-datasets',
     components: {
-        SelectDataset,
-        SelectModel,
+        ModelsTable,
         TrainModel
     },
     props: {
@@ -38,12 +34,6 @@ export default {
             type: String,
             required: true
         },
-    },
-    data() {
-        return {
-            dataset: null,
-            model: null,
-        }
     }
 }
 </script>

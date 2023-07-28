@@ -1,44 +1,49 @@
 <template>
+    <SelectDataset v-model:dataset.sync="dataset" />
+    <PrimeDivider v-if="dataset" />
+    <SelectModelType v-if="dataset" v-model:type.sync="type" />
+    <PrimeDivider v-if="type" />
     <PrimeCard v-if="type">
         <template #title>Save</template>
         <template #content>
             <PrimeInputSwitch inputId="save" v-model="save" />
         </template>
     </PrimeCard>
-    <PrimeDivider />
-    <PrimeCard>
+    <PrimeDivider v-if="type" />
+    <PrimeCard v-if="type">
         <template #title>Configuration</template>
         <template #content>
-            <SelectApi app="trainer" uri="/models/get/types" title="Type" v-model:output.sync="type" />
             <FormObject v-if="parameters_map" submitText="Train" :submitFunction="train" :loading="Boolean(training)" :object="parameters_map" />
         </template>
     </PrimeCard>
-    <PrimeDivider />
+    <PrimeDivider v-if="perfs && type" />
     <RandomForestPerfs v-if="perfs && type === 'random_forest'" :perfs="perfs" :name="name" />
 </template>
 
 <script>
 import RandomForestPerfs from '@/components/atoms/RandomForestPerfs.vue'
+import SelectModelType from '@/components/molecules/SelectModelType.vue'
+import SelectDataset from '@/components/molecules/SelectDataset.vue'
 import FormObject from '@/components/atoms/FormObject.vue'
-import SelectApi from '@/components/atoms/SelectApi.vue'
 import axios from "axios"
 
 export default {
     name: 'train-model',
-    props: ['dataset'],
     components: {
       RandomForestPerfs,
-      FormObject,
-      SelectApi  
+      SelectModelType,
+      SelectDataset,
+      FormObject
     },
     data() {
         return {
-            type: null,
             parameters_map: null,
-            save: false,
             training: null,
+            dataset: null,
+            save: false,
             perfs: null,
             name: null,
+            type: null,
         }
     },
     watch: {
