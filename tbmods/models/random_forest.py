@@ -51,7 +51,8 @@ class ModelRandomForest:
             "type": "random_forest",
             "dataset": self.dataset_name,
             "perfs": self.perfs,
-            "parameters": self._map
+            "parameters": self._map,
+            "symbol": self.symbol
         }
         mongodb = MongoDB()
         mongodb.update("TB","models_metadatas",metadata,{"name":self.name},True)
