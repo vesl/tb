@@ -38,6 +38,12 @@ def get_models_types():
     mongodb.close()
     return types
 
+@router.get('/get/metadatas/{symbol}')
+def get_models_metadatas(symbol):
+    mongodb = MongoDB()
+    metadatas = [doc for doc in mongodb.find("TB","models_metadatas",{"symbol":symbol})]
+    return metadatas
+
 @router.get('/train/status')
 def get_model_status():
     return int(os.environ["STATUS"])
