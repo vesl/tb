@@ -21,9 +21,7 @@ export default {
     watch: {
         selectedFeaturesMap(featuresMap) {
             axios.get('http://trainer'+this.$store.state.apis_domain+'/features/get/map/'+featuresMap)
-                .then(response => {
-                    this.$emit('update:featuresMap', response.data)
-                })
+                .then(response => {this.$emit('update:featuresMap', response.data)})
                 .catch(error => {this.$toast.add({ severity: 'error', summary: 'Error', detail: error, life: 3000 })})
         }
     },
