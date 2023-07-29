@@ -1,14 +1,14 @@
 <template>
     <div class="p-2">
-        <SelectDataset v-model:dataset.sync="dataset" />
+        <SelectDataset v-model:datasetName.sync="datasetName" output="name" />
         <PrimeDivider />
-        <FeaturesMapsTable v-if="dataset" :dataset="dataset" :key="dataset" />
+        <FeaturesMapsTable v-if="datasetName" :dataset="datasetName" :key="datasetName" />
         <PrimeDivider />
-        <PlotDatasetFeatures v-if="dataset" :dataset="dataset" :key="dataset" />
+        <PlotDatasetFeatures v-if="datasetName" :dataset="datasetName" :key="datasetName" />
         <PrimeDivider />
-        <PlotDatasetEvents v-if="dataset" :dataset="dataset" :key="dataset" />
+        <PlotDatasetEvents v-if="datasetName" :dataset="datasetName" :key="datasetName" />
         <PrimeDivider />
-        <PlotDatasetLabels v-if="dataset" :dataset="dataset" :key="dataset" />
+        <PlotDatasetLabels v-if="datasetName" :dataset="datasetName" :key="datasetName" />
     </div>
 </template>
 
@@ -28,23 +28,10 @@ export default {
         FeaturesMapsTable,
         SelectDataset
     },
-    props: {
-        app: {
-            type: String,
-            required: true
-        },
-        view: {
-            type: String,
-            required: true
-        },
-        symbol: {
-            type: String,
-            required: true
-        },
-    },
+    props: ['app','view','symbol'],
     data() {
         return {
-            dataset: this.$cookies.get("selectedDataset") ? this.$cookies.get("selectedDataset") : null,
+            datasetName: null,
         }
     }
 }
