@@ -1,4 +1,4 @@
-from trainer.routers import features, datasets, models
+from trainer.routers import features, datasets, models, darwin
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 import os
@@ -23,3 +23,4 @@ app.add_middleware(
 app.include_router(features.router)
 app.include_router(datasets.router)
 app.include_router(models.router)
+app.include_router(darwin.router)
