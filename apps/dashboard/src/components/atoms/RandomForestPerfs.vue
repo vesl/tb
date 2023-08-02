@@ -19,6 +19,7 @@
             </div>
             <PrimeChart type="line" :data="cross_val_score.data" :options="cross_val_score.options" class="h-30rem" />
             <PrimeChart type="bar" :data="confusion_matrix.data" :options="confusion_matrix.options" class="h-30rem" />
+            <PrimeChart type="bar" :data="feature_importances.data" :options="feature_importances.options" class="h-30rem" />
         </template>
     </PrimeCard>
 </template>
@@ -58,6 +59,10 @@ export default {
                         }
                     ]
                 },
+                options: {maintainAspectRatio:false,plugins:{legend:{display:false}}}
+            },
+            feature_importances: {
+                data: this.perfs.feature_importances,
                 options: {maintainAspectRatio:false,plugins:{legend:{display:false}}}
             }
         }

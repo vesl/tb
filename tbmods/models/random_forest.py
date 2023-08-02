@@ -68,3 +68,7 @@ class ModelRandomForest:
         self.perfs['f1_score'] = f1_score(self.y_test,self.test_prediction)
         self.perfs['training_time'] = str(datetime.now() - self.time_start)
         self.perfs['cross_val_score'] = cross_val_score(self.model,self.X,self.y).tolist()
+        self.perfs['feature_importances'] = {
+            "labels": [feature.split('!')[0] for feature in self.dataset.features.columns],
+            "datasets": [{"data":self.model.feature_importances_.tolist()}]
+        }
