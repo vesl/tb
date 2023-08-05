@@ -26,20 +26,22 @@ class Features:
         args = self.features_map['features'][feature]['args'] if 'args' in self.features_map['features'][feature] else {}
         lag = self.features_map['features'][feature]['lag'] if 'lag' in self.features_map['features'][feature] else 0
         tuple_index = self.features_map['features'][feature]['tuple_index'] if 'tuple_index' in self.features_map['features'][feature] else -1
-        feature_name = feature
-        feature_name += "!"+"-".join(['{}={}'.format(arg,args[arg]) for arg in args]) if len(args) > 0 else ""
-        feature_name += "!lag={}".format(lag)
-        return source, klines_args, args,lag, tuple_index, feature_name
+        return source, klines_args, args, lag, tuple_index
 
     def load(self):
         for feature in self.features_map['features']:
-            source, klines_args, args,lag, tuple_index, feature_name = self.peel_feature_map(feature)
+            source, klines_args, args,lag, tuple_index = self.peel_feature_map(feature)
             try:
                 feature_data = getattr(self,'load_{}'.format(source))(feature,klines_args,args,lag,tuple_index)
             except Exception as e:
-                log.warning("Cant compute {} {}".format(feature_name,e))
+                log.warning("Cant compute {} {}".format(feature,e))
                 continue
-            self.df = self.df.join(feature_data.rename(feature_name))
+            while lag >= 0:
+                feature_name = feature
+                feature_name += "!"+"-".join(['{}={}'.format(arg,args[arg]) for arg in args]) if len(args) > 0 else ""
+                feature_name += "!lag={}".format(lag)
+                self.df = self.df.join(feature_data.rename(feature_name).shift(lag))
+                lag -= 1
         self.df.dropna(inplace=True)
             
     def load_talib(self,feature,klines_args,args,lag,tuple_index):
@@ -47,11 +49,11 @@ class Features:
         positionnal_args = [self.klines.df[klines_arg] for klines_arg in klines_args]
         kwargs = { arg:args[arg] for arg in args }
         talib_data = getattr(talib,method)(*positionnal_args) if tuple_index == -1 else getattr(talib,method)(*positionnal_args)[tuple_index]
-        return talib_data.shift(lag)
+        return talib_data
         
     def load_klines(self,feature,klines_args,args,lag,tuple_index):
         klines_data = self.klines.df[feature]
-        return klines_data.shift(lag)
+        return klines_data
     
     def load_ichimoku(self,feature,klines_args,args,lag,tuple_index):
         tenkan = (self.klines.df.high.rolling(args['short_period']).max()+self.klines.df.low.rolling(args['short_period']).min())/2
