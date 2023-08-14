@@ -17,10 +17,13 @@ class Darwin:
     def evolve(self):
         self.populate_ids()
         while self.current_generation <= self.nb_generations:
+            print("GENERATION {}".format(self.current_generation))
             self.train_ids()
+            print("Train finished")
             self.rank_ids()
+            print("RESULT : {} ".format([_id.model.perfs['f1_score'] for _id in self.ids]))
+            self.ids.append(Id(self.cross_over(self.ids[0],self.ids[1]),self.dataset_type,self.model_type,self.symbol))
             self.ids.append(Id(self.cross_over(self.ids[0],self.ids[2]),self.dataset_type,self.model_type,self.symbol))
-            self.ids.append(Id(self.cross_over(self.ids[0],self.ids[4]),self.dataset_type,self.model_type,self.symbol))
             self.ids.append(Id(self.cross_over(self.ids[1],self.ids[3]),self.dataset_type,self.model_type,self.symbol))
             self.ids = self.ids[10:]
             self.populate_ids()
@@ -40,10 +43,11 @@ class Darwin:
     def cross_over(self,id1,id2):
         gid1 = id1.genom
         gid2 = id2.genom
-        gid3 = {'model_map':{},'features_maps':{}}
+        gid3 = gid1
         for gene in gid1['model_map'].keys():
             gid3['model_map'][gene] = random.choice([gid1['model_map'],gid2['model_map']])[gene]
-        for gene in gid1['features_maps'].keys():
-            gid3['features_maps'][gene] = random.choice([gid1['features_maps'],gid2['features_maps']])[gene]
+        for features_map in gid1['features_maps'].keys():
+            for gene in gid1['features_maps'][features_map]['features'].keys():
+                gid3['features_maps'][features_map]['features'][gene] = random.choice([gid1,gid2])['features_maps'][features_map]['features'][gene]
         return gid3
         
