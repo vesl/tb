@@ -21,7 +21,7 @@ class Genom:
         features_maps_names = mongodb.find('TB','datasets_maps',{"name":self.dataset_type})[0]['features_maps']
         self.stumps = {
             "model_map": mongodb.find('TB','models_maps',{"name":self.model_type})[0]['parameters'],
-            "features_maps": { features_maps_name:mongodb.find('TB','features_maps',{"name":features_maps_name})[0]['features'] for features_maps_name in features_maps_names }
+            "features_maps": { features_maps_name:mongodb.find('TB','features_maps',{"name":features_maps_name})[0] for features_maps_name in features_maps_names }
         }
         mongodb.close()
 
@@ -43,16 +43,19 @@ class Genom:
         return parameter
 
     def randomise_features_map(self, features_map_name):
-        features_map = {}
-        features_map_stump = self.stumps['features_maps'][features_map_name]
+        features_map = {"features": {}, "source": self.stumps['features_maps'][features_map_name]["source"] }
+        features_map_stump = self.stumps['features_maps'][features_map_name]["features"]
         for feature_name in features_map_stump:
             feature = features_map_stump[feature_name].copy()
             if random.random() < 0.5: feature['lag'] = random.randint(1,8)
             if 'args' in feature and random.random() > 0.1: feature['args'] = {arg:self.randomise_int(value) for arg, value in feature['args'].items()}
-            features_map[feature_name] = feature
+            features_map["features"][feature_name] = feature
         return features_map
         
     def model_constraints(self,model_map):
         if self.model_type == 'random_forest':
             if model_map['max_samples']['value'] != None: model_map['bootstrap']['value'] = True
+            if model_map['class_weight']['value'] == 'balanced' or model_map['class_weight']['value'] == 'balanced_subsample':
+                model_map['warm_start']['value'] = False
+            if model_map['max_leaf_nodes'] < 2: model_map['max_leaf_nodes'] = 2
         return model_map
