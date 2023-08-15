@@ -13,7 +13,8 @@ class Genom:
         features_maps = { features_map_name:self.randomise_features_map(features_map_name) for features_map_name in self.stumps['features_maps'] }
         return {
             "model_map": self.model_constraints(model_map),
-            "features_maps": features_maps
+            "features_maps": features_maps,
+            "vertical": self.randomise_int(9)
         }
 
     def get_stumps(self):
@@ -54,8 +55,10 @@ class Genom:
         
     def model_constraints(self,model_map):
         if self.model_type == 'random_forest':
-            if model_map['max_samples']['value'] != None: model_map['bootstrap']['value'] = True
+            if model_map['max_samples']['value'] != 'None': model_map['bootstrap']['value'] = True
             if model_map['class_weight']['value'] == 'balanced' or model_map['class_weight']['value'] == 'balanced_subsample':
                 model_map['warm_start']['value'] = False
-            if model_map['max_leaf_nodes'] < 2: model_map['max_leaf_nodes'] = 2
+            if model_map['max_leaf_nodes']['value'] != 'None' and model_map['max_leaf_nodes']['value'] < 2:
+                model_map['max_leaf_nodes']['value'] = 2
+            if model_map['oob_score']['value'] == True: model_map['bootstrap']['value'] = True
         return model_map
