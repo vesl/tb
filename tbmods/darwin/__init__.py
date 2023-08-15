@@ -22,10 +22,11 @@ class Darwin:
             print("Train finished")
             self.rank_ids()
             print("RESULT : {} ".format([_id.model.perfs['f1_score'] for _id in self.ids]))
-            self.ids.append(Id(self.cross_over(self.ids[0],self.ids[1]),self.dataset_type,self.model_type,self.symbol))
-            self.ids.append(Id(self.cross_over(self.ids[0],self.ids[2]),self.dataset_type,self.model_type,self.symbol))
-            self.ids.append(Id(self.cross_over(self.ids[1],self.ids[3]),self.dataset_type,self.model_type,self.symbol))
-            self.ids = self.ids[10:]
+            self.new_gen_ids = []
+            while len(self.new_gen_ids) >= len(self.ids)/2:
+                self.new_gen_ids.append(Id(self.cross_over(self.ids[0],random.choice(self.ids[1:])),self.dataset_type,self.model_type,self.symbol))
+                self.new_gen_ids.append(Id(self.cross_over(self.ids[1],random.choice(self.ids[2:])),self.dataset_type,self.model_type,self.symbol))
+            self.ids = self.new_gen_ids
             self.populate_ids()
             self.current_generation += 1
     
@@ -49,5 +50,6 @@ class Darwin:
         for features_map in gid1['features_maps'].keys():
             for gene in gid1['features_maps'][features_map]['features'].keys():
                 gid3['features_maps'][features_map]['features'][gene] = random.choice([gid1,gid2])['features_maps'][features_map]['features'][gene]
+        gid3['vertical'] = random.choice([gid1,gid2])['vertical']
         return gid3
         
