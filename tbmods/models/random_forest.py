@@ -9,13 +9,14 @@ import os
 
 class ModelRandomForest:
 
-    def __init__(self,dataset_name,symbol,_map):
+    def __init__(self,dataset_name,symbol,_map,vertical):
         self.time_start = datetime.now()
         self.dataset_name = dataset_name
         self.symbol = symbol
         self._map = _map
+        self.vertical = vertical
         self.name = 'random_forest_{}_{}_{}'.format(self.dataset_name,self.symbol,self.time_start.strftime("%m%d%Y%H%M%S"))
-        self.dataset = Dataset(self.dataset_name,None,None,self.symbol,'historical')
+        self.dataset = Dataset(self.dataset_name,None,None,self.symbol,'historical',self.vertical)
         self.y = self.dataset.labels
         self.X = self.dataset.features.loc[self.y.index]
         self.model = RandomForestClassifier(

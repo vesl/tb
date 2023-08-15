@@ -6,10 +6,11 @@ config = Config()
 
 class TripleBarrier:
 
-    def __init__(self,close,events):
+    def __init__(self,close,events,vertical):
         self.close = close
         self.barriers = pd.DataFrame(self.close.loc[events.index].values,columns=['close'],index=events.index)
         self.get_horizontal_barriers(config['tbm_up_thresh'],config['tbm_down_thresh'])
+        self.vertical = vertical
         self.get_vertical_barrier()
         self.get_first_touch()
         self.get_side()
@@ -19,7 +20,7 @@ class TripleBarrier:
         self.barriers['bot'] = (self.barriers.close-(self.barriers.close*(float(up_thresh))))
 
     def get_vertical_barrier(self):
-        self.barriers['vertical'] = self.barriers.index + pd.Timedelta(hours=9)
+        self.barriers['vertical'] = self.barriers.index + pd.Timedelta(hours=self.vertical)
         index = pd.DatetimeIndex(self.barriers.vertical).intersection(self.barriers.index)
         self.barriers = self.barriers.loc[index]
         

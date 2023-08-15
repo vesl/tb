@@ -15,7 +15,7 @@ class Id:
 
     def train(self):
         if self.model_type == 'random_forest':
-            self.model = ModelRandomForest(self.dataset_name,self.symbol,self.genom['model_map'])
+            self.model = ModelRandomForest(self.dataset_name,self.symbol,self.genom['model_map'],self.genom['vertical'])
             self.model.train()
             self.model.save()
   
