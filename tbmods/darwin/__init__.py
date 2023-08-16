@@ -17,11 +17,11 @@ class Darwin:
     def evolve(self):
         self.populate_ids()
         while self.current_generation <= self.nb_generations:
-            print("GENERATION {}".format(self.current_generation))
             self.train_ids()
-            print("Train finished")
             self.rank_ids()
-            print("RESULT : {} ".format([_id.model.perfs['f1_score'] for _id in self.ids]))
+            print("GENERATION {}".format(self.current_generation))
+            print("BETTER : {}".format(self.ids[0].model.perfs['f1_score']))
+            print("GENOM : {}".format(self.ids[0].genom))
             self.new_gen_ids = []
             while len(self.new_gen_ids) >= len(self.ids)/2:
                 self.new_gen_ids.append(Id(self.cross_over(self.ids[0],random.choice(self.ids[1:])),self.dataset_type,self.model_type,self.symbol))
