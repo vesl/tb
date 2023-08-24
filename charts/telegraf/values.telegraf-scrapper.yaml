@@ -36,6 +36,6 @@ config:
   inputs:
     - http:
         urls:
-          - "http://scrapper.tb.svc.k8s.slav.rocks/klines/update/BTCUSDT"
+          - "http://scrapper.tb.svc.k8s.slav.rocks/klines/scrap/BTCUSDT"
         timeout: "1s"
         data_format: "json_v2"

@@ -34,8 +34,29 @@ CREATE TABLE live_BTCUSDT(
 ) timestamp(open_time);
 """
 
-@router.get('/update/{symbol}')
-def klines(symbol):
+@router.get('/get/{period}/{symbol}')
+def get_klines(period,symbol):
+    klines = Klines(symbol,period)
+    klines.load_df(None,None)
+    klines.df["time"] = klines.df.index.astype(int)/1000000000 
+    return klines.df.to_json(orient="records")
+
+@router.get('/get/first/{period}/{symbol}')
+def get_last_kline(period,symbol):
+    klines = Klines(symbol,period)
+    klines.get_first_stored()
+    klines.first_stored['open_time'] = klines.first_stored.index
+    return klines.first_stored[['open_time','open','high','low','close','close_time']].to_json(orient='records')
+
+@router.get('/get/last/{period}/{symbol}')
+def get_last_kline(period,symbol):
+    klines = Klines(symbol,period)
+    klines.get_last_stored()
+    klines.last_stored['open_time'] = klines.last_stored.index
+    return klines.last_stored[['open_time','open','high','low','close','close_time']].to_json(orient='records')
+
+@router.get('/scrap/{symbol}')
+def scrap_kline(symbol):
     # compute previous kline time and next kline time
     klines = Klines(symbol,'live')
     klines.get_last_stored()

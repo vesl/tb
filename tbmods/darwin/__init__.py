@@ -1,92 +1,55 @@
-from random import random,randint,choices
-from tbmods.config import Config
-from tbmods.log import Log
-import pandas as pd
-import json
-
-config = Config()
-log = Log(config['app'])
+from tbmods.darwin.genom import Genom
+from tbmods.darwin.id import Id
+import random
 
 class Darwin:
     
-    def __init__(self,prefix,symbol,period,start,end):
-        self.prefix = prefix
+    def __init__(self, dataset_type, model_type, symbol, _map):
+        self.dataset_type = dataset_type
+        self.model_type = model_type
+        self.nb_ids = _map["nb_ids"]
+        self.nb_generations = _map["nb_generations"]
+        self.current_generation = 1
         self.symbol = symbol
-        self.period = period
-        self.start = start
-        self.end = end
-        self.pop = []
-    
-    def new_random_genotype(self):
-        n_estimators = round(random()*self.n_estimators_factor)+1
-        features = self.new_features()
-        return {
-            "features": features,
-            "config": {
-                "n_estimators":n_estimators,
-                "oob_score":True,
-                "n_jobs":-1,
-                "verbose":1,
-                "class_weight":"balanced",
-                "random_state":42
-            }
-        }
-    
-    def fill_pop(self):
-        while len(self.pop)<self.pop_size:
-            genotype = self.new_random_genotype()
-            new_id = self.new_id(genotype)
-            self.pop.append(new_id)
-        
-    def train_pop(self):
-        for i in self.pop:
-            i.load_dataset()
-            i.fit()
-            i.meta['score']['f1_score_mean'] = sum(i.meta['score']['f1_score'])/len(i.meta['score']['f1_score'])
-            del i.dataset
-
-    def rank_pop(self):
-        self.pop = sorted(self.pop.copy(),key=lambda i: i.meta['score']['f1_score_mean'],reverse=True)
-        
-    def orgy(self):
-        old_pop = self.pop.copy()
-        self.pop = []
-        while len(old_pop) > 2:
-            male = old_pop[0]
-            female = old_pop[2]
-            child = self.fuck(male,female)
-            self.pop.append(child)
-            del old_pop[0]
-            del old_pop[1]
-    
-    def fuck(self,male,female):
-        feature_importances = pd.concat([pd.Series(json.loads(male.meta['score']['feature_importances'])),pd.Series(json.loads(female.meta['score']['feature_importances']))]).sort_values(ascending=False)
-        best_features = list(set(list(feature_importances.index[:round(len(feature_importances)*self.keep_best_features)])))
-        features = best_features + self.new_features()
-        if len(features) > self.max_features: features = features[:self.max_features]
-        features = list(set(features))
-        n_estimators_male = male.meta['clf_config']['n_estimators']
-        n_estimators_female = male.meta['clf_config']['n_estimators']
-        n_estimators = (n_estimators_male+n_estimators_female)/2
-        genotype = {
-            "features": features,
-            "config": {
-                "n_estimators":n_estimators,
-                "oob_score":True,
-                "n_jobs":-1,
-                "verbose":1,
-                "class_weight":"balanced",
-                "random_state":42
-            }
-        }
-        return self.new_id(genotype)
+        self.genom = Genom(self.dataset_type, self.model_type)
+        self.ids = []
 
     def evolve(self):
-        while self.current_gen < self.max_gen:
-            log.info('Generation {}'.format(self.current_gen))
-            self.fill_pop()
-            self.train_pop()
-            self.rank_pop()
-            self.pop[0].save_meta()
-            self.orgy()
-            self.current_gen += 1
+        self.populate_ids()
+        while self.current_generation <= self.nb_generations:
+            self.train_ids()
+            self.rank_ids()
+            print("GENERATION {}".format(self.current_generation))
+            print("BETTER : {}".format(self.ids[0].model.perfs['f1_score']))
+            print("GENOM : {}".format(self.ids[0].genom))
+            self.new_gen_ids = []
+            while len(self.new_gen_ids) >= len(self.ids)/2:
+                self.new_gen_ids.append(Id(self.cross_over(self.ids[0],random.choice(self.ids[1:])),self.dataset_type,self.model_type,self.symbol))
+                self.new_gen_ids.append(Id(self.cross_over(self.ids[1],random.choice(self.ids[2:])),self.dataset_type,self.model_type,self.symbol))
+            self.ids = self.new_gen_ids
+            self.populate_ids()
+            self.current_generation += 1
+    
+    def populate_ids(self):
+        while len(self.ids) <= self.nb_ids:
+            self.ids.append(Id(self.genom.get_random(),self.dataset_type,self.model_type,self.symbol))
+            
+    def train_ids(self):
+        for _id in self.ids:
+            _id.train()
+            
+    def rank_ids(self):
+        self.ids = sorted(self.ids, key=lambda x: x.model.perfs['f1_score'],reverse=True)
+        
+    def cross_over(self,id1,id2):
+        gid1 = id1.genom
+        gid2 = id2.genom
+        gid3 = gid1
+        for gene in gid1['model_map'].keys():
+            gid3['model_map'][gene] = random.choice([gid1['model_map'],gid2['model_map']])[gene]
+        for features_map in gid1['features_maps'].keys():
+            for gene in gid1['features_maps'][features_map]['features'].keys():
+                gid3['features_maps'][features_map]['features'][gene] = random.choice([gid1,gid2])['features_maps'][features_map]['features'][gene]
+        gid3['vertical'] = random.choice([gid1,gid2])['vertical']
+        return gid3
+        

@@ -1,15 +1,11 @@
-from tbmods.darwin.ichimoku import DarwinIchimoku
-from tbmods.models.ichimoku import ModelIchimoku
+from trainer.routers.datasets import get_dataset_features_maps_by_name
+from tbmods.models.random_forest import ModelRandomForest
+from tbmods.pydantic_models import ModelMap
 from fastapi import APIRouter, HTTPException
-from tbmods.darwin.tech import DarwinTech
-from tbmods.models.tech import ModelTech
+from tbmods.mongodb import MongoDB
 from tbmods.config import Config
-from tbmods.cache import Cache
 from tbmods.log import Log
-import pandas as pd
-import numpy as np
-import requests
-import json
+import os
 
 router = APIRouter(
     prefix="/models",
@@ -19,31 +15,49 @@ router = APIRouter(
 config = Config()
 log = Log(config['app'])
 
-@router.get('/{prefix}/train/{symbol}/{period}/{start}/{end}')
-def train(prefix,symbol,period,start,end):
-    features_list = config['{}_features_selected'.format(prefix)].split(',')
-    if prefix == 'tech': model = ModelTech(symbol,period,start,end,features_list)
-    if prefix == 'ichimoku': model = ModelIchimoku(symbol,period,start,end,features_list)
-    model.update_status(False)
-    model.update_status({"Load dataset":"..."})
-    model.load_dataset()
-    model.update_status({"Load dataset":"OK"})
-    model.clf_init(json.loads(config['tech_clf_config']))
-    model.update_status({"Fit":"..."})
-    model.fit(True)
-    model.save_meta()
-    model.update_status({"Fit":"OK"})
-    model.save_model()
-    model.save_scaler()
-    model.update_status(False)
+@router.get('/get/names/{_type}')
+def get_models_names_by_type(_type):
+    mongodb = MongoDB()
+    maps = [doc['name'] for doc in mongodb.find("TB","models_maps",{"type":_type})]
+    mongodb.close()
+    return maps
 
-@router.get('/{prefix}/check_run')
-def check_run(prefix):
-    cache = Cache(config['app'])
-    return cache.data["models/{}/status".format(prefix)]
-    
-@router.get('/{prefix}/darwin/{symbol}/{period}/{start}/{end}')
-def get_darwin(prefix,symbol,period,start,end):
-    if prefix == 'tech': darwin = DarwinTech(symbol,period,start,end)
-    if prefix == 'ichimoku': darwin = DarwinIchimoku(symbol,period,start,end)
-    darwin.evolve()
+@router.get('/get/parameters_map/{_type}')
+def get_models_parameters_map_by_type(_type):
+    mongodb = MongoDB()
+    parameters_map = [doc['parameters'] for doc in mongodb.find("TB","models_maps",{"name":_type})][0]
+    mongodb.close()
+    return parameters_map
+
+@router.get('/get/types')
+def get_models_types():
+    mongodb = MongoDB()
+    types = []
+    for doc in mongodb.groupby("TB","models_maps","type"):
+        types.append(doc["_id"])
+    mongodb.close()
+    return types
+
+@router.get('/get/metadatas/{symbol}')
+def get_models_metadatas(symbol):
+    mongodb = MongoDB()
+    metadatas = [doc for doc in mongodb.find("TB","models_metadatas",{"symbol":symbol})]
+    return metadatas
+
+@router.get('/train/status')
+def get_model_status():
+    return int(os.environ["STATUS"])
+
+@router.post('/train/random_forest/{symbol}')
+def train_random_forest(model_map: ModelMap, symbol):
+    os.environ["STATUS"] = "1"
+    try:
+        model = ModelRandomForest(model_map.dataset_name,symbol,model_map.parameters_map)
+        model.train()
+        if model_map.save: model.save()
+        os.environ["STATUS"] = "0"
+        return { "perfs": model.perfs, "name": model.name }
+    except Exception as e:
+        os.environ["STATUS"] = "0"
+        log.warning(e)
+        raise HTTPException(status_code=500, detail="Training failed")

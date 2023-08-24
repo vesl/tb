@@ -27,11 +27,15 @@ class Klines:
         qdbr = self.questdb.query("SELECT * AS {} FROM {} ORDER BY open_time DESC LIMIT 1".format(avoid_cache,self.table))
         self.last_stored = self.qdb_to_df(qdbr['result'])
         
+    def get_first_stored(self):
+        qdbr = self.questdb.query("SELECT * FROM {} ORDER BY open_time ASC LIMIT 1".format(self.table))
+        self.first_stored = self.qdb_to_df(qdbr['result'])
+        
     def ingest(self,kline):
         kline[0] *= 1000
         kline[6] *= 1000
         qdbr = self.questdb.query("INSERT INTO {} VALUES ({})".format(self.table,",".join([str(v) for v in kline])))
         
     def load_df(self,start,end):
-        qdbr = self.questdb.query("SELECT * FROM {} where open_time between '{}' and '{}'".format(self.table,start,end))
+        qdbr = self.questdb.query("SELECT * FROM {} where open_time between '{}' and '{}'".format(self.table,start,end)) if start and end else self.questdb.query("SELECT * FROM {}".format(self.table))
         self.df = self.qdb_to_df(qdbr['result'])

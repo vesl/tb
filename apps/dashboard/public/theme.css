@@ -1,0 +1,29 @@
+/** backgrounds **/
+body {
+    font-family: var(--font-family);
+    color: #fff;
+}
+.primary {
+    background: var(--primary-800);
+}
+.primary-dark {
+    background: var(--primary-900);
+    color: white;
+}
+
+.secondary {
+    background: var(--bluegray-900);
+    color: white;
+}
+
+.text-success {
+    color: var(--green-200);
+}
+
+.text-warning {
+    color: var(--yellow-200);
+}
+
+.text-danger {
+    color: var(--red-200);
+}
